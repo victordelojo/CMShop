@@ -1,0 +1,115 @@
+doctype html
+html
+    head
+        title="Title"
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+        link(rel="stylesheet" ,href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css", integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T", crossorigin="anonymous")
+    body
+        h1.text-center="Binenvenido a CMShop"
+        div.container.text-center.col-s-6.col-m-5.mt-5
+            div.progress
+                div.progress-bar.progress-bar-striped.progress-bar-animated(role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="barra")
+            br
+            form(id="formulario", method="POST", action="/confCMShopUser")
+                div.card
+                    div.card-body.bg-light(id="Usu")
+                        h5.card-title="Registro del usuario administrador"
+                        div.card-text
+                            div.form-group.d-flex.justify-content-center
+                                label(for="exampleInputEmail1")="Nombre de usuario"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control(type="text" id="nombre" name="nombre" required)
+                            div.form-group.d-flex.justify-content-center
+                                label(for="exampleInputEmail1")="Email address"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control(type="text" id="email" name="email" required)
+                            div.form-group.justify-content-center.d-flex.mb-0
+                                label(for="exampleInputPassword1")="Contraseña"
+                            div.form-group.justify-content-center.d-flex.container
+                            div.col.m-0.p-0
+                                input.form-control.col-12(type="password" id="pass1" name="pass" required)
+                            div.col
+                                small.form-text.text-muted(id="emailHelp")="Contraseña con longitud mayor que 8"
+                            div.form-group.justify-content-center.d-flex.mb-0
+                                label(for="exampleInputPassword1")="Repite contraseña"
+                            div.form-group.justify-content-center.d-flex.container.m-0.p-0.mb-4
+                                input.form-control(type="password" id="pass2" required)
+                            input.btn.btn-primary(type="submit",id="boton",value="Siguiente")
+                    div.card-body.bg-light(id="db")
+                        h5.card-title="Gestion de Base de Datos"
+                        div.card-text
+                            div.form-group.d-flex.justify-content-center
+                                label(for="exampleInputEmail1")="Nombre de Base de datos para CMSHop"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control(type="text" id="nombreDB" name="nombreDB" required)
+                            div.form-group.d-flex.justify-content-center
+                                label(for="exampleInputEmail1")="Nombre de Base de datos para el acceso"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control(type="text" id="accesoDB" name="accesoDB" required)
+                            div.form-group.justify-content-center.d-flex.mb-0
+                                label(for="exampleInputEmail1")="Dirección de BD"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control.mr-3(type="text" id="direccionDB" name="direccionDB" required)
+                            div.form-group.justify-content-center.d-flex.mb-0
+                                label(for="exampleInputEmail1")="Puerto de BD"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control.mr-3(type="number" id="portDB" name="portDB" required)
+                            div.form-group.d-flex.justify-content-center
+                                label(for="exampleInputEmail1")="Usuario de BD"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control.mr-3(type="text" id="usuarioDB" name="usuarioDB" required)
+                            div.form-group.justify-content-center.d-flex.mb-0
+                                label(for="exampleInputPassword1")="Contraseña de la BD"
+                            div.form-group.justify-content-center.d-flex.container
+                                input.form-control.col-12(type="password" id="passDB" name="passDB" required)
+                            div.form-group.justify-content-center.d-flex.container
+                                input.btn.btn-warning.mr-3(type="button",id="atras",value="Atras")
+                                button.btn.btn-primary(type="button", data-toggle="modal", data-target="#exampleModalCenter") Finalizar
+                            div.modal.fade(id="exampleModalCenter", tabindex="-1", role="dialog", aria-labelledby="exampleModalCenterTitle", aria-hidden="true")
+                                div.modal-dialog.modal-dialog-centered(role="document")
+                                    div.modal-content
+                                        div.modal-header
+                                            h5.modal-title(id="exampleModalCenterTitle") Notificación
+                                            button.close(type="button", data-dismiss="modal" aria-label="Close")
+                                                span(aria-hidden="true") &times;
+                                        div.modal-body Esta Configuración se podrá cambiar en cualquier momento en el archivo de configuración (directorio_app/CONFIGURE.json)
+                                        div.modal-footer
+                                            button.btn.btn-secondary(type="button", data-dismiss="modal") Cerrar
+                                            input.btn.btn-primary.ml-3(type="submit",id="sub",value="Finalizar")
+
+
+
+
+                    div.card-body.bg-light(id="host")
+                        h5.card-title="Configuración del sitio web"
+                        div.card-text
+                            div.form-group.d-flex.justify-content-center
+                                label(for="exampleInputEmail1")="Nombre del dominio donde se aloja CMShop"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control(type="text" id="nombreHost" name="nombreHost" required placeholder="www.google.es")
+                            div.form-group.d-flex.justify-content-center
+                                label(for="exampleInputEmail1")="Puerto que utiliza el dominio"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control.mr-3(type="number" id="portHost" name="portHost" required)
+                            input.btn.btn-warning.mr-3(type="button",id="atras2",value="Atras")
+                            input.btn.btn-primary(type="submit",id="boton2",value="Siguiente")
+                
+        div.modal.fade(id="modal",tabindex="-1", role="dialog")
+            div.modal-dialog.modal-dialog-centered(role="document")
+                div.modal-content
+                    div.modal-header.bg-warning
+                        h5.modal-title Atención
+                        button.close(type="button", data-dismiss="modal", aria-label="Close")
+                            span(aria-hidden="true") &times;
+                    div.modal-body
+                        p Antes de configurar CMShop deberás configurar 
+                            a(href="https://parzibyte.me/blog/2018/12/11/autenticacion-administrador-mongodb/") MongoDB con autentificación
+                            span  para no dar error en la conexión de la base de datos
+                    div.modal-footer
+                        button.btn.btn-secondary(type="button", data-dismiss="modal") Entendido
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        script(src="../javascript/comprobar_Registro_CMShop.js")
+        script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js", integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1", crossorigin="anonymous")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js", integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM", crossorigin="anonymous")

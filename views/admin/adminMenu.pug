@@ -1,0 +1,117 @@
+doctype html
+html
+  head
+    title="Title"
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    link(rel="stylesheet" ,href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css", integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T", crossorigin="anonymous")
+    link(rel="stylesheet", href="../typicons/src/font/typicons.min.css")
+  body
+    div.container-fluid.m-0.p-0
+        div.row.m-0.p-0
+            div.d-none.d-md-inline-block.col-md-3.col-xl-2.m-0.p-0.text-center.bg-light(id="menu")
+              div.row
+                div.col-12
+                  img.img-fluid.p-3(src="../logo.png", alt="Responsive image", style="width:60%")
+              div.row
+                div.col-12
+                  div.accordion(id="accordionExample")
+                    div.card.bg-dark
+                      div.card-header(id="headingOne")
+                        a.collapsed.text-white(data-toggle="collapse", href="#collapseOne", aria-expanded="false" aria-controls="collapseOne")
+                          h6.mb-0 Estadisticas
+                      div.collapse.show.bg-secondary(id="collapseOne", aria-labelledby="headingOne", data-parent="#accordionExample")
+                        div.card-body 
+                          div.card-body
+                            div.card.bg-secondary.border-0
+                              div.card-header.border-0(id="headingFive")
+                                a.text-white(href="#collapseFive")
+                                  h6.mb-0 Sitio Web
+                          div.card-body
+                            div.card.bg-secondary.border-0
+                              div.card-header.border-0(id="headingFive")
+                                a.text-white(href="#collapseFive")
+                                  h6.mb-0 Configuración
+                    div.card.bg-dark
+                      div.card-header(id="headingTwo")
+                        a.collapsed.text-white(data-toggle="collapse", href="#collapseTwo", aria-expanded="false" aria-controls="collapseTwo")
+                          h6.mb-0 Categorias
+                      div.collapse.bg-secondary(id="collapseTwo", aria-labelledby="headingTwo", data-parent="#accordionExample")
+                        div.card-body 
+                          div.card-body
+                            div.card.bg-secondary.border-0
+                              div.card-header.border-0(id="headingFive")
+                                a.text-white(href="#collapseFive")
+                                  h6.mb-0 Sitio Web
+                          div.card-body
+                            div.card.bg-secondary.border-0
+                              div.card-header.border-0(id="headingFive")
+                                a.text-white(href="#collapseFive")
+                                  h6.mb-0 Configuración
+                    div.card.bg-dark
+                      div.card-header(id="headingThree")
+                        a.collapsed.text-white(data-toggle="collapse", href="#collapseThree", aria-expanded="false" aria-controls="collapseThree")
+                          h6.mb-0 Productos
+                      div.collapse.bg-secondary(id="collapseThree", aria-labelledby="headingThree", data-parent="#accordionExample")
+                        div.card-body 
+                          div.card-body
+                            div.card.bg-secondary.border-0
+                              div.card-header.border-0(id="headingFive")
+                                a.text-white(href="#collapseFive")
+                                  h6.mb-0 Sitio Web
+                          div.card-body
+                            div.card.bg-secondary.border-0
+                              div.card-header.border-0(id="headingFive")
+                                a.text-white(href="#collapseFive")
+                                  h6.mb-0 Configuración
+                    div.card.bg-dark
+                      div.card-header(id="headingFour")
+                        a.collapsed.text-white(data-toggle="collapse", href="#collapseFour", aria-expanded="false" aria-controls="collapseFour")
+                          h6.mb-0 Usuarios
+                      div.collapse.bg-secondary(id="collapseFour", aria-labelledby="headingFour", data-parent="#accordionExample")
+                        div.card-body
+                          div.card-body
+                            div.card.bg-secondary.border-0
+                              div.card-header.border-0(id="headingFive")
+                                a.text-white(href="#collapseFive")
+                                  h6.mb-0 Sitio Web
+                          div.card-body
+                            div.card.bg-secondary.border-0
+                              div.card-header.border-0(id="headingFive")
+                                a.text-white(href="#collapseFive")
+                                  h6.mb-0 Configuración
+                    div.card.bg-dark
+                      div.card-header(id="headingFive")
+                        a.collapsed.text-white(data-toggle="collapse", href="#collapseFive", aria-expanded="false" aria-controls="collapseFive")
+                          h6.mb-0 Configuración
+                      div.collapse.bg-secondary(id="collapseFive", aria-labelledby="headingFive", data-parent="#accordionExample")
+                        div.card-body
+                          div.card.bg-secondary.border-0
+                            div.card-header.border-0(id="headingFive")
+                              a.text-white(href="#collapseFive")
+                                h6.mb-0 Sitio Web
+                        div.card-body
+                          div.card.bg-secondary.border-0
+                            div.card-header.border-0(id="headingFive")
+                              a.text-white(href="#collapseFive")
+                                h6.mb-0 Configuración
+            div.d-inline-block.d-md-none.col-2.col-sm-1.bg-light
+              div.row.mt-4
+                button.btn.btn-secondary.w-100(id="btn-menu") 
+                  span.typcn.typcn-th-menu
+            div.col-9.col-sm-10.col-md-9.col-xl-10.m-0.p-0
+              div.row.align-items-center.m-0.bg-light
+                div.col-9.col-md-10.col-xl-11.text-center #{location}
+                div.col-3.col-md-2.col-xl-1.p-4
+                  a(href="/admin/usuario")
+                    img.mr-3(src="../usuario.png", alt="",width="100%")
+              block datos
+
+                
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    block script
+    script(src="../javascript/menu.js")
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js", integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1", crossorigin="anonymous")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js", integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM", crossorigin="anonymous")

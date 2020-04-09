@@ -1,0 +1,33 @@
+doctype html
+html
+    head
+        title="Title"
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+        link(rel="stylesheet" ,href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css", integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T", crossorigin="anonymous")
+    body
+        form.d-none(id="realizarPago", action="https://www.paypal.com/cgi-bin/webscr", method="post")
+            input(name="cmd", type="hidden", value="_cart")
+            input(name="upload" type="hidden" value="1")
+            input(name="business" type="hidden" value="victordelojogalvan27@gmail.com")
+            input(name="shopping_url" type="hidden" value="http://martin27.ddns.net:6969/")
+            input(name="currency_code" type="hidden" value="EUR")
+            input(name="return" type="hidden" value="http://martin27.ddns.net:6969/carro/pago/correcto")
+            input(name="rm" type="hidden" value="2")
+            input(name="item_number_1" type="hidden" value="1")
+            input(name="item_name_1" type="hidden" value="prueba")
+            input(name="amount_1" type="hidden" value="0.01")
+            input(name="quantity_1" type="hidden" value="2")
+            input(type="submit" value="pagar")
+
+
+        div.container
+            div.row.justify-content-center.align-items-center(style="height: 100vh")
+                div.col-lg-12text-center
+                    div.spinner-grow(style="width: 3rem; height: 3rem;", role="status")
+                        span.sr-only Loading...
+
+        script document.getElementById("realizarPago").submit();
+        script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js", integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1", crossorigin="anonymous")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js", integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM", crossorigin="anonymous")

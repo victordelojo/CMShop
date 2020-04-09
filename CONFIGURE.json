@@ -1,0 +1,11 @@
+{
+    "_comentario": "Configuración del Sitio Web",
+    "user": "martin",
+    "db_auth": "admin",
+    "pass": "123qweASD",
+    "portDB": "27017",
+    "direccionDB": "127.0.0.1",
+    "db_name": "CMShop",
+    "direccion": "127.0.0.1",
+    "port": "3000"
+}
