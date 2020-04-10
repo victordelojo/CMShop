@@ -1,14 +1,10 @@
-/* MODAL FADE LEFT RIGHT BOTTOM */
 
 .modal.fade:not(.in).left .modal-dialog {
-    -webkit-transform: translate3d(0%, 0, 0);
-    transform: translate3d(0%, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 }
 
-.modal.fade:not(.in).bottom .modal-dialog {
-    -webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0);
-}
+
 
 .modal.left .modal-dialog {
     position: absolute;
@@ -24,4 +20,7 @@
 .modal.left .modal-content {
     min-height: 100vh;
     border: 0;
+}
+h1,h2,h3,h4,h5,h6{
+    color:#282769;
 }
