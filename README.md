@@ -17,3 +17,15 @@ Antes de la descarga del CMShop debes de tener instalado:
 <li>Arrancamos el servidor CMShop: node app.js</li>
 <li>Vamos al navegador y entramos en http://localhost:3000 para la configuración de CMShop</li>
 </ul>
+<br>
+<h2>
+Posibles problemas:
+</h2>
+<ul>
+<li>
+Al Terminar la configuración de CMShop vuelve a pedir los parámetros de configuración <br> reinicia el servidor.
+</li>
+<li>
+No inicia sesión en admin <br> Comprobar si la dirección de donde está alojado el CMShop esta bien configurado en el archivo CONFIGURE.json
+</li>
+</ul>
