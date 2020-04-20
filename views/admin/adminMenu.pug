@@ -1,5 +1,5 @@
 doctype html
-html
+html.h-100
   head
     title="Title"
     meta(charset="utf-8")
@@ -8,110 +8,102 @@ html
     link(rel="stylesheet", href="../typicons/src/font/typicons.min.css")
     link(rel="stylesheet", href="../css/menu.css")
 
-  body
-    div.container-fluid.m-0.p-0
-        div.row.m-0.p-0
-            div.d-none.d-md-inline-block.col-md-3.col-xl-2.m-0.p-0.text-center.bg-light(id="menu")
-              div.row
-                div.col-12
-                  img.img-fluid.p-3(src="../logo.png", alt="Responsive image", style="width:60%")
-              div.row
-                div.col-12
-                  div.accordion(id="accordionExample")
-                    div.card.bg-dark
-                      div.card-header(id="headingOne")
-                        a.collapsed(data-toggle="collapse", href="#collapseOne", aria-expanded="false" aria-controls="collapseOne")
-                          h6.mb-0.text-white Estadisticas
-                      div.collapse.show.bg-secondary(id="collapseOne", aria-labelledby="headingOne", data-parent="#accordionExample")
-                        div.card-body.p-0
-                          div.card-body.p-0
-                            div.card.bg-secondary.border-0
-                              div.card-header.border-0(id="headingFive")
-                                a(href="#collapseFive")
-                                  h6.mb-0 Sitio Web
-                          div.card-body.p-0
-                            div.card.bg-secondary.border-0
-                              div.card-header.border-0(id="headingFive")
-                                a(href="#collapseFive")
-                                  h6.mb-0 Configuración
-                    div.card.bg-dark
-                      div.card-header(id="headingTwo")
-                        a.collapsed(data-toggle="collapse", href="#collapseTwo", aria-expanded="false" aria-controls="collapseTwo")
-                          h6.mb-0.text-white Categorias
-                      div.collapse.bg-secondary(id="collapseTwo", aria-labelledby="headingTwo", data-parent="#accordionExample")
-                        div.card-body.p-0
-                          div.card-body.p-0
-                            div.card.bg-secondary.border-0
-                              div.card-header.border-0(id="headingFive")
-                                a(href="#collapseFive")
-                                  h6.mb-0 Sitio Web
-                          div.card-body.p-0
-                            div.card.bg-secondary.border-0
-                              div.card-header.border-0(id="headingFive")
-                                a(href="#collapseFive")
-                                  h6.mb-0 Configuración
-                    div.card.bg-dark
-                      div.card-header(id="headingThree")
-                        a.collapsed(data-toggle="collapse", href="#collapseThree", aria-expanded="false" aria-controls="collapseThree")
-                          h6.mb-0.text-white Productos
-                      div.collapse.bg-secondary(id="collapseThree", aria-labelledby="headingThree", data-parent="#accordionExample")
-                        div.card-body.p-0
-                          div.card-body.p-0
-                            div.card.bg-secondary.border-0
-                              div.card-header.border-0(id="headingFive")
-                                a(href="#collapseFive")
-                                  h6.mb-0 Sitio Web
-                          div.card-body.p-0
-                            div.card.bg-secondary.border-0
-                              div.card-header.border-0(id="headingFive")
-                                a(href="#collapseFive")
-                                  h6.mb-0 Configuración
-                    div.card.bg-dark
-                      div.card-header(id="headingFour")
-                        a.collapsed.te(data-toggle="collapse", href="#collapseFour", aria-expanded="false" aria-controls="collapseFour")
-                          h6.mb-0.text-white Usuarios
-                      div.collapse.bg-secondary(id="collapseFour", aria-labelledby="headingFour", data-parent="#accordionExample")
-                        div.card-body.p-0                          
-                          div.card-body.p-0
-                            div.card.bg-secondary.border-0
-                              div.card-header.border-0(id="headingFive")
-                                a(href="#collapseFive")
-                                  h6.mb-0 Sitio Web
-                          div.card-body.p-0
-                            div.card.bg-secondary.border-0
-                              div.card-header.border-0(id="headingFive")
-                                a(href="#collapseFive")
-                                  h6.mb-0 Configuración
-                    div.card.bg-dark
-                      div.card-header(id="headingFive")
-                        a.collapsed(data-toggle="collapse", href="#collapseFive", aria-expanded="false" aria-controls="collapseFive")
-                          h6.mb-0.text-white Configuración
-                      div.collapse.bg-secondary(id="collapseFive", aria-labelledby="headingFive", data-parent="#accordionExample")
-                        div.card-body.p-0
-                          div.card.bg-secondary.border-0
-                            div.card-header.border-0(id="headingFive")
-                              a(href="#collapseFive")
-                                h6.mb-0 Sitio Web
-                        div.card-body.p-0
-                          div.card.bg-secondary.border-0
-                            div.card-header.border-0(id="headingFive")
-                              a(href="#collapseFive")
-                                h6.mb-0 Configuración
-            //div.d-inline-block.d-md-none.col-2.col-sm-1.bg-light
-              div.row.mt-4
-                button.btn.btn-dark.w-100.navbar-btn.pull-right(id="btn-menu",type="button" ,data-toggle="modal" ,data-target="#sidebar-left") 
-                  span.typcn.typcn-th-menu
-            div.col-12.col-md-9.col-xl-10.m-0.p-0
-              div.row.align-items-center.m-0.bg-light
-                div.col-2.col-sm-2.d-md-none
-                  button.btn.btn-dark.w-100.navbar-btn.pull-right.p-0.h-sm-25(id="btn-menu",type="button" ,data-toggle="modal" ,data-target="#sidebar-left") 
-                    span.typcn.typcn-th-menu
-                div.col-7.col-md-9.col-xl-11.text-center 
-                  h4 #{location}
-                div.col-3.col-md-1.col-xl-1.p-4
-                  a(href="/admin/usuario")
-                    img.mr-3(src="../usuario.png", alt="",width="100%")
-              block datos
+  body.h-100
+    div.container-fluid.m-0.p-0.h-100
+      div.row.h-10
+        div.col-12
+          div.row.align-items-center.m-0.bg-light
+            div.col-md-3.col-xl-2.d-none.d-md-inline-block
+              img.img-fluid.p-3(src="../logo.png", alt="Responsive image", style="width:60%")
+            div.col-2.col-sm-2.d-md-none.d-inline-block
+              button.btn.btn-dark.w-100.navbar-btn.pull-right.p-0.h-sm-25(id="btn-menu",type="button" ,data-toggle="modal" ,data-target="#sidebar-left") 
+                span.typcn.typcn-th-menu
+            div.col-7.col-md-7.col-xl-9.text-center 
+              h4 #{location}
+            div.col-3.col-md-2.col-xl-1.p-4
+              a(href="/admin/usuario")
+                img.mr-3(src="../usuario.png", alt="",width="100%")
+      div.row.m-0.p-0.h-90
+        div.d-none.d-md-inline-block.col-md-3.col-xl-2.m-0.p-0.text-center.bg-dark(id="menu")
+          div.row
+            div.col-12
+              div.accordion(id="accordionExample")
+                div.card.bg-dark
+                  div.card-header(id="headingOne")
+                    a.collapsed(data-toggle="collapse", href="#collapseOne", aria-expanded="false" aria-controls="collapseOne")
+                      h6.mb-0.text-white Estadisticas
+                  div.collapse.show.bg-secondary(id="collapseOne", aria-labelledby="headingOne", data-parent="#accordionExample")
+                    div.card-body.p-0
+                      div.card-body.p-0
+                        div.card.bg-secondary.border-0
+                          div.card-header.border-0(id="headingFive")
+                            a(href="#collapseFive")
+                              h6.mb-0 Estadisticas
+                div.card.bg-dark
+                  div.card-header(id="headingTwo")
+                    a.collapsed(data-toggle="collapse", href="#collapseTwo", aria-expanded="false" aria-controls="collapseTwo")
+                      h6.mb-0.text-white Categorias
+                  div.collapse.bg-secondary(id="collapseTwo", aria-labelledby="headingTwo", data-parent="#accordionExample")
+                    div.card-body.p-0
+                      div.card-body.p-0
+                        div.card.bg-secondary.border-0
+                          div.card-header.border-0(id="headingFive")
+                            a(href="#collapseFive")
+                              h6.mb-0 Todas
+                      div.card-body.p-0
+                        div.card.bg-secondary.border-0
+                          div.card-header.border-0(id="headingFive")
+                            a(href="#collapseFive")
+                              h6.mb-0 Configuración
+                div.card.bg-dark
+                  div.card-header(id="headingThree")
+                    a.collapsed(data-toggle="collapse", href="#collapseThree", aria-expanded="false" aria-controls="collapseThree")
+                      h6.mb-0.text-white Productos
+                  div.collapse.bg-secondary(id="collapseThree", aria-labelledby="headingThree", data-parent="#accordionExample")
+                    div.card-body.p-0
+                      div.card-body.p-0
+                        div.card.bg-secondary.border-0
+                          div.card-header.border-0(id="headingFive")
+                            a(href="#collapseFive")
+                              h6.mb-0 Todos
+                      div.card-body.p-0
+                        div.card.bg-secondary.border-0
+                          div.card-header.border-0(id="headingFive")
+                            a(href="#collapseFive")
+                              h6.mb-0 Configuración
+                div.card.bg-dark
+                  div.card-header(id="headingFour")
+                    a.collapsed.te(data-toggle="collapse", href="#collapseFour", aria-expanded="false" aria-controls="collapseFour")
+                      h6.mb-0.text-white Usuarios
+                  div.collapse.bg-secondary(id="collapseFour", aria-labelledby="headingFour", data-parent="#accordionExample")
+                    div.card-body.p-0                          
+                      div.card-body.p-0
+                        div.card.bg-secondary.border-0
+                          div.card-header.border-0(id="headingFive")
+                            a(href="#collapseFive")
+                              h6.mb-0 Todos
+                      div.card-body.p-0
+                        div.card.bg-secondary.border-0
+                          div.card-header.border-0(id="headingFive")
+                            a(href="#collapseFive")
+                              h6.mb-0 Configuración
+                div.card.bg-dark
+                  div.card-header(id="headingFive")
+                    a.collapsed(data-toggle="collapse", href="#collapseFive", aria-expanded="false" aria-controls="collapseFive")
+                      h6.mb-0.text-white Configuración
+                  div.collapse.bg-secondary(id="collapseFive", aria-labelledby="headingFive", data-parent="#accordionExample")
+                    div.card-body.p-0
+                      div.card.bg-secondary.border-0
+                        div.card-header.border-0(id="headingFive")
+                          a(href="#collapseFive")
+                            h6.mb-0 Sitio Web
+                    div.card-body.p-0
+                      div.card.bg-secondary.border-0
+                        div.card-header.border-0(id="headingFive")
+                          a(href="#collapseFive")
+                            h6.mb-0 General
+        div.col-12.col-md-9.col-xl-10.m-0.p-0.text-center.bg-light(id="menu")
+          block datos
 
     <!-- Sidebar Left -->
     div.modal.fade.left.bd-example-modal-xl(id="sidebar-left" tabindex="-1" role="dialog")
