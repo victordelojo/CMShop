@@ -1,5 +1,5 @@
 doctype html
-html.h-100
+html
   head
     title="Title"
     meta(charset="utf-8")
@@ -8,11 +8,11 @@ html.h-100
     link(rel="stylesheet", href="../typicons/src/font/typicons.min.css")
     link(rel="stylesheet", href="../css/menu.css")
 
-  body.h-100
+  body.bg-light(style="height: 100vh")
     div.container-fluid.m-0.p-0.h-100
-      div.row.h-10
-        div.col-12
-          div.row.align-items-center.m-0.bg-light
+      div.row.p-0.m-0(style="height:15vh")
+        div.col-12.p-0
+          div.row.align-items-center.m-0
             div.col-md-3.col-xl-2.d-none.d-md-inline-block
               img.img-fluid.p-3(src="../logo.png", alt="Responsive image", style="width:60%")
             div.col-2.col-sm-2.d-md-none.d-inline-block
@@ -20,24 +20,24 @@ html.h-100
                 span.typcn.typcn-th-menu
             div.col-7.col-md-7.col-xl-9.text-center 
               h4 #{location}
-            div.col-3.col-md-2.col-xl-1.p-4
-              a(href="/admin/usuario")
-                img.mr-3(src="../usuario.png", alt="",width="100%")
-      div.row.m-0.p-0.h-90
+            div.col-3.col-md-2.col-xl-1
+              a.p-0.m-0(href="/admin/usuario")
+                img.m-0.p-0(src="../usuario.png", alt="",width="100%")
+      div.row.m-0.p-0(style="height:85vh")
         div.d-none.d-md-inline-block.col-md-3.col-xl-2.m-0.p-0.text-center.bg-dark(id="menu")
-          div.row
+          div.row.p-0.m-0
             div.col-12
               div.accordion(id="accordionExample")
                 div.card.bg-dark
                   div.card-header(id="headingOne")
                     a.collapsed(data-toggle="collapse", href="#collapseOne", aria-expanded="false" aria-controls="collapseOne")
                       h6.mb-0.text-white Estadisticas
-                  div.collapse.show.bg-secondary(id="collapseOne", aria-labelledby="headingOne", data-parent="#accordionExample")
+                  div.collapse.bg-secondary(id="collapseOne", aria-labelledby="headingOne", data-parent="#accordionExample")
                     div.card-body.p-0
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
                           div.card-header.border-0(id="headingFive")
-                            a(href="#collapseFive")
+                            a(href="/admin")
                               h6.mb-0 Estadisticas
                 div.card.bg-dark
                   div.card-header(id="headingTwo")
@@ -48,7 +48,7 @@ html.h-100
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
                           div.card-header.border-0(id="headingFive")
-                            a(href="#collapseFive")
+                            a(href="/admin/categoria")
                               h6.mb-0 Todas
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
@@ -64,7 +64,7 @@ html.h-100
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
                           div.card-header.border-0(id="headingFive")
-                            a(href="#collapseFive")
+                            a(href="/admin/producto")
                               h6.mb-0 Todos
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
@@ -80,7 +80,7 @@ html.h-100
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
                           div.card-header.border-0(id="headingFive")
-                            a(href="#collapseFive")
+                            a(href="/admin/usuario")
                               h6.mb-0 Todos
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
@@ -95,12 +95,12 @@ html.h-100
                     div.card-body.p-0
                       div.card.bg-secondary.border-0
                         div.card-header.border-0(id="headingFive")
-                          a(href="#collapseFive")
+                          a(href="/admin/confSitio")
                             h6.mb-0 Sitio Web
                     div.card-body.p-0
                       div.card.bg-secondary.border-0
                         div.card-header.border-0(id="headingFive")
-                          a(href="#collapseFive")
+                          a(href="/admin/general")
                             h6.mb-0 General
         div.col-12.col-md-9.col-xl-10.m-0.p-0.text-center.bg-light(id="menu")
           block datos
@@ -119,7 +119,7 @@ html.h-100
                       div.card-header.p-0(id="headingOne")
                         a.collapsed(data-toggle="collapse", href="#collapseOne", aria-expanded="false" aria-controls="collapseOne")
                           h6.mb-0.m-3.text-white Estadisticas
-                      div.collapse.show.bg-secondary(id="collapseOne", aria-labelledby="headingOne", data-parent="#accordionExample")
+                      div.collapse.bg-secondary(id="collapseOne", aria-labelledby="headingOne", data-parent="#accordionExample")
                         div.card-body.p-0
                           div.card-body.p-0
                             div.card.bg-secondary.border-0

@@ -126,6 +126,20 @@ app.post('/login/comprobar', async function (req, res) {
     res.json({ estado: false });
   }
 })
+app.get('/usuario', async function (req,res){
+  if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+    var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var usuAdmin = new admin(url, DB_CONF.db_name);
+    if (await usuAdmin.comprobarInicio()) {
+      res.render('./admin/usuario.pug',{location:"Usuarios"})
+    }else{
+      res.redirect("/")
+    }
+  }else{
+    res.redirect("confCMShopUser")
+  }
+})
 
 
 module.exports = app;
