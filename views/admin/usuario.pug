@@ -1,6 +1,26 @@
 extends adminMenu.pug
 append datos
   div.row.m-0.p-0
-    h1 Holaaa
+    div.col-12.mt-5
+      table.table.table-hover
+        thead
+          tr
+            th(scope="col") Nombre
+            th(scope="col") Correo
+            th(scope="col") Contraseña
+            th(scope="col") Pedidos
+            th(scope="col") 
+            th(scope="col") 
+        each val in usuarios
+          tbody
+            tr
+              td(scope="row") #{val[0]}
+              td #{val[1]}
+              td #{val[2]}
+              td #{val[3]}
+              td
+                button.btn.btn-light Editar
+              td
+                button.btn.btn-dark Borrar
 append script
   

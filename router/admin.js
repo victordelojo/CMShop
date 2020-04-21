@@ -126,13 +126,17 @@ app.post('/login/comprobar', async function (req, res) {
     res.json({ estado: false });
   }
 })
-app.get('/usuario', async function (req,res){
+app.get('/usuarios', async function (req,res){
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
-      res.render('./admin/usuario.pug',{location:"Usuarios"})
+      if (req.session.nombre) {
+        res.render('./admin/usuario.pug',{location:"Usuarios",usuarios:[["víctor","123","qwe"],["andrea","123","qwe"]]})
+      }else{
+        res.redirect("/admin/login")
+      }
     }else{
       res.redirect("/")
     }
@@ -141,5 +145,78 @@ app.get('/usuario', async function (req,res){
   }
 })
 
+app.get("/categorias", async function (req,res){
+  if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+    var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var usuAdmin = new admin(url, DB_CONF.db_name);
+    if (await usuAdmin.comprobarInicio()) {
+      if (req.session.nombre) {
+        res.render('./admin/categorias.pug',{location:"Categorias",categorias:["Electronica","hogar"]})
+      }else{
+        res.redirect("/admin/login")
+      }
+    }else{
+      res.redirect("/")
+    }
+  }else{
+    res.redirect("confCMShopUser")
+  }
+})
+
+app.get("/productos", async function (req,res){
+  if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+    var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var usuAdmin = new admin(url, DB_CONF.db_name);
+    if (await usuAdmin.comprobarInicio()) {
+      if (req.session.nombre) {
+        res.render('./admin/productos.pug',{location:"Productos",categorias:[]})
+      }else{
+        res.redirect("/admin/login")
+      }
+    }else{
+      res.redirect("/")
+    }
+  }else{
+    res.redirect("confCMShopUser")
+  }
+})
+app.get("/confSitio", async function (req,res){
+  if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+    var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var usuAdmin = new admin(url, DB_CONF.db_name);
+    if (await usuAdmin.comprobarInicio()) {
+      if (req.session.nombre) {
+        res.render('./admin/confSitio.pug',{location:"Configuración del Sitio Web",categorias:[]})
+      }else{
+        res.redirect("/admin/login")
+      }
+    }else{
+      res.redirect("/")
+    }
+  }else{
+    res.redirect("confCMShopUser")
+  }
+})
+app.get("/general", async function (req,res){
+  if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+    var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var usuAdmin = new admin(url, DB_CONF.db_name);
+    if (await usuAdmin.comprobarInicio()) {
+      if (req.session.nombre) {
+        res.render('./admin/general.pug',{location:"Configuración General",categorias:[]})
+      }else{
+        res.redirect("/admin/login")
+      }
+    }else{
+      res.redirect("/")
+    }
+  }else{
+    res.redirect("confCMShopUser")
+  }
+})
 
 module.exports = app;
