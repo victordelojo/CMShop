@@ -4,34 +4,46 @@ var admin = require("../controller_db/Admin.js")
 var fs = require("fs")
 
 
-
-
-
-/* GET home page. */
-router.get('/', async function (req, res) {
-    if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
-        var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-        var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-        var usuAdmin = new admin(url, DB_CONF.db_name);
-        if (await usuAdmin.comprobarInicio().catch(function () { return false })) {
-            res.render("./default/index.pug");// Envia el archivo que se va a visualizar
-        } else {
-            res.render("./admin/configurar_CMShop.pug")
+// Vamos a requerir del modulo que provee Node.js 
+// llamado child_process
+var exec = require('child_process').exec, child;
+// Creamos la función y pasamos el string pwd 
+// que será nuestro comando a ejecutar
+child = exec('ls ./views/default',
+// Pasamos los parámetros error, stdout la salida 
+// que mostrara el comando
+  function (error, stdout, stderr) {
+    // Imprimimos en pantalla con console.log
+    var arra=stdout.split(".pug\n")
+    console.log(arra)
+    arra.forEach(element => {
+        if(element!==""){
+            if(element=="index"){
+                element=""
+            }
+            router.get("/"+element, async function (req, res) {
+                if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+                    var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
+                    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+                    var usuAdmin = new admin(url, DB_CONF.db_name);
+                    if (await usuAdmin.comprobarInicio().catch(function () { return false })) {
+                        if(element==""){
+                            element="index"
+                        }
+                        res.render("./default/"+element+".pug");// Envia el archivo que se va a visualizar
+                    } else {
+                        res.render("./admin/configurar_CMShop.pug")
+                    }
+                } else {
+                    res.render("./admin/configurar_CMShop.pug")
+                }
+            });
         }
-    } else {
-        res.render("./admin/configurar_CMShop.pug")
-    }
-});
-
-router.get("/pagar", async function (req, res) {
-
-    var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    var usuAdmin = new admin(url, DB_CONF.db_name);
-    if (await usuAdmin.comprobarInicio()) {
-        res.render("./default/pagar.pug")
-    } else {
-        res.render("./admin/configurar_CMShop.pug")
+        
+    });
+    // controlamos el error
+    if (error !== null) {
+      console.log('exec error: ' + error);
     }
 });
 
