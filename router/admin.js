@@ -9,7 +9,7 @@ var Categoria = require("../controller_db/Categoria")
 app.get("/", async function (req, res) {
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
@@ -96,11 +96,11 @@ app.get("/", async function (req, res) {
 app.get('/login', async function (req, res) {
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (!req.session.nombre) {
-        res.render("./admin/adminLogin.pug", { "portDB": DB_CONF.portDB, "hostDB": DB_CONF.direccionDB, "port": DB_CONF.port, "host": DB_CONF.direccion })
+        res.render("./admin/adminLogin.pug", { "portDB": DB_CONF.db_port, "hostDB": DB_CONF.db_direccion, "port": DB_CONF.port, "host": DB_CONF.direccion })
       } else {
         res.redirect("/admin");
       }
@@ -114,7 +114,7 @@ app.get('/login', async function (req, res) {
 app.post('/login/comprobar', async function (req, res) {
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarAdmin({ "nombre": req.body.nombre, "pass": req.body.pass })) {
       req.session.nombre = req.body.nombre;
@@ -129,7 +129,7 @@ app.post('/login/comprobar', async function (req, res) {
 app.get('/usuarios', async function (req,res){
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
@@ -148,7 +148,7 @@ app.get('/usuarios', async function (req,res){
 app.get("/categorias", async function (req,res){
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
@@ -167,7 +167,7 @@ app.get("/categorias", async function (req,res){
 app.get("/productos", async function (req,res){
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
@@ -185,7 +185,7 @@ app.get("/productos", async function (req,res){
 app.get("/confSitio", async function (req,res){
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
@@ -203,7 +203,7 @@ app.get("/confSitio", async function (req,res){
 app.get("/general", async function (req,res){
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.user + ':' + DB_CONF.pass + '@' + DB_CONF.direccionDB + ':' + DB_CONF.portDB + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {

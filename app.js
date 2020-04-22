@@ -49,7 +49,7 @@ app.use("/", inicio);
 app.use("/admin", admin)
 
 app.post("/confCMShopUser", async function (req, res) {
-  var url = 'mongodb://' + req.body.usuarioDB + ':' + req.body.passDB + '@' + req.body.direccionDB + ':' + req.body.portDB + '?authMechanism=DEFAULT&authSource=' + req.body.accesoDB + '';
+  var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
   var userAdmin = new useAdmin(url, req.body.nombreDB);
   if (!await userAdmin.comprobarInicio()) {
     var nombre = req.body.nombre || ''; // Recoge el parámetro nombre y si no existe lo pone en blanco
@@ -79,11 +79,11 @@ app.post("/confCMShopUser", async function (req, res) {
           escribir = {
             "_comentario": "Configuración de la base de datos",
 
-            "user": req.body.usuarioDB,
+            "db_user": req.body.usuarioDB,
             "db_auth": req.body.accesoDB,
-            "pass": req.body.passDB,
-            "portDB": req.body.portDB,
-            "direccionDB": req.body.direccionDB,
+            "db_pass": req.body.passDB,
+            "db_port": req.body.portDB,
+            "db_direccion": req.body.direccionDB,
             "db_name": req.body.nombreDB,
 
 
@@ -99,11 +99,11 @@ app.post("/confCMShopUser", async function (req, res) {
       await fs.writeFileSync('./CONFIGURE.json', JSON.stringify({
         "_comentario": "Configuración de la base de datos",
 
-        "user": req.body.usuarioDB,
+        "db_user": req.body.usuarioDB,
         "db_auth": req.body.accesoDB,
-        "pass": req.body.passDB,
-        "portDB": req.body.portDB,
-        "direccionDB": req.body.direccionDB,
+        "db_pass": req.body.passDB,
+        "db_port": req.body.portDB,
+        "db_direccion": req.body.direccionDB,
         "db_name": req.body.nombreDB,
 
 
