@@ -7,5 +7,6 @@
     "db_direccion": "127.0.0.1",
     "db_name": "CMShop",
     "direccion": "martin27.ddns.net",
-    "port": "6969"
+    "port": "6969",
+    "Direccion_Admin": "admin2"
 }

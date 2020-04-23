@@ -84,9 +84,9 @@ app.get("/", async function (req, res) {
         });
         
         `
-        res.render("./admin/admin.pug",{location:"ESTADISTICAS",charts})
+        res.render("./admin/admin.pug",{location:"ESTADISTICAS",charts,"adminD":DB_CONF.Direccion_Admin})
       } else {
-        res.redirect("/admin/login");
+        res.redirect("/"+DB_CONF.Direccion_Admin+"/login");
       }
     }
   } else {
@@ -100,9 +100,9 @@ app.get('/login', async function (req, res) {
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (!req.session.nombre) {
-        res.render("./admin/adminLogin.pug", { "portDB": DB_CONF.db_port, "hostDB": DB_CONF.db_direccion, "port": DB_CONF.port, "host": DB_CONF.direccion })
+        res.render("./admin/adminLogin.pug", { "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD":DB_CONF.Direccion_Admin })
       } else {
-        res.redirect("/admin");
+        res.redirect("/"+DB_CONF.Direccion_Admin+"");
       }
     }
   } else {
@@ -133,9 +133,9 @@ app.get('/usuarios', async function (req,res){
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
-        res.render('./admin/usuario.pug',{location:"Usuarios",usuarios:[["víctor","123","qwe"],["andrea","123","qwe"]]})
+        res.render('./admin/usuario.pug',{location:"Usuarios",usuarios:[["víctor","123","qwe"],["andrea","123","qwe"]],"adminD":DB_CONF.Direccion_Admin})
       }else{
-        res.redirect("/admin/login")
+        res.redirect("/"+DB_CONF.Direccion_Admin+"/login")
       }
     }else{
       res.redirect("/")
@@ -152,9 +152,9 @@ app.get("/categorias", async function (req,res){
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
-        res.render('./admin/categorias.pug',{location:"Categorias",categorias:["Electronica","hogar"]})
+        res.render('./admin/categorias.pug',{location:"Categorias",categorias:["Electronica","hogar"],"adminD":DB_CONF.Direccion_Admin})
       }else{
-        res.redirect("/admin/login")
+        res.redirect("/"+DB_CONF.Direccion_Admin+"/login")
       }
     }else{
       res.redirect("/")
@@ -171,9 +171,9 @@ app.get("/productos", async function (req,res){
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
-        res.render('./admin/productos.pug',{location:"Productos",categorias:[]})
+        res.render('./admin/productos.pug',{location:"Productos",categorias:[],"adminD":DB_CONF.Direccion_Admin})
       }else{
-        res.redirect("/admin/login")
+        res.redirect("/"+DB_CONF.Direccion_Admin+"/login")
       }
     }else{
       res.redirect("/")
@@ -189,9 +189,9 @@ app.get("/confSitio", async function (req,res){
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
-        res.render('./admin/confSitio.pug',{location:"Configuración del Sitio Web",categorias:[]})
+        res.render('./admin/confSitio.pug',{location:"Configuración del Sitio Web",categorias:[],"adminD":DB_CONF.Direccion_Admin})
       }else{
-        res.redirect("/admin/login")
+        res.redirect("/"+DB_CONF.Direccion_Admin+"/login")
       }
     }else{
       res.redirect("/")
@@ -207,9 +207,9 @@ app.get("/general", async function (req,res){
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
-        res.render('./admin/general.pug',{location:"Configuración General",categorias:[]})
+        res.render('./admin/general.pug',{location:"Configuración General",categorias:[],"adminD":DB_CONF.Direccion_Admin})
       }else{
-        res.redirect("/admin/login")
+        res.redirect("/"+DB_CONF.Direccion_Admin+"/login")
       }
     }else{
       res.redirect("/")

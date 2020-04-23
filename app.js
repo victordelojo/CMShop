@@ -4,10 +4,11 @@ var body_parser = require('body-parser');// Poder parsear los datos para los mé
 var useAdmin = require("./controller_db/Admin.js")
 var fs = require('fs');
 var DB_CONF = "";
-
+var adminD="admin";
 try {
   fs.accessSync('./CONFIGURE.json');
-  DB_CONF = require("./CONFIGURE.json")//Carga la configuración de la base de datos
+  DB_CONF = require("./CONFIGURE.json")//Carga la configuración
+  adminD=DB_CONF.Direccion_Admin;
 }
 catch (err) {
   console.log("no esta")
@@ -46,7 +47,7 @@ app.use("/", inicio);
 
 
 
-app.use("/admin", admin)
+app.use("/"+adminD, admin)
 
 app.post("/confCMShopUser", async function (req, res) {
   var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
@@ -90,7 +91,8 @@ app.post("/confCMShopUser", async function (req, res) {
             "_comentario": "Configuración del Sitio Web",
 
             "direccion": req.body.nombreHost,
-            "port": req.body.portHost
+            "port": req.body.portHost,
+            "Direccion_Admin": req.body.direcAdmin
           }
           console.log('Email sent: ' + info.response);
           DB_CONF = escribir;
@@ -110,7 +112,8 @@ app.post("/confCMShopUser", async function (req, res) {
         "_comentario": "Configuración del Sitio Web",
 
         "direccion": req.body.nombreHost,
-        "port": req.body.portHost
+        "port": req.body.portHost,
+        "Direccion_Admin": req.body.direcAdmin
       }, null, 4));
       userAdmin.insertar({ "nombre": nombre, "email": email, "pass": pass })
 

@@ -22,7 +22,7 @@ function comprobar(){
             datos=JSON.parse(this.responseText);
             console.log(datos)
             if(datos.estado){
-                location.replace("http://"+conf.host+":"+conf.port+"/admin");
+                location.replace("http://"+conf.host+":"+conf.port+"/"+conf.adminD+"");
             }else{
                 document.getElementById("alerta").innerHTML="<div class='alert alert-danger alert-dismissible fade show' role='alert'>\
                 <strong>Nombre o Contraseña incorectos</strong>\
@@ -34,7 +34,7 @@ function comprobar(){
             
         }
     };
-    xhttp.open("POST", "http://"+conf.host+":"+conf.port+"/admin/login/comprobar", true);
+    xhttp.open("POST", "http://"+conf.host+":"+conf.port+"/"+conf.adminD+"/login/comprobar", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("nombre="+nombre+"&pass="+pass);
     //document.getElementById("email").setCustomValidity("I am expecting an e-mail address!");
