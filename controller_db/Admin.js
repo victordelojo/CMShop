@@ -81,6 +81,16 @@ module.exports = function (url, bd_nombre) {
         }
         return false;
     }
+    this.recojerDatos = async function (admin) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,// Usar el nuevo motor de tipografia
+            useNewUrlParser: true,// Usa la herramienta para analizar las cadenas de conexión con mongoDB
+        });
+        const dbo = db.db(this.bd_nombre);
+        let thing = await dbo.collection("userAdmin").find({nombre:admin}).toArray();
+        await db.close();
+        return thing[0];
+    }
 
     /*
     dbo.collection("prueba").find({}).toArray(function(err, result){ // Muestra todos los registros

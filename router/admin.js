@@ -68,7 +68,7 @@ app.get("/", async function (req, res) {
         new Chart(document.getElementById('pagos'), {
             type: 'pie',
             data: {
-              labels: ['Paypal', 'Targeta de Credito', 'GPay', 'otros'],
+              labels: ['Ordenadores', 'Placas Bases', 'Procesadores', 'otros'],
               datasets: [{
                 label: '',
                 backgroundColor: ['#3e95cd', '#8e5ea2','#3cba9f','#e8c3b9'],
@@ -208,6 +208,24 @@ app.get("/general", async function (req,res){
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
         res.render('./admin/general.pug',{location:"Configuración General",categorias:[],"adminD":DB_CONF.Direccion_Admin})
+      }else{
+        res.redirect("/"+DB_CONF.Direccion_Admin+"/login")
+      }
+    }else{
+      res.redirect("/")
+    }
+  }else{
+    res.redirect("confCMShopUser")
+  }
+})
+app.get("/usuarioAdmin",async function (req,res){
+  if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+    var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var usuAdmin = new admin(url, DB_CONF.db_name);
+    if (await usuAdmin.comprobarInicio()) {
+      if (req.session.nombre) {
+        res.render('./admin/usuarioAdmin.pug',{location:"Configurar Adminstrador","adminD":DB_CONF.Direccion_Admin,datosUsu: await usuAdmin.recojerDatos(req.session.nombre)})
       }else{
         res.redirect("/"+DB_CONF.Direccion_Admin+"/login")
       }

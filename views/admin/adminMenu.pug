@@ -14,7 +14,7 @@ html
         div.col-12.p-0
           div.row.align-items-center.m-0
             div.col-md-3.col-xl-2.d-none.d-md-inline-block
-              img.img-fluid.p-3(src="../logo.png", alt="Responsive image", style="width:60%")
+              img.img-fluid.p-3.ml-5(src="../logo.png", alt="Responsive image", style="width:60%")
             div.col-2.col-sm-2.d-md-none.d-inline-block
               button.btn.btn-dark.w-100.navbar-btn.pull-right.p-0.h-sm-25(id="btn-menu",type="button" ,data-toggle="modal" ,data-target="#sidebar-left") 
                 span.typcn.typcn-th-menu
@@ -36,7 +36,7 @@ html
                     div.card-body.p-0
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
-                          div.card-header.border-0(id="headingFive")
+                          div.card-header.border-0(id="headingOne")
                             a(href=`/${adminD}`)
                               h6.mb-0 Estadisticas
                 div.card.bg-dark
@@ -47,7 +47,7 @@ html
                     div.card-body.p-0
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
-                          div.card-header.border-0(id="headingFive")
+                          div.card-header.border-0(id="headingTwo")
                             a(href=`/${adminD}/categorias`)
                               h6.mb-0 Todas
                 div.card.bg-dark
@@ -58,7 +58,18 @@ html
                     div.card-body.p-0
                       div.card-body.p-0
                         div.card.bg-secondary.border-0
-                          div.card-header.border-0(id="headingFive")
+                          div.card-header.border-0(id="headingThree")
+                            a(href=`/${adminD}/productos`)
+                              h6.mb-0 Todos
+                div.card.bg-dark
+                  div.card-header(id="headingPedidos")
+                    a.collapsed(data-toggle="collapse", href="#collapsePedidos", aria-expanded="false" aria-controls="collapsePedidos")
+                      h6.mb-0.text-white Pedidos
+                  div.collapse.bg-secondary(id="collapsePedidos", aria-labelledby="headingPedidos", data-parent="#accordionExample")
+                    div.card-body.p-0
+                      div.card-body.p-0
+                        div.card.bg-secondary.border-0
+                          div.card-header.border-0(id="headingPedidos")
                             a(href=`/${adminD}/productos`)
                               h6.mb-0 Todos
                 div.card.bg-dark
@@ -66,12 +77,16 @@ html
                     a.collapsed.te(data-toggle="collapse", href="#collapseFour", aria-expanded="false" aria-controls="collapseFour")
                       h6.mb-0.text-white Usuarios
                   div.collapse.bg-secondary(id="collapseFour", aria-labelledby="headingFour", data-parent="#accordionExample")
-                    div.card-body.p-0                          
-                      div.card-body.p-0
+                    div.card-body.p-0
+                      div.card.bg-secondary.border-0
+                        div.card-header.border-0(id="headingFour")
+                          a(href=`/${adminD}/usuarios`)
+                            h6.mb-0 Clientes
+                    div.card-body.p-0
                         div.card.bg-secondary.border-0
-                          div.card-header.border-0(id="headingFive")
-                            a(href=`/${adminD}/usuarios`)
-                              h6.mb-0 Todos
+                          div.card-header.border-0(id="headingFour")
+                            a(href=`/${adminD}/usuarioAdmin`)
+                              h6.mb-0 Administrador
                 div.card.bg-dark
                   div.card-header(id="headingFive")
                     a.collapsed(data-toggle="collapse", href="#collapseFive", aria-expanded="false" aria-controls="collapseFive")
@@ -138,12 +153,16 @@ html
                           a.collapsed.te(data-toggle="collapse", href="#collapseFour", aria-expanded="false" aria-controls="collapseFour")
                             h6.mb-0.text-white Usuarios
                         div.collapse.bg-secondary(id="collapseFour", aria-labelledby="headingFour", data-parent="#accordionExample")
-                          div.card-body.p-0                          
                             div.card-body.p-0
                               div.card.bg-secondary.border-0
                                 div.card-header.border-0(id="headingFive")
                                   a(href=`/${adminD}/usuarios`)
-                                    h6.mb-0 Todos
+                                    h6.mb-0 Clientes
+                            div.card-body.p-0
+                              div.card.bg-secondary.border-0
+                                div.card-header.border-0(id="headingFive")
+                                  a(href=`/${adminD}/usuarioAdmin`)
+                                    h6.mb-0 Administrador
                       div.card.bg-dark
                         div.card-header(id="headingFive")
                           a.collapsed(data-toggle="collapse", href="#collapseFive", aria-expanded="false" aria-controls="collapseFive")
