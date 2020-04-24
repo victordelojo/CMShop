@@ -23,7 +23,7 @@ Posibles problemas:
 </h2>
 <ul>
 <li>
-Al Terminar la configuración de CMShop vuelve a pedir los parámetros de configuración <br> Reinicia el servidor.
+Al Terminar la configuración de CMShop vuelve a pedir los parámetros de configuración <br> <b>Reinicia el servidor</b>.
 </li>
 <li>
 No inicia sesión en admin <br> Comprobar si la dirección de donde está alojado el CMShop esta bien configurado en el archivo <b>CONFIGURE.json</b>
