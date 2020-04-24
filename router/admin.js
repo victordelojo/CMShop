@@ -236,5 +236,23 @@ app.get("/usuarioAdmin",async function (req,res){
     res.redirect("confCMShopUser")
   }
 })
+app.get("/pedidos",async function (req, res){
+  if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+    var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var usuAdmin = new admin(url, DB_CONF.db_name);
+    if (await usuAdmin.comprobarInicio()) {
+      if (req.session.nombre) {
+        res.render('./admin/pedidos.pug',{location:"Pedidos","adminD":DB_CONF.Direccion_Admin})
+      }else{
+        res.redirect("/"+DB_CONF.Direccion_Admin+"/login")
+      }
+    }else{
+      res.redirect("/")
+    }
+  }else{
+    res.redirect("confCMShopUser")
+  }
+})
 
 module.exports = app;
