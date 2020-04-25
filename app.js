@@ -50,9 +50,7 @@ app.use("/", inicio);
 app.use("/"+adminD, admin)
 
 app.post("/confCMShopUser", async function (req, res) {
-  var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-  var userAdmin = new useAdmin(url, req.body.nombreDB);
-  if (!await userAdmin.comprobarInicio()) {
+  if (!fs.existsSync(__dirname + "/../CONFIGURE.json")) {
     var nombre = req.body.nombre || ''; // Recoge el parámetro nombre y si no existe lo pone en blanco
     if (nombre != "") {
       var email = req.body.email;
@@ -92,7 +90,7 @@ app.post("/confCMShopUser", async function (req, res) {
 
             "direccion": req.body.nombreHost,
             "port": req.body.portHost,
-            "Direccion_Admin": req.body.direcAdmin
+            "Direccion_Admin": "admin"
           }
           console.log('Email sent: ' + info.response);
           DB_CONF = escribir;
@@ -115,6 +113,8 @@ app.post("/confCMShopUser", async function (req, res) {
         "port": req.body.portHost,
         "Direccion_Admin": req.body.direcAdmin
       }, null, 4));
+      var url = 'mongodb://' + req.body.usuarioDB + ':' + req.body.passDB + '@' + req.body.direccionDB + ':' + req.body.portDB + '?authMechanism=DEFAULT&authSource=' + req.body.accesoDB + '';
+      var userAdmin = new useAdmin(url, req.body.nombreDB);
       userAdmin.insertar({ "nombre": nombre, "email": email, "pass": pass })
 
     }
