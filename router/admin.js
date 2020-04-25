@@ -5,6 +5,13 @@ var fs = require("fs")
 var Categoria = require("../controller_db/Categoria")
 
 
+app.get("/reiniciar", async function (req, res){
+  var exec = require('child_process').exec, child;
+  child = exec('pm2 restart app.js',
+  function (error, stdout, stderr) {
+    
+  })
+})
 
 app.get("/", async function (req, res) {
   if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {

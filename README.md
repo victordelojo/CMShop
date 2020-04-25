@@ -7,14 +7,15 @@ Antes de la descarga del CMShop debes de tener instalado:
 <li>npm</li>
 <li>git</li>
 <li>MongoDB</li>
+<li>node < v8.10.0</li>
 </ul>
 </p>
-<p>Para iniciar la aplicacion sigues los siguientes pasos:</p>
+<p>Para iniciar la aplicacion sigues los siguientes pasos en la terminal:</p>
 <ul>
 <li>Obtener CMShop: git clone https://github.com/victordelojo/CMShop</li>
 <li>Entramos en la carpeta CMShop</li>
 <li>Dentro de esa carpeta instalamos las dependencias: npm install</li>
-<li>Arrancamos el servidor CMShop: node app.js</li>
+<li>Arrancamos el servidor CMShop: node app.js &</li>
 <li>Vamos al navegador y entramos en http://localhost:3000 para la configuración de CMShop</li>
 </ul>
 <br>

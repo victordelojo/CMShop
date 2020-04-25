@@ -32,7 +32,7 @@ app.set("view engine", "pug")// Indicamos el motor de plantilla que utilizaremos
 
 app.use(session({ secret: 'AltoSecreto', resave: false, saveUninitialized: true }));//Usa sieiones con una frase secreta
 
-
+var hola;
 
 
 // Connection URL
@@ -113,6 +113,7 @@ app.post("/confCMShopUser", async function (req, res) {
         "port": req.body.portHost,
         "Direccion_Admin": "admin"
       }, null, 4));
+      DB_CONF.port=req.body.portHost;
       var url = 'mongodb://' + req.body.usuarioDB + ':' + req.body.passDB + '@' + req.body.direccionDB + ':' + req.body.portDB + '?authMechanism=DEFAULT&authSource=' + req.body.accesoDB + '';
       var userAdmin = new useAdmin(url, req.body.nombreDB);
       userAdmin.insertar({ "nombre": nombre, "email": email, "pass": pass })
@@ -138,6 +139,7 @@ app.post("/confCMShopUser", async function (req, res) {
 app.use(function (err, res, next) {
   res.status(404).sendFile(__dirname + '/static/404.html');
 });
-app.listen(3000, function () { // Arranca el servidor en el puerto 3000
+
+app.listen(DB_CONF.port || 3000, function () { // Arranca el servidor e
   console.log('Example app listening on port 3000!');
 });
