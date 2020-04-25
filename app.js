@@ -111,7 +111,7 @@ app.post("/confCMShopUser", async function (req, res) {
 
         "direccion": req.body.nombreHost,
         "port": req.body.portHost,
-        "Direccion_Admin": req.body.direcAdmin
+        "Direccion_Admin": "admin"
       }, null, 4));
       var url = 'mongodb://' + req.body.usuarioDB + ':' + req.body.passDB + '@' + req.body.direccionDB + ':' + req.body.portDB + '?authMechanism=DEFAULT&authSource=' + req.body.accesoDB + '';
       var userAdmin = new useAdmin(url, req.body.nombreDB);
