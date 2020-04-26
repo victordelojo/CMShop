@@ -5,12 +5,28 @@ var fs = require("fs")
 var Categoria = require("../controller_db/Categoria")
 
 
-app.get("/reiniciar", async function (req, res){
+app.get("/reiniciar", async function (req, res){ //Cambia los parámetros del archivo de configuración y reinicia el servicio
+  var DB_CONF = require("../CONFIGURE.json")
+  await fs.writeFileSync(__dirname + '/../CONFIGURE.json', JSON.stringify({
+    "_comentario": "Configuración de la base de datos",
+
+    "db_user": DB_CONF.db_user,
+    "db_auth": DB_CONF.db_auth,
+    "db_pass": DB_CONF.db_pass,
+    "db_port": DB_CONF.db_port,
+    "db_direccion": DB_CONF.db_direccion,
+    "db_name": DB_CONF.db_name,
+
+
+    "_comentario": "Configuración del Sitio Web",
+
+    "direccion": "martin27.ddns.net",
+    "port": 3000,
+    "Direccion_Admin": "admin"
+  }, null, 4));
   var exec = require('child_process').exec, child;
-  child = exec('pm2 restart app.js',
-  function (error, stdout, stderr) {
-    
-  })
+  child = exec('pm2 restart app.js')
+  res.redirect("http://martin27.ddns.net:"+3000+"/"+DB_CONF.Direccion_Admin)
 })
 
 app.get("/", async function (req, res) {
