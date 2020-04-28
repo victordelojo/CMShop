@@ -18,7 +18,8 @@
     "pm2": "4.4.0",
     "pug": "^2.0.4",
     "serve-favicon": "^2.5.0",
-    "utf-8-validate": "^5.0.2"
+    "utf-8-validate": "^5.0.2",
+    "https": "1.0.0"
   },
   "repository": {
     "type": "https",
