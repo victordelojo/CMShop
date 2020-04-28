@@ -3,6 +3,7 @@ var app = express();
 var body_parser = require('body-parser');// Poder parsear los datos para los métodos POST
 var useAdmin = require("./controller_db/Admin.js")
 var fs = require('fs');
+var https = require('https')
 var DB_CONF = "";
 var adminD="admin";
 try {
@@ -140,6 +141,19 @@ app.use(function (err, res, next) {
   res.status(404).sendFile(__dirname + '/static/404.html');
 });
 
-app.listen(DB_CONF.port || 3000, function () { // Arranca el servidor e
-  console.log('Example app listening on port 3000!');
-});
+if(!true){
+
+  var privateKey  = fs.readFileSync('CA.key', 'utf8');
+  var certificate = fs.readFileSync('CA.crt', 'utf8');
+
+  var credentials = {key: privateKey, cert: certificate};
+
+  var httpsServer = https.createServer(credentials, app);
+
+  httpsServer.listen(DB_CONF.port || 3000);
+}else{
+  app.listen(DB_CONF.port || 3000, function () { // Arranca el servidor e
+    console.log('Example app listening on port 3000!');
+  });
+}
+

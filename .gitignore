@@ -1,3 +1,6 @@
 node_modules/
 CONFIGURE.json
 package-lock.json
+CA.crt
+CA.csr
+CA.key
