@@ -141,10 +141,10 @@ app.use(function (err, res, next) {
   res.status(404).sendFile(__dirname + '/static/404.html');
 });
 
-if(!true){
+if(DB_CONF.https){
 
-  var privateKey  = fs.readFileSync('CA.key', 'utf8');
-  var certificate = fs.readFileSync('CA.crt', 'utf8');
+  var privateKey  = fs.readFileSync(DB_CONF.httpsKey, 'utf8');
+  var certificate = fs.readFileSync(DB_CONF.httpsCrt, 'utf8');
 
   var credentials = {key: privateKey, cert: certificate};
 

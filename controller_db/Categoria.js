@@ -32,13 +32,40 @@ module.exports = function (url, bd_nombre) {
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        var salida2 = await dbo.collection("categorias").find({},{_id:0,name:1}).toArray();
+        let salida2 = await dbo.collection("categorias").find({},{_id:0,name:1}).toArray();
         db.close()
-        var salida=[]
+        let salida=[]
         salida2.forEach(element => {
-            salida.push(element.name+"")
+            salida.push("'"+element.name+"'")
         });
         return salida;
+    }
+    this.getPedidosPrecioDeCategorias = async function(){
+        let db= await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        let categorias = await dbo.collection("categorias").find({},{_id:0,nombre:1,ganancias:1}).sort({ganancias:-1}).limit(3).toArray();//Obtiene las 3 categorias con más ganancias
+        let total = await dbo.collection("categorias").aggregate([{ // Obtien todas las ganancias obtenidas
+                $group:{
+                    _id:null,
+                    "total":{$sum: "$ganancias"}
+                }
+            }
+        ]).toArray();
+        total=total[0].total
+        let nombre=[];
+        let ganancias=[];
+        db.close();
+        categorias.forEach(element =>{
+            nombre.push("'"+element.nombre+"'");
+            ganancias.push("'"+element.ganancias+"'");
+            total-=element.ganancias;
+        })
+        nombre.push("'otros'");
+        ganancias.push(total)
+        return [nombre,ganancias];
     }
 
     /*

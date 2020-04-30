@@ -16,7 +16,7 @@ Antes de la descarga del CMShop debes de tener instalado:
 <li>Obtener CMShop: git clone https://github.com/victordelojo/CMShop</li>
 <li>Entramos en la carpeta CMShop</li>
 <li>Dentro de esa carpeta instalamos las dependencias: npm install</li>
-<li>Arrancamos el servidor CMShop: pm2 start app.js &</li>
+<li>Arrancamos el servidor CMShop: pm2 start app.js</li>
 <li>Vamos al navegador y entramos en http://localhost:3000 para la configuración de CMShop</li>
 <li>Para que arranque el servidor al inicio ejecutamos:
 <ul>

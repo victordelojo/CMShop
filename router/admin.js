@@ -3,6 +3,7 @@ var app = express.Router();
 var admin = require("../controller_db/Admin.js")
 var fs = require("fs")
 var Categoria = require("../controller_db/Categoria")
+var Producto = require("../controller_db/Producto")
 
 
 app.get("/reiniciar", async function (req, res){ //Cambia los parámetros del archivo de configuración y reinicia el servicio
@@ -37,23 +38,28 @@ app.get("/", async function (req, res) {
     if (await usuAdmin.comprobarInicio()) {
       if (req.session.nombre) {
         var categorias = new Categoria(url,DB_CONF.db_name);
-        categorias =await categorias.getCategorias()
-        var salida=""
-        categorias.forEach(function(element,key){
-          if(key==categorias.length-1){
-            salida+="'"+element+"'"
+        var productos = new Producto(url,DB_CONF.db_name)
+        var ganancaiasCategorias=await categorias.getPedidosPrecioDeCategorias();
+        var pedidosMensuales= await productos.totalProductosMensuales();
+        var gananciasMesnuales = await productos.getGananciasMensuales();
+        var meses=["'Enero'","'Febrero'","'Marzo'","'Abril'","'Mayo'","'Junio'","'Julio'","'Agosto'","'Septiembre'","'Octubre'","'Noviembre'","'Diciembre'"];
+        var mes=new Date().getMonth();
+        var aux=[]
+        for(i=3;i>=0;i--){
+          aux[i]=meses[mes]
+          if(mes==0){
+            mes=11;
           }else{
-            salida+="'"+element+"',"
+            mes--;
           }
-          
-        })
+        }
         var charts=`
           new Chart(document.getElementById('ganancias'), {
             type: 'line',
             data: {
-                labels: [`+salida+`],
+                labels: [${aux.toString()}],
                 datasets: [{
-                    data: [0, 100, 300, 250],
+                    data: [${gananciasMesnuales}],
                     label: 'Euros',
                     borderColor: '#3e95cd',
                     fill: true
@@ -63,7 +69,7 @@ app.get("/", async function (req, res) {
             options: {
                 title: {
                     display: true,
-                    text: 'Ganancias en los ultimos días'
+                    text: 'Ganancias en los ultimos meses'
                 }
             }
         });
@@ -71,9 +77,9 @@ app.get("/", async function (req, res) {
         new Chart(document.getElementById('pedidos'), {
             type: 'line',
             data: {
-                labels: ['Enero', 'Febrero', 'Marzo', 'Abril'],
+                labels: [${aux.toString()}],
                 datasets: [{
-                    data: [0, 2, 6, 5],
+                    data: [${pedidosMensuales}],
                     label: 'Nº pedidos',
                     borderColor: '#3cba9f',
                     fill: true
@@ -91,11 +97,11 @@ app.get("/", async function (req, res) {
         new Chart(document.getElementById('pagos'), {
             type: 'pie',
             data: {
-              labels: ['Ordenadores', 'Placas Bases', 'Procesadores', 'otros'],
+              labels: [${ganancaiasCategorias[0]}],
               datasets: [{
                 label: '',
                 backgroundColor: ['#3e95cd', '#8e5ea2','#3cba9f','#e8c3b9'],
-                data: [2478,5267,734,784]
+                data: [${ganancaiasCategorias[1]}]
               }]
             },
             options: {
