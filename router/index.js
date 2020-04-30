@@ -49,19 +49,20 @@ if(os.platform()=="linux"){
     }
 });
 }else{
-    child = exec('dir .\views\default\*.pug',
+    child = exec('dir '+__dirname+'\\..\\views\\default\\*.pug | find ".pug"',
 // Pasamos los parámetros error, stdout la salida 
 // que mostrara el comando
   function (error, stdout, stderr) {
     // Imprimimos en pantalla con console.log
-    var arra=stdout.split(".pug\n")
+    var arra=stdout.match(/\s\w{1,}.pug/gi)
     console.log(arra)
     arra.forEach(element => {
         if(element!==""){
-            if(element=="index"){
+            if(element.trim()=="index.pug"){
                 element=""
             }
-            router.get("/"+element, async function (req, res) {
+console.log(element.split(".")[0].trim())
+            router.get("/"+element.split(".")[0].trim(), async function (req, res) {
                 if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
                     var DB_CONF = require("../CONFIGURE.json")//Carga la configuración de la base de datos
                     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
@@ -70,7 +71,7 @@ if(os.platform()=="linux"){
                         if(element==""){
                             element="index"
                         }
-                        res.render("./default/"+element+".pug");// Envia el archivo que se va a visualizar
+                        res.render("./default/"+element);// Envia el archivo que se va a visualizar
                     } else {
                         res.render("./admin/configurar_CMShop.pug")
                     }
