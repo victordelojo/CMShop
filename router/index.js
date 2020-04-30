@@ -49,7 +49,7 @@ if(os.platform()=="linux"){
     }
 });
 }else{
-    child = exec('dir ./views/default/*.pug',
+    child = exec('dir .\views\default\*.pug',
 // Pasamos los parámetros error, stdout la salida 
 // que mostrara el comando
   function (error, stdout, stderr) {
