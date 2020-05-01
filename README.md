@@ -7,7 +7,7 @@ Antes de la descarga del CMShop debes de tener instalado:
 <li>npm</li>
 <li>git</li>
 <li>MongoDB</li>
-<li>node < v8.10.0</li>
+<li>node > v8.10.0</li>
 <li>Gestro de servicio pm2</li>
 </ul>
 </p>
