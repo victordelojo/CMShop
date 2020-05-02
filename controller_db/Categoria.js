@@ -21,9 +21,14 @@ module.exports = function(url, bd_nombre) {
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        return dbo.collection("categorias").insertOne(datos);
-
-
+        var existe = await dbo.collection("categorias").find({ nombre: datos.nombre }).toArray();
+        if (existe.length == 0) {
+            await dbo.collection("categorias").insertOne(datos);
+            db.close()
+            return true;
+        }
+        db.close()
+        return false;
     }
     this.getCategorias = async function() {
         let db = await this.mongodb.MongoClient.connect(this.url, {
@@ -31,12 +36,29 @@ module.exports = function(url, bd_nombre) {
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        let salida2 = await dbo.collection("categorias").find({}, { _id: 0, name: 1 }).toArray();
+        let salida2 = await dbo.collection("categorias").find({}).toArray();
+        let productos = await dbo.collection("productos").aggregate([{ $group: { _id: "$categoria", total: { $sum: 1 } } }]).toArray()
+        var salida = []
+        var aux;
+        for (let i = 0; i < salida2.length; i++) {
+            aux = false;
+            for (let x = 0; x < productos.length; x++) {
+
+                //Para compara 2 ids se necesitan el método equals para compara ya que es un objeto y no un String
+                if (salida2[i]._id.equals(productos[x]._id)) {
+                    salida[i] = { nombre: salida2[i].nombre, productos: productos[x].total, ganancias: salida2[i].ganancias };
+                    aux = true;
+                }
+            }
+            if (!aux) {
+                salida[i] = {
+                    nombre: salida2[i].nombre,
+                    productos: 0,
+                    ganancias: salida2[i].ganancias
+                }
+            }
+        }
         db.close()
-        let salida = []
-        salida2.forEach(element => {
-            salida.push("'" + element.name + "'")
-        });
         return salida;
     }
     this.getPedidosPrecioDeCategorias = async function() {
@@ -68,6 +90,39 @@ module.exports = function(url, bd_nombre) {
         nombre.push("'otros'");
         ganancias.push(total)
         return [nombre, ganancias];
+    }
+
+    this.borrar = async function(datos) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var categoria = await dbo.collection("categorias").find({ nombre: datos.nombre }).toArray();
+        if (categoria.length == 1) {
+            await dbo.collection("productos").updateMany({ categoria: this.mongodb.ObjectId(categoria._id) }, { $unset: { categoria: "" } })
+            await dbo.collection("categorias").deleteOne({ nombre: datos.nombre });
+            db.close();
+            return true;
+        }
+        db.close();
+        return false;
+    }
+
+    this.editar = async function(datos) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var categoria = await dbo.collection("categorias").find({ nombre: datos.nombreA }).toArray();
+        if (categoria.length == 1) {
+            await dbo.collection("categorias").update({ nombre: datos.nombreA }, { $set: { nombre: datos.nombreN } })
+            db.close()
+            return true;
+        }
+        db.close()
+        return false;
     }
 
     /*
