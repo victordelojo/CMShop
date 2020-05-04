@@ -153,6 +153,6 @@ if (DB_CONF.https) {
     httpsServer.listen(DB_CONF.port || 3000);
 } else {
     app.listen(DB_CONF.port || 3000, function() { // Arranca el servidor e
-        console.log('Example app listening on port 3000!');
+        console.log(`Example app listening on port ${DB_CONF.port}!`);
     });
 }

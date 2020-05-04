@@ -98,6 +98,7 @@ function borrar() {
 }
 
 function editarProducto() {
+    $('#cargar').modal('show');
     var seguir = true
     if (nombreMod.value == "") {
         nombreMod.focus()
@@ -163,6 +164,7 @@ function editarProducto() {
                     location.reload();
                 } else {
                     $('#editar').modal('hide')
+                    setTimeout(() => { $('#cargar').modal('hide'); }, 500);
                     document.getElementById("alerta").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>\
                 <strong>" + datos.error + "</strong>\
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>\
@@ -185,6 +187,7 @@ function editarProducto() {
 }
 
 function guardar() {
+    $('#cargar').modal('hide');
     var seguir = true;
     var nombre = document.getElementById("nombreProducto")
     var descripcion = document.getElementById("descipcionProducto")
@@ -254,6 +257,7 @@ function guardar() {
                     location.reload();
                 } else {
                     $('#nuevo').modal('hide')
+                    setTimeout(() => { $('#cargar').modal('hide'); }, 500);
                     document.getElementById("alerta").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>\
                 <strong>" + datos.error + "</strong>\
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>\
