@@ -22,7 +22,7 @@ Antes de la descarga del CMShop debes de tener instalado:
 <ul>
 <li>Dentro de la carpeta: pm2 startup [ubuntu | ubuntu14 | ubuntu12 | centos | centos6 | arch | oracle | amazon | macos | darwin | freebsd | systemd | systemv | upstart | launchd | rcd | openrc]</li>
 Si instalas dentro de una distribución linux debes de especificar la distribución, si estas en macos o windows puedes ejecutar solo el comando pm2 startup.
-<li>Generará un comando que se deberá de ejecuatar como administrador</li>
+<li>Generará un comando que se deberá de ejecutar como administrador</li>
 </ul>
 </ul>
 <br>
