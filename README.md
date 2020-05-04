@@ -32,7 +32,7 @@ Posibles problemas:
 <ul>
 <li>Error: listen EACCES 0.0.0.0:80 <br> Iniciar el servicio como <b>administrador</b>, ya que necesita permisos para utilizar el puerto 80</li><br>
 <li>
-Al Terminar la configuración de CMShop vuelve a pedir los parámetros de configuración <br> <b>Reinicia el servidor</b>.
+Al Terminar la configuración de CMShop vuelve a pedir los parámetros de configuración <br> <b>Reinicia el servicio</b>.
 </li><br>
 <li>
 No inicia sesión en admin <br> Comprobar si la dirección de donde está alojado el CMShop esta bien configurado en el archivo <b>CONFIGURE.json</b>
