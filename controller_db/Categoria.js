@@ -30,6 +30,14 @@ module.exports = function(url, bd_nombre) {
         db.close()
         return false;
     }
+    this.getnombreCategorias = async function(){
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        return await dbo.collection("categorias").find({},{_id:1,nombre:1}).toArray();
+    }
     this.getCategorias = async function() {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
@@ -99,7 +107,7 @@ module.exports = function(url, bd_nombre) {
         });
         const dbo = db.db(this.bd_nombre);
         var categoria = await dbo.collection("categorias").find({ nombre: datos.nombre }).toArray();
-        if (categoria.length == 1) {
+        if (categoria.length > 0) {
             await dbo.collection("productos").updateMany({ categoria: this.mongodb.ObjectId(categoria._id) }, { $unset: { categoria: "" } })
             await dbo.collection("categorias").deleteOne({ nombre: datos.nombre });
             db.close();
@@ -117,7 +125,7 @@ module.exports = function(url, bd_nombre) {
         const dbo = db.db(this.bd_nombre);
         var categoria = await dbo.collection("categorias").find({ nombre: datos.nombreA }).toArray();
         if (categoria.length == 1) {
-            await dbo.collection("categorias").update({ nombre: datos.nombreA }, { $set: { nombre: datos.nombreN } })
+            await dbo.collection("categorias").updateOne({ nombre: datos.nombreA }, { $set: { nombre: datos.nombreN } })
             db.close()
             return true;
         }

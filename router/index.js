@@ -11,7 +11,7 @@ var os = require("os");
 var exec = require('child_process').exec,
     child;
 
-if (os.platform() == "linux") {
+if (os.platform() != "win32") {
     child = exec('ls ./views/default | grep .pug',
         // Pasamos los parámetros error, stdout la salida 
         // que mostrara el comando

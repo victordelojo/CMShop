@@ -1,6 +1,119 @@
 extends adminMenu.pug
 append datos
   div.row.m-0.p-0
-    div.col-12.mt-5 Productos
+    div.col-12.mt-5.text-center
+      div(id="alerta")
+      button.btn.btn-outline-dark(data-toggle="modal" data-target="#nuevo") Añadir
+  div.row.m-0.p-0
+    div.col-12.mt-5.text-center
+      table.table.table-hover.table-responsive-sm
+        thead
+          tr
+            th(scope="col") 
+            th(scope="col") Nombre
+            th(scope="col") Descripción
+            th(scope="col") Precio
+            th(scope="col") Cantidad
+            th(scope="col") 
+            th(scope="col") 
+        each val in productos
+          tbody
+            tr
+              td(scope="row")
+                img.img-fluid.img-thumbnail(src="../fotos/"+val.foto, alt="foto",width="300px") 
+              td #{val.nombre}
+              td(width="330px") #{val.descripcion}
+              td #{val.precio}
+              td #{val.cantidad}
+              td
+                button.btn.btn-outline-dark.editar(data-toggle="modal" data-target="#cargar",value=val._id) Editar
+              td 
+                button.btn.btn-dark.borrar(data-toggle="modal" data-target="#borrar",value=val._id) Borrar
+  div.modal.fade(id="nuevo" tabindex="-1" role="dialog" aria-labelledby="nuevoTitle" aria-hidden="true")
+    div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
+      div.modal-content
+        div.modal-header
+          h5.modal-title(id="exampleModalLongTitle") Nuevo producto
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") &times;
+        div.modal-body
+          h5.m-3 Nombre: 
+          input.form-control(type="text",id="nombreProducto" name="nombre")
+          h5.m-3 Descripción:
+          textarea.form-control(id="descipcionProducto", cols="30", rows="10", name="descripcion")
+          div.row
+            div.col-6
+              h5.m-3 Cantidad:
+              input.form-control(type="number", id="cantProducto", name="cant")
+            div.col-6
+              h5.m-3 Precio:
+              input.form-control(type="number", id="precioProducto" name="precio")
+          div.m-3
+            h5 Foto:
+            div.custom-file
+              input.custom-file-input(type="file",id="fotoProducto",name="foto")
+              label.custom-file-label(for="customFileLang") Selecciona foto
+          h5.m-3 Categoría:
+          select.custom-select(id="categoriaProducto" name="categoria")
+            option(value=0) Seleccione...
+            each val in categorias
+              option(value=val._id) #{val.nombre}
+          div.invalid-feedback Todos los apartados tiene que estar rellenos
+
+        div.modal-footer
+          button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
+          button.btn.btn-dark(type="button",id="guardarProducto") Guardar
+  div.modal.fade(id="borrar" tabindex="-1" role="dialog" aria-labelledby="borrarTitle" aria-hidden="true")
+    div.modal-dialog.modal-dialog-centered(role="document")
+      div.modal-content
+        div.modal-header
+          h5.modal-title(id="exampleModalLongTitle") Borrar
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") &times;
+        div.modal-body
+          h4 ¿Estás seguro de borrar el Producto?
+        div.modal-footer
+          button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
+          button.btn.btn-dark(type="button",id="borrarProducto") Borrar
+  div.modal.fade(id="editar" tabindex="-1" role="dialog" aria-labelledby="editarTitle" aria-hidden="true")
+    div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
+      div.modal-content
+        div.modal-header
+          h5.modal-title(id="exampleModalLongTitle") Editar
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") &times;
+        div.modal-body
+          h5.m-3 Nombre: 
+          input.form-control(type="text",id="nombreProductoMod" name="nombre")
+          h5.m-3 Descripción:
+          textarea.form-control(id="descipcionProductoMod", cols="30", rows="10", name="descripcion")
+          div.row
+            div.col-6
+              h5.m-3 Cantidad:
+              input.form-control(type="number", id="cantProductoMod", name="cant")
+            div.col-6
+              h5.m-3 Precio:
+              input.form-control(type="number", id="precioProductoMod" name="precio")
+          div.m-3
+            h5 Foto:
+            div.custom-file
+              input.custom-file-input(type="file",id="fotoProductoMod",name="foto")
+              label.custom-file-label(for="customFileLang") Selecciona foto
+          h5.m-3 Categoría:
+          select.custom-select(id="categoriaProductoMod" name="categoria")
+            option(value=0) Seleccione...
+            each val in categorias
+              option(value=val._id, id=`${val.nombre}SelectMod`) #{val.nombre}
+          div.invalid-feedback Todos los apartados tiene que estar rellenos
+        div.modal-footer
+          button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
+          button.btn.btn-dark(type="button",id="editarProducto") Editar
+    div.modal.bg-transparent.border-0.fade(id="cargar" tabindex="-1" role="dialog" aria-labelledby="editarTitle" aria-hidden="true")
+      div.modal-dialog.bg-transparent.modal-dialog-centered(role="document")
+        div.modal-content.bg-transparent.border-0
+          div.modal-body.bg-transparent
+            div.spinner-grow.text-dark(role="status")
+              span.sr-only Loading...
+
 append script
-  
+  script(src="../javascript/productos.js")

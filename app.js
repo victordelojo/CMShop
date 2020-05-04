@@ -3,7 +3,8 @@ var app = express();
 var body_parser = require('body-parser'); // Poder parsear los datos para los métodos POST
 var useAdmin = require("./controller_db/Admin.js")
 var fs = require('fs');
-var https = require('https')
+var https = require('https');
+const fileUpload = require('express-fileupload');
 var DB_CONF = "";
 var adminD = "admin";
 try {
@@ -24,7 +25,7 @@ var favicon = require('serve-favicon');
 var inicio = require("./router/index");
 var admin = require("./router/admin");
 
-
+app.use(fileUpload())
 app.use(favicon(__dirname + '/static/logo.png')); // 
 app.use(express.static("static")) // Añade la carpeta con los archivos estaticos de la aplicación
 app.use(body_parser.urlencoded({ extended: true })); // Usa el parseo para el metodo POST

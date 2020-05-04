@@ -1,4 +1,4 @@
-module.exports = function(url, bd_nombre) {
+module.exports = function (url, bd_nombre) {
 
     this.mongodb = require('mongodb'); // 
     this.f = require('util').format;
@@ -6,17 +6,88 @@ module.exports = function(url, bd_nombre) {
     this.url = url;
     this.bd_nombre = bd_nombre;
 
-    this.insertar = async function(cliente, datos) {
+    this.getProductos = async function () {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        await dbo.collection("clientes").update({ _id: cliente }, { $push: { pedidos: { datos } } });
+        var productos=await dbo.collection("productos").find({}).toArray()
+        db.close();
+        return productos;
+    }
+
+    this.getProductosFotosCount = async function(foto){
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var productos=await dbo.collection("productos").find({foto:foto}).toArray()
+        db.close();
+        return productos.length;
+    }
+
+    this.getProductoById = async function(id){
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var producto=await dbo.collection("productos").find({_id: new this.mongodb.ObjectId(id)}).toArray();
+        db.close();
+        return producto[0];
+    }
+
+    this.insertarPedido = async function (cliente, datos) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        await dbo.collection("clientes").updateOne({ _id: cliente }, { $set: { datos } });
         db.close();
     }
 
-    this.totalProductosMensuales = async function() {
+    this.actualizar = async function (antiguo, nuevo) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        nuevo.categoria=new this.mongodb.ObjectId(nuevo.categoria);
+        const dbo = db.db(this.bd_nombre);
+        await dbo.collection("productos").updateOne({ _id: new this.mongodb.ObjectId(antiguo) }, { $set: nuevo })
+        db.close()
+        return true;
+    }
+
+    this.borrar = async function (datos) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        try {
+            await dbo.collection("productos").removeOne({ _id: new this.mongodb.ObjectId(datos) })
+            return {estado:true};
+        } catch (e) {
+            return {estado:false,error:"No se a podido borrar el producto de la base de datos"};
+        }
+
+    }
+
+    this.insertar = async function (datos) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        datos.categoria = new this.mongodb.ObjectId(datos.categoria)
+        await dbo.collection("productos").insertOne(datos);
+        db.close();
+    }
+
+    this.totalProductosMensuales = async function () {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
@@ -56,7 +127,7 @@ module.exports = function(url, bd_nombre) {
         db.close();
         return salida;
     }
-    this.getGananciasMensuales = async function() {
+    this.getGananciasMensuales = async function () {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
