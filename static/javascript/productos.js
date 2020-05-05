@@ -67,7 +67,6 @@ function cargar() {
                 </div>"
                 }
             })
-            console.log(IdEditar)
             xhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp1.send("id=" + IdEditar)
         })
@@ -154,7 +153,6 @@ function editarProducto() {
         aux.name = "antiguaFoto"
         formulario.appendChild(aux)
         formulario.enctype = "multipart/form-data"
-        console.log(formulario)
         var xhttp = new XMLHttpRequest();
         xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/actualizar", true);
         xhttp.addEventListener("readystatechange", function () {

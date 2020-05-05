@@ -370,7 +370,6 @@ app.post("/productos/actualizar", async function (req, res) {
                         await foto.mv(`./static/fotos/${foto.name}`)
                         await productos.actualizar(req.body._id, { nombre: req.body.nombre, descripcion: req.body.descripcion, precio: req.body.precio, cantidad: req.body.cant, foto: foto.name, categoria: req.body.categoria })
                     } else {
-                        console.log(req.body)
                         await productos.actualizar(req.body._id, { nombre: req.body.nombre, descripcion: req.body.descripcion, precio: req.body.precio, cantidad: req.body.cant, categoria: req.body.categoria })
 
                     }
