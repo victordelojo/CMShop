@@ -304,7 +304,12 @@ app.get("/productos", async function (req, res) {
             if (req.session.nombre) {
                 var categorias = new Categoria(url, DB_CONF.db_name);
                 var productos = new Producto(url, DB_CONF.db_name);
-                res.render('./admin/productos.pug', { location: "Productos", categorias: await categorias.getnombreCategorias(), productos: await productos.getProductos(), "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin })
+                var productosSalida = await productos.getProductos();
+                for(var i=0;i<productosSalida.length;i++){
+                    let aux=await categorias.getCategoriaById(productosSalida[i].categoria)
+                    productosSalida[i].categoria=aux.nombre; 
+                }
+                res.render('./admin/productos.pug', { location: "Productos", categorias: await categorias.getnombreCategorias(), productos: productosSalida, "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin })
             } else {
                 res.redirect("/" + DB_CONF.Direccion_Admin + "/login")
             }

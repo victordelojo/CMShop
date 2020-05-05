@@ -30,6 +30,19 @@ module.exports = function(url, bd_nombre) {
         db.close()
         return false;
     }
+    this.getCategoriaById=async function(id){
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var salida =  await dbo.collection("categorias").find({_id: new this.mongodb.ObjectId(id)}).toArray();
+        if(salida.length==0){
+            return false;
+        }else{
+            return salida[0];
+        }
+    }
     this.getnombreCategorias = async function(){
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,

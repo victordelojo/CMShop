@@ -12,6 +12,7 @@ append datos
             th(scope="col") 
             th(scope="col") Nombre
             th(scope="col") Descripción
+            th(scope="col") Categoría
             th(scope="col") Precio
             th(scope="col") Cantidad
             th(scope="col") 
@@ -21,13 +22,14 @@ append datos
             tr
               td(scope="row")
                 img.img-fluid.img-thumbnail(src="../fotos/"+val.foto, alt="foto",width="300px") 
-              td #{val.nombre}
-              td(width="330px") #{val.descripcion}
-              td #{val.precio}
-              td #{val.cantidad}
-              td
+              td.align-middle #{val.nombre}
+              td.align-middle(width="330px") #{val.descripcion}
+              td.align-middle #{val.categoria}
+              td.align-middle #{val.precio}
+              td.align-middle #{val.cantidad}
+              td.align-middle
                 button.btn.btn-outline-dark.editar(data-toggle="modal" data-target="#cargar",value=val._id) Editar
-              td 
+              td.align-middle
                 button.btn.btn-dark.borrar(data-toggle="modal" data-target="#borrar",value=val._id) Borrar
   div.modal.fade(id="nuevo" tabindex="-1" role="dialog" aria-labelledby="nuevoTitle" aria-hidden="true")
     div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
