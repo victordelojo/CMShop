@@ -118,7 +118,9 @@ app.post("/confCMShopUser", async function(req, res) {
             var url = 'mongodb://' + req.body.usuarioDB + ':' + req.body.passDB + '@' + req.body.direccionDB + ':' + req.body.portDB + '?authMechanism=DEFAULT&authSource=' + req.body.accesoDB + '';
             var userAdmin = new useAdmin(url, req.body.nombreDB);
             userAdmin.insertar({ "nombre": nombre, "email": email, "pass": pass })
-
+            var exec = require('child_process').exec,
+                child;
+            child = exec('pm2 restart app.js')
         }
     }
     res.redirect("/");

@@ -1,5 +1,5 @@
 addEventListener("load", cargar)
-var IdBorrar=""
+var IdBorrar = ""
 var IdEditar = ""
 var nombreMod
 var descripcionMod
@@ -22,26 +22,24 @@ function cargar() {
     document.getElementById("editarProducto").addEventListener("click", editarProducto)
     document.getElementById("borrarProducto").addEventListener("click", borrar)
     for (var i = 0; i < editarBtn.length; i++) {
-        borrarBtn[i].addEventListener("click",function (e){
-            IdBorrar=e.target.value;
+        borrarBtn[i].addEventListener("click", function(e) {
+            IdBorrar = e.target.value;
         })
-        editarBtn[i].addEventListener("click", function (e) {
+        editarBtn[i].addEventListener("click", function(e) {
             nombreMod.disabled = true
             descripcionMod.disabled = true
             cantidadMod.disabled = true
             precioMod.disabled = true
-            fotoMod.disabled = true
             categoriaMod.disabled = true
             IdEditar = e.target.value
             var xhttp1 = new XMLHttpRequest();
             xhttp1.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/obtenerUno", true);
-            xhttp1.addEventListener("readystatechange", function () {
+            xhttp1.addEventListener("readystatechange", function() {
                 if (this.readyState == 4 && this.status == 200) {
                     nombreMod.disabled = false
                     descripcionMod.disabled = false
                     cantidadMod.disabled = false
                     precioMod.disabled = false
-                    fotoMod.disabled = false
                     categoriaMod.disabled = false
                     $('#editar').modal('show')
                     setTimeout(() => { $('#cargar').modal('hide'); }, 500);
@@ -54,7 +52,6 @@ function cargar() {
                         cantidadMod.value = datos.cantidad;
                         precioMod.value = datos.precio;
                         categoriaMod.value = datos.categoria;
-                        fotoAntiguaMod = datos.foto;
                     }
                 } else if (this.readyState == 4) {
                     $('#cargar').modal('hide')
@@ -71,12 +68,25 @@ function cargar() {
             xhttp1.send("id=" + IdEditar)
         })
     }
+    document.getElementById("fotoProducto").addEventListener("change", cambiarNombre)
+}
+
+function cambiarNombre(e) {
+    if (document.getElementById("fotoProductoNuevo").value == "") {
+        document.getElementById("nombreFoto").innerHTML = "Selecciona foto"
+    } else {
+        if (navigator.platform == "Win32") {
+            document.getElementById("nombreFoto").innerHTML = e.target.value.split("\\")[e.target.value.split("\\").length - 1]
+        } else {
+            document.getElementById("nombreFoto").innerHTML = e.target.value.split("/")[e.target.value.split("/").length - 1]
+        }
+    }
 }
 
 function borrar() {
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/borrar", true);
-    xhttp.addEventListener("readystatechange", function () {
+    xhttp.addEventListener("readystatechange", function() {
         if (this.readyState == 4 && this.status == 200) {
             datos = JSON.parse(this.responseText);
             if (datos.estado) {
@@ -93,7 +103,7 @@ function borrar() {
         }
     })
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("id="+IdBorrar)
+    xhttp.send("id=" + IdBorrar)
 }
 
 function editarProducto() {
@@ -143,19 +153,13 @@ function editarProducto() {
         var aux1 = categoriaMod.cloneNode(true)
         aux1.value = categoriaMod.value
         formulario.appendChild(aux1)
-        formulario.appendChild(fotoMod.cloneNode(true))
         var id = document.createElement("input")
         id.value = IdEditar
         id.name = "_id"
         formulario.appendChild(id)
-        var aux = document.createElement("input");
-        aux.value = fotoAntiguaMod;
-        aux.name = "antiguaFoto"
-        formulario.appendChild(aux)
-        formulario.enctype = "multipart/form-data"
         var xhttp = new XMLHttpRequest();
         xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/actualizar", true);
-        xhttp.addEventListener("readystatechange", function () {
+        xhttp.addEventListener("readystatechange", function() {
             if (this.readyState == 4 && this.status == 200) {
                 datos = JSON.parse(this.responseText);
                 if (datos.estado) {
@@ -248,7 +252,7 @@ function guardar() {
         formulario.enctype = "multipart/form-data"
         var xhttp = new XMLHttpRequest();
         xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/insertar", true);
-        xhttp.addEventListener("readystatechange", function () {
+        xhttp.addEventListener("readystatechange", function() {
             if (this.readyState == 4 && this.status == 200) {
                 datos = JSON.parse(this.responseText);
                 if (datos.estado) {
