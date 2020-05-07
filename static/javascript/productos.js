@@ -68,18 +68,23 @@ function cargar() {
             xhttp1.send("id=" + IdEditar)
         })
     }
-    document.getElementById("fotoProducto").addEventListener("change", cambiarNombre)
+    document.getElementById("fotoProducto").addEventListener("change", cambiarNombre);
+    document.getElementById("categoria").addEventListener("change",filtro)
+}
+
+function filtro(e){
+    if(e.target.value==0){
+        location.href="./productos";
+    }else{
+        location.href="./productos?cat="+e.target.value;
+    }
 }
 
 function cambiarNombre(e) {
-    if (document.getElementById("fotoProductoNuevo").value == "") {
+    if (document.getElementById("fotoProducto").value == "") {
         document.getElementById("nombreFoto").innerHTML = "Selecciona foto"
     } else {
-        if (navigator.platform == "Win32") {
-            document.getElementById("nombreFoto").innerHTML = e.target.value.split("\\")[e.target.value.split("\\").length - 1]
-        } else {
-            document.getElementById("nombreFoto").innerHTML = e.target.value.split("/")[e.target.value.split("/").length - 1]
-        }
+        document.getElementById("nombreFoto").innerHTML = e.target.value.split("\\")[e.target.value.split("\\").length - 1]
     }
 }
 

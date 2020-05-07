@@ -305,17 +305,27 @@ app.get("/productos", async function(req, res) {
                 var categorias = new Categoria(url, DB_CONF.db_name);
                 var productos = new Producto(url, DB_CONF.db_name);
                 var num = parseInt(req.query.num) || 0
-                if (num > await productos.getNumTotalProductos()) {
-                    num -= 5
-                } else if (num < 0) {
-                    num = 0
+                var cat=req.query.cat||0
+                if(cat!=0){
+                    if (num > await productos.getNumTotalProductosByCategoria(cat)) {
+                        num -= 4
+                    } else if (num < 0) {
+                        num = 0
+                    }
+                    var productosSalida = await productos.getProductosByCategoria(num,cat);
+                }else{
+                    if (num > await productos.getNumTotalProductos()) {
+                        num -= 4
+                    } else if (num < 0) {
+                        num = 0
+                    }
+                    var productosSalida = await productos.getProductos(num);
                 }
-                var productosSalida = await productos.getProductos(num);
                 for (var i = 0; i < productosSalida.length; i++) {
                     let aux = await categorias.getCategoriaById(productosSalida[i].categoria)
                     productosSalida[i].categoria = aux.nombre;
                 }
-                res.render('./admin/productos.pug', { location: "Productos", categorias: await categorias.getnombreCategorias(), productos: productosSalida, "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, "num": num })
+                res.render('./admin/productos.pug', { location: "Productos", categorias: await categorias.getnombreCategorias(), productos: productosSalida, "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, "num": num,"cat":cat })
             } else {
                 res.redirect("/" + DB_CONF.Direccion_Admin + "/login")
             }
@@ -337,18 +347,27 @@ app.get("/fotos", async function(req, res) {
                 var categorias = new Categoria(url, DB_CONF.db_name);
                 var productos = new Producto(url, DB_CONF.db_name);
                 var num = parseInt(req.query.num) || 0
-                if (num > await productos.getNumTotalProductos()) {
-                    num -= 4
-                } else if (num < 0) {
-                    num = 0
+                var cat=req.query.cat||0
+                if(cat!=0){
+                    if (num > await productos.getNumTotalProductosByCategoria(cat)) {
+                        num -= 4
+                    } else if (num < 0) {
+                        num = 0
+                    }
+                    var productosSalida = await productos.getProductosByCategoria(num,cat);
+                }else{
+                    if (num > await productos.getNumTotalProductos()) {
+                        num -= 4
+                    } else if (num < 0) {
+                        num = 0
+                    }
+                    var productosSalida = await productos.getProductos(num);
                 }
-                var productosSalida = await productos.getProductos(num);
-                console.log(productosSalida)
                 for (var i = 0; i < productosSalida.length; i++) {
                     let aux = await categorias.getCategoriaById(productosSalida[i].categoria)
                     productosSalida[i].categoria = aux.nombre;
                 }
-                res.render('./admin/fotos.pug', { location: "Fotos de productos", categorias: await categorias.getnombreCategorias(), productos: productosSalida, "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, "num": num })
+                res.render('./admin/fotos.pug', { location: "Fotos de productos", categorias: await categorias.getnombreCategorias(), productos: productosSalida, "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, "num": num ,"cat":cat})
             } else {
                 res.redirect("/" + DB_CONF.Direccion_Admin + "/login")
             }

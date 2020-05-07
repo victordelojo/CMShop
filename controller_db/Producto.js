@@ -16,6 +16,16 @@ module.exports = function(url, bd_nombre) {
         db.close();
         return productos;
     }
+    this.getProductosByCategoria= async function(num,cat){
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var productos = await dbo.collection("productos").find({categoria:new this.mongodb.ObjectId(cat)}).skip(num).limit(4).toArray()
+        db.close();
+        return productos;
+    }
 
     this.getNumTotalProductos = async function() {
         let db = await this.mongodb.MongoClient.connect(this.url, {
@@ -24,6 +34,17 @@ module.exports = function(url, bd_nombre) {
         });
         const dbo = db.db(this.bd_nombre);
         var productos = await dbo.collection("productos").find({}).toArray()
+        db.close();
+        return productos.length;
+    }
+
+    this.getNumTotalProductosByCategoria = async function(cat) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var productos = await dbo.collection("productos").find({categoria: new this.mongodb.ObjectId(cat)}).toArray()
         db.close();
         return productos.length;
     }

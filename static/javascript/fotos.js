@@ -6,9 +6,11 @@ borrarId = ""
 function cargar() {
 
     var aux = document.getElementsByClassName("imagenes");
-    for (var i = 0; i < aux.length; i++) {
-        aux[i].addEventListener("focus", boton);
-        aux[i].addEventListener("focusout", sinBoton);
+    if(aux.length>1){
+        for (var i = 0; i < aux.length; i++) {
+            aux[i].addEventListener("focus", boton);
+            aux[i].addEventListener("focusout", sinBoton);
+        }
     }
     var guardar = document.getElementsByClassName("insertar");
     for (var i = 0; i < guardar.length; i++) {
@@ -19,6 +21,15 @@ function cargar() {
     document.getElementById("fotoProductoNuevo").addEventListener("change", cambiarNombre)
     document.getElementById("guardarFoto").addEventListener("click", guardarfoto);
     document.getElementById("borrarFoto").addEventListener("click", borrarFoto)
+    document.getElementById("categoria").addEventListener("change",filtro)
+}
+
+function filtro(e){
+    if(e.target.value==0){
+        location.href="./fotos";
+    }else{
+        location.href="./fotos?cat="+e.target.value;
+    }
 }
 
 function cambiarNombre(e) {

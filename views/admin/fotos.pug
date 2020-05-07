@@ -2,6 +2,19 @@ extends adminMenu.pug
 append datos
     div.col-12
         div(id="alerta")
+    div.row.m-0.justify-content-end
+        div.col-12.col-sm-10.col-lg-4.text-right.mr-sm-5.mt-sm-5
+            div.row.m-0.p-0
+                div.col-12.col-sm-5
+                    span Filtro por categoría: 
+                div.col-12.col-sm-7
+                    select.custom-select(name="categoria" id="categoria")
+                        option(value="0") Todas
+                            each categoria in categorias
+                                if cat==categoria._id
+                                    option(value=categoria._id selected)=categoria.nombre
+                                else
+                                    option(value=categoria._id)=categoria.nombre
     div.mt-5.accordion(id="accordion2")
         each val in productos
             div.card
@@ -20,17 +33,21 @@ append datos
                                     div.col-4.p-5.col-md-3(value=val._id)
                                         button.btn.btn-outline-dark.align-items-center.insertar(data-toggle="modal" data-target="#nuevo",value=val._id)
                                             span.typcn.typcn-plus(value=val._id)
+    if productos.length==0
+        div.row.m-0
+            div.col-12
+                h5 No hay ningun producto
     div.row.m-0.mb-5.mt-5
         div.col-6
-          a(href="./fotos?num=0") 
+          a(href="./fotos?num=0&cat="+cat) 
             button.btn.btn-outline-dark
               span.typcn.typcn-chevron-left
               span.typcn.typcn-chevron-left
-          a(href="./fotos?num="+(num-4)) 
+          a(href="./fotos?num="+(num-4)+"&cat="+cat) 
             button.btn.btn-outline-dark
               span.typcn.typcn-chevron-left
         div.col-6
-          a(href="./fotos?num="+(num+4))
+          a(href="./fotos?num="+(num+4)+"&cat="+cat)
             button.btn.btn-outline-dark
               span.typcn.typcn-chevron-right
     div.modal.fade(id="borrar" tabindex="-1" role="dialog" aria-labelledby="borrarTitle" aria-hidden="true")
