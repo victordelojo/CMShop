@@ -61,6 +61,13 @@ append datos
           a(href="./productos?num="+(num+4)+"&cat="+cat)
             button.btn.btn-outline-dark
               span.typcn.typcn-chevron-right
+
+
+
+  //**************  NUEVO ***********************************************************
+
+
+
   div.modal.fade(id="nuevo" tabindex="-1" role="dialog" aria-labelledby="nuevoTitle" aria-hidden="true")
     div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
       div.modal-content
@@ -95,6 +102,12 @@ append datos
         div.modal-footer
           button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
           button.btn.btn-dark(type="button",id="guardarProducto") Guardar
+
+
+
+  //**************  BORRAR ***********************************************************
+
+
   div.modal.fade(id="borrar" tabindex="-1" role="dialog" aria-labelledby="borrarTitle" aria-hidden="true")
     div.modal-dialog.modal-dialog-centered(role="document")
       div.modal-content
@@ -107,6 +120,13 @@ append datos
         div.modal-footer
           button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
           button.btn.btn-dark(type="button",id="borrarProducto") Borrar
+
+
+
+  //**************  EDITAR ***********************************************************
+
+
+
   div.modal.fade(id="editar" tabindex="-1" role="dialog" aria-labelledby="editarTitle" aria-hidden="true")
     div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
       div.modal-content
@@ -143,4 +163,4 @@ append datos
               span.sr-only Loading...
 
 append script
-  script(src="../javascript/productos.js")
+  script(src="../javascript/admin/productos.js")

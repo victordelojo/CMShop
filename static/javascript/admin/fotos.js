@@ -6,7 +6,7 @@ borrarId = ""
 function cargar() {
 
     var aux = document.getElementsByClassName("imagenes");
-    if(aux.length>1){
+    if (aux.length > 1) {
         for (var i = 0; i < aux.length; i++) {
             aux[i].addEventListener("focus", boton);
             aux[i].addEventListener("focusout", sinBoton);
@@ -14,21 +14,21 @@ function cargar() {
     }
     var guardar = document.getElementsByClassName("insertar");
     for (var i = 0; i < guardar.length; i++) {
-        guardar[i].addEventListener("click", function(e) {
+        guardar[i].addEventListener("click", function (e) {
             insertar = e.target.getAttribute("value");
         })
     }
     document.getElementById("fotoProductoNuevo").addEventListener("change", cambiarNombre)
     document.getElementById("guardarFoto").addEventListener("click", guardarfoto);
     document.getElementById("borrarFoto").addEventListener("click", borrarFoto)
-    document.getElementById("categoria").addEventListener("change",filtro)
+    document.getElementById("categoria").addEventListener("change", filtro)
 }
 
-function filtro(e){
-    if(e.target.value==0){
-        location.href="./fotos";
-    }else{
-        location.href="./fotos?cat="+e.target.value;
+function filtro(e) {
+    if (e.target.value == 0) {
+        location.href = "./fotos";
+    } else {
+        location.href = "./fotos?cat=" + e.target.value;
     }
 }
 
@@ -43,12 +43,12 @@ function cambiarNombre(e) {
 function borrarFoto() {
     $('#cargar').modal('show');
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             datos = JSON.parse(this.responseText);
             console.log(datos)
             if (datos.estado) {
-                location.reload()
+                location.href="./fotos?id="+borrarId;
             } else {
                 $('#borrar').modal('hide')
                 setTimeout(() => { $('#cargar').modal('hide'); }, 500);
@@ -82,11 +82,11 @@ function guardarfoto() {
         formulario.enctype = "multipart/form-data"
         var xhttp = new XMLHttpRequest();
         xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/insertar/foto", true);
-        xhttp.addEventListener("readystatechange", function() {
+        xhttp.addEventListener("readystatechange", function () {
             if (this.readyState == 4 && this.status == 200) {
                 datos = JSON.parse(this.responseText);
                 if (datos.estado) {
-                    location.reload();
+                    location.href="./fotos?id="+insertar;
                 } else {
                     $('#nuevo').modal('hide')
                     setTimeout(() => { $('#cargar').modal('hide'); }, 500);
@@ -104,17 +104,23 @@ function guardarfoto() {
 }
 
 function boton(e) {
-    var aux = document.createElement("div");
-    aux.classList.add("card-img-overlay");
-    console.log(e.target)
-    borrarId = e.target.getAttribute("value")
-    borrarImg = e.target.getAttribute("alt");
-    aux.innerHTML = `<button class="btn btn-danger" data-toggle="modal" data-target="#borrar">Borrar</button>`
-    e.target.appendChild(aux)
+    console.log(e.target.parentElement.parentElement.children.length)
+    if (e.target.parentElement.parentElement.children.length > 2) {
+        var aux = document.createElement("div");
+        aux.classList.add("card-img-overlay");
+        console.log(e.target)
+        borrarId = e.target.getAttribute("value")
+        borrarImg = e.target.getAttribute("alt");
+        aux.innerHTML = `<button class="btn btn-danger" data-toggle="modal" data-target="#borrar">Borrar</button>`
+        e.target.appendChild(aux)
+    }
+
 }
 
 function sinBoton(e) {
-    setTimeout(function() {
-        e.target.lastChild.remove();
-    }, 250);
+    if (e.target.parentElement.parentElement.children.length > 2) {
+        setTimeout(function () {
+            e.target.lastChild.remove();
+        }, 100);
+    }
 }

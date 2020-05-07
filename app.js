@@ -24,6 +24,7 @@ var favicon = require('serve-favicon');
 
 var inicio = require("./router/index");
 var admin = require("./router/admin");
+var correo = require("./router/correo");
 
 app.use(fileUpload())
 app.use(favicon(__dirname + '/static/logo.png')); // 
@@ -31,9 +32,8 @@ app.use(express.static("static")) // Añade la carpeta con los archivos estatico
 app.use(body_parser.urlencoded({ extended: true })); // Usa el parseo para el metodo POST
 app.set("view engine", "pug") // Indicamos el motor de plantilla que utilizaremos  
 
-app.use(session({ secret: 'AltoSecreto', resave: false, saveUninitialized: true })); //Usa sieiones con una frase secreta
+app.use(session({ secret: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15), resave: false, saveUninitialized: true })); //Usa sieiones con una frase secreta
 
-var hola;
 
 
 // Connection URL
@@ -50,7 +50,9 @@ app.use("/", inicio);
 
 app.use("/" + adminD, admin)
 
-app.post("/confCMShopUser", async function(req, res) {
+app.use("/correo", correo)
+
+app.post("/confCMShopUser", async function (req, res) {
     if (!fs.existsSync(__dirname + "/../CONFIGURE.json")) {
         var nombre = req.body.nombre || ''; // Recoge el parámetro nombre y si no existe lo pone en blanco
         if (nombre != "") {
@@ -72,7 +74,7 @@ app.post("/confCMShopUser", async function(req, res) {
                 html: '<h1>Muchas gracias de utilizar CMShop</h1><br>\
           '
             };
-            await transporter.sendMail(mailOptions, async function(error, info) {
+            await transporter.sendMail(mailOptions, async function (error, info) {
                 if (error) {
                     console.log(error);
                 } else {
@@ -97,6 +99,18 @@ app.post("/confCMShopUser", async function(req, res) {
                     DB_CONF = escribir;
                 }
             });
+            /*
+
+            ENCRIPTADO
+
+
+            var crypto = require('crypto'),
+                algorithm = 'aes-256-ctr',
+                password = 'd6F3Efeq';
+            var cipher = crypto.createCipher(algorithm,password)
+            var crypted = cipher.update(text,'utf8','hex')
+            crypted += cipher.final('hex');
+            */
             await fs.writeFileSync('./CONFIGURE.json', JSON.stringify({
                 "_comentario": "Configuración de la base de datos",
 
@@ -112,7 +126,9 @@ app.post("/confCMShopUser", async function(req, res) {
 
                 "direccion": req.body.nombreHost,
                 "port": req.body.portHost,
-                "Direccion_Admin": "admin"
+                "Direccion_Admin": "admin",
+                "https": false,
+                "SMTP": false
             }, null, 4));
             DB_CONF.port = req.body.portHost;
             var url = 'mongodb://' + req.body.usuarioDB + ':' + req.body.passDB + '@' + req.body.direccionDB + ':' + req.body.portDB + '?authMechanism=DEFAULT&authSource=' + req.body.accesoDB + '';
@@ -139,7 +155,7 @@ app.post("/confCMShopUser", async function(req, res) {
 
 
 
-app.use(function(err, res, next) {
+app.use(function (err, res, next) {
     res.status(404).sendFile(__dirname + '/static/404.html');
 });
 
@@ -154,7 +170,7 @@ if (DB_CONF.https) {
 
     httpsServer.listen(DB_CONF.port || 3000);
 } else {
-    app.listen(DB_CONF.port || 3000, function() { // Arranca el servidor e
+    app.listen(DB_CONF.port || 3000, function () { // Arranca el servidor e
         console.log(`Example app listening on port ${DB_CONF.port}!`);
     });
 }

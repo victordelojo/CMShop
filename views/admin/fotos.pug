@@ -1,3 +1,4 @@
+
 extends adminMenu.pug
 append datos
     div.col-12
@@ -21,18 +22,61 @@ append datos
                 div.card-header(id=val._id)
                     a.collapsed(data-toggle="collapse", href="#c"+val._id, aria-expanded="false" aria-controls="c"+val._id)
                         h6.mb-0=val.nombre+" ("+val.categoria+")"
-                div.collapse.bg-secondary(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
-                    div.card-body.p-0
-                        div.card-body.p-0
-                            div.card.border-0
-                                div.card-body.border-0.row.align-items-center(id=val._id)
-                                    each val2 in val.foto
-                                        div.col-4.col-md-3
-                                            div.card.align-items-center.imagenes(tabindex="0",alt=val2, value=val._id)
-                                                img.card-img(src="../fotos/"+val2)
-                                    div.col-4.p-5.col-md-3(value=val._id)
-                                        button.btn.btn-outline-dark.align-items-center.insertar(data-toggle="modal" data-target="#nuevo",value=val._id)
-                                            span.typcn.typcn-plus(value=val._id)
+                if id
+                    if id==val._id
+
+                        div.collapse.show.bg-secondary(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
+                            div.card-body.p-0
+                                div.card-body.p-0
+                                    div.card.border-0
+                                        div.card-body.border-0.row.align-items-center(id=val._id)
+                                            each val2 in val.foto
+                                                div.col-4.col-md-3
+                                                    div.card.align-items-center.imagenes(tabindex="0",alt=val2, value=val._id)
+                                                        img.card-img(src="../fotos/"+val2)
+                                            div.col-4.p-5.col-md-3(value=val._id)
+                                                button.btn.btn-outline-dark.align-items-center.insertar(data-toggle="modal" data-target="#nuevo",value=val._id)
+                                                    span.typcn.typcn-plus(value=val._id)
+                    else
+                        div.collapse.bg-secondary(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
+                            div.card-body.p-0
+                                div.card-body.p-0
+                                    div.card.border-0
+                                        div.card-body.border-0.row.align-items-center(id=val._id)
+                                            each val2 in val.foto
+                                                div.col-4.col-md-3
+                                                    div.card.align-items-center.imagenes(tabindex="0",alt=val2, value=val._id)
+                                                        img.card-img(src="../fotos/"+val2)
+                                            div.col-4.p-5.col-md-3(value=val._id)
+                                                button.btn.btn-outline-dark.align-items-center.insertar(data-toggle="modal" data-target="#nuevo",value=val._id)
+                                                    span.typcn.typcn-plus(value=val._id)
+                else
+                    if val._id==productos[0]._id
+                        div.collapse.show.bg-secondary(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
+                            div.card-body.p-0
+                                div.card-body.p-0
+                                    div.card.border-0
+                                        div.card-body.border-0.row.align-items-center(id=val._id)
+                                            each val2 in val.foto
+                                                div.col-4.col-md-3
+                                                    div.card.align-items-center.imagenes(tabindex="0",alt=val2, value=val._id)
+                                                        img.card-img(src="../fotos/"+val2)
+                                            div.col-4.p-5.col-md-3(value=val._id)
+                                                button.btn.btn-outline-dark.align-items-center.insertar(data-toggle="modal" data-target="#nuevo",value=val._id)
+                                                    span.typcn.typcn-plus(value=val._id)
+                    else
+                        div.collapse.bg-secondary(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
+                            div.card-body.p-0
+                                div.card-body.p-0
+                                    div.card.border-0
+                                        div.card-body.border-0.row.align-items-center(id=val._id)
+                                            each val2 in val.foto
+                                                div.col-4.col-md-3
+                                                    div.card.align-items-center.imagenes(tabindex="0",alt=val2, value=val._id)
+                                                        img.card-img(src="../fotos/"+val2)
+                                            div.col-4.p-5.col-md-3(value=val._id)
+                                                button.btn.btn-outline-dark.align-items-center.insertar(data-toggle="modal" data-target="#nuevo",value=val._id)
+                                                    span.typcn.typcn-plus(value=val._id)
     if productos.length==0
         div.row.m-0
             div.col-12
@@ -84,4 +128,4 @@ append datos
             div.spinner-grow.text-dark(role="status")
               span.sr-only Loading...
 append script
-  script(src="../javascript/fotos.js")
+  script(src="../javascript/admin/fotos.js")
