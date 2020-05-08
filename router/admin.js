@@ -175,24 +175,37 @@ app.get('/usuarios', async function (req, res) {
             if (req.session.nombre) {
                 var usuarios = new Usuario(url, DB_CONF.db_name)
                 var num = parseInt(req.query.num) || 0
-                if (num > await usuarios.getNumTotalUsuarios()) {
-                    num -= 5
-                } else if (num < 0) {
-                    num = 0
+                var nombre=req.query.nombre||0
+                if(nombre!=0){
+                    if (num >= await usuarios.getNumTotalUsuariosByNombre(nombre)) {
+                        num -= 5
+                    } else if (num < 0) {
+                        num = 0
+                    }
+                    var usuario = await usuarios.getUsuariosByNombre(num,nombre);
+                }else{
+                    if (num >= await usuarios.getNumTotalUsuarios()) {
+                        num -= 5
+                    } else if (num < 0) {
+                        num = 0
+                    }
+                    var usuario = await usuarios.getUsuarios(num);
                 }
-                var usuario = await usuarios.getUsuarios(num);
+                
                 for (var i = 0; i < usuario.length; i++) {
                     var aux = "";
-                    for (var x = 0; x < usuario[i].pass; x++) {
+                    for (var x = 0; x < usuario[i].contra.length; x++) {
                         aux += "*";
                     }
-                    usuario[i].pass = aux;
+                    usuario[i].contra = aux;
                 }
                 res.render('./admin/usuario.pug', {
                     location: "Usuarios",
                     usuarios: usuario,
                     "adminD": DB_CONF.Direccion_Admin,
-                    "port": DB_CONF.port, "host": DB_CONF.direccion
+                    "port": DB_CONF.port, "host": DB_CONF.direccion,
+                    "num":num,
+                    "nombre": nombre
                 })
             } else {
                 res.redirect("/" + DB_CONF.Direccion_Admin + "/login")
@@ -212,11 +225,35 @@ app.post("/usuarios/insertar", async function (req, res) {
         var usuAdmin = new admin(url, DB_CONF.db_name);
         if (await usuAdmin.comprobarInicio()) {
             if (req.session.nombre) {
-
-                if (insertar) {
+                var usuario=new Usuario(url,DB_CONF.db_name);
+                if (await usuario.insertar(req.body)) {
                     res.json({ estado: true });
                 } else {
-                    res.json({ estado: false, error: "Ya existe esa categoría" });
+                    res.json({ estado: false, error: "Ya existe un usuario con ese correo" });
+                }
+            } else {
+                res.json({ estado: false, error: "No estas logueado como administrador" });
+            }
+        } else {
+            res.json({ estado: false, error: "No existe un usuario administrador" });
+        }
+    } else {
+        res.json({ estado: false, error: "No existe una configuración de CMShop" })
+    }
+})
+
+app.post("/usuarios/borrar", async function(req, res){
+    if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+        var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+        var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+        var usuAdmin = new admin(url, DB_CONF.db_name);
+        if (await usuAdmin.comprobarInicio()) {
+            if (req.session.nombre) {
+                var usuario=new Usuario(url,DB_CONF.db_name);
+                if (await usuario.borrar(req.body.id)) {
+                    res.json({ estado: true });
+                } else {
+                    res.json({ estado: false, error: "No se a podido borrar el usuario" });
                 }
             } else {
                 res.json({ estado: false, error: "No estas logueado como administrador" });

@@ -4,8 +4,24 @@ append datos
     div.col-12.mt-5.text-center
       div(id="alerta")
       button.btn.btn-outline-dark(data-toggle="modal" data-target="#nuevo") Añadir
+
+  div.row.m-0.p-0.mt-5.justify-content-center
+    div.col-12.col-md-6.col-lg-3.mr-0.pr-0
+      div.input-group.mb-3
+        input.form-control(type="search" placeholder="" aria-label="" aria-describedby="basic-addon1" id="busquedaNombre")
+        div.input-group-prepend
+          button.btn.btn-outline-secondary(type="button",id="btnNombre")
+            span.typcn.typcn-zoom.h-100.w-100
+        
+  if nombre!=0
+    div.row.m-0.p-0.mt-3.justify-content-center
+      div.col-3
+        
+          button.btn.btn-danger(type="button", id="borrarFiltro")=nombre 
+            span.badge.badge-light.ml-2
+              span.typcn.typcn-times
   div.row.m-0.p-0
-    div.col-12.mt-5
+    div.col-12.mt-4
       table.table.table-hover.table-responsive-sm
         thead
           tr
@@ -20,28 +36,28 @@ append datos
             tr
               td(scope="row") #{val.nombre}
               td #{val.correo}
-              td #{val.pass}
+              td #{val.contra}
               td
-                a(href="/pedidos?client="+val._id) Ir
+                a(href="./pedidos?client="+val._id) Ir
               td
-                button.btn.btn-light Editar
+                button.btn.btn-outline-dark.editar(value=val._id) Editar
               td 
-                button.btn.btn-dark Borrar
+                button.btn.btn-dark.borrar(data-toggle="modal" data-target="#borrar",value=val._id) Borrar
       if usuarios.length==0
         div.row.m-0
             div.col-12
                 h5 No hay ningun usuario
   div.row.m-0.mb-5.mt-5
         div.col-6
-          a(href="./usuarios?num=0") 
+          a(href="./usuarios?num=0&nombre="+nombre) 
             button.btn.btn-outline-dark
               span.typcn.typcn-chevron-left
               span.typcn.typcn-chevron-left
-          a(href="./usuarios?num="+(num-5)) 
+          a(href="./usuarios?num="+(num-5)+"&nombre="+nombre) 
             button.btn.btn-outline-dark
               span.typcn.typcn-chevron-left
         div.col-6
-          a(href="./fotos?num="+(num+5))
+          a(href="./usuarios?num="+(num+5)+"&nombre="+nombre)
             button.btn.btn-outline-dark
               span.typcn.typcn-chevron-right
 
@@ -58,21 +74,52 @@ append datos
         div.modal-body.row
           div.col-12.col-md-6
             h5.m-3 Nombre: 
-            input.form-control(type="text",id="nombreUsuario" name="nombre")
+            input.form-control(type="text",id="nombreUsuNuevo" name="nombre")
+            div.invalid-feedback Campo obligatorio
             h5.m-3 Correo:
-            input.form-control(type="email" id="corrreoUsuario", name="descripcion")
+            input.form-control(type="email" id="correoUsuNuevo", name="correo")
+            div.invalid-feedback(id="errorCorreoNuevo") Campo obligatorio
           div.col-12.col-md-6
             h5.m-3 Contraseña:
-            input.form-control(type="text" id="contraUno", name="descripcion")
+            input.form-control(type="password" id="contraUnoNuevo", name="contra")
+            div.invalid-feedback Campo obligatorio
             h5.m-3 Repite Contraseña:
-            input.form-control(type="text" id="contraDos", name="descripcion")
-            
-          div.invalid-feedback Todos los apartados tiene que estar rellenos
+            input.form-control(type="password" id="contraDosNuevo", name="contra")
+            div.invalid-feedback(id="errorContraNuevo") Campo obligatorio
 
         div.modal-footer
           button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
-          button.btn.btn-dark(type="button",id="guardarProducto") Guardar
+          button.btn.btn-dark(type="button",id="guardarUsu") Guardar
 
+
+  
+  //**************  BORRAR ***********************************************************
+
+
+  div.modal.fade(id="borrar" tabindex="-1" role="dialog" aria-labelledby="borrarTitle" aria-hidden="true")
+    div.modal-dialog.modal-dialog-centered(role="document")
+      div.modal-content
+        div.modal-header
+          h5.modal-title(id="exampleModalLongTitle") Borrar
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") &times;
+        div.modal-body
+          h4 ¿Estás seguro de borrar el usuario?
+        div.modal-footer
+          button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
+          button.btn.btn-dark(type="button",id="borrarUsu") Borrar
+
+
+
+  //**************  CARGAR ***********************************************************
+
+
+  div.modal.bg-transparent.border-0.fade(id="cargar" tabindex="-1" role="dialog" aria-labelledby="editarTitle" aria-hidden="true")
+    div.modal-dialog.bg-transparent.modal-dialog-centered(role="document")
+      div.modal-content.bg-transparent.border-0
+        div.modal-body.bg-transparent
+          div.spinner-grow.text-dark(role="status")
+            span.sr-only Loading...
 
 append script
   script(src="../javascript/admin/usuarios.js")
