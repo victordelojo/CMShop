@@ -400,10 +400,8 @@ app.post("/productos/borrar", async function (req, res) {
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
     var producto = await productos.getProductoById(req.body.id);
-    console.log(producto)
     for (var i = 0; i < producto.foto.length; i++) {
         try {
-            console.log(producto.foto[i])
             fs.unlinkSync(`./static/fotos/${producto.foto[i]}`)
         } catch (error) {
             console.log(error)
