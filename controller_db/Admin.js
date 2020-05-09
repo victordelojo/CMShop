@@ -30,7 +30,7 @@ module.exports = function (url, bd_nombre) {
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        await dbo.collection("userAdmin").insertOne(datos);
+        await dbo.collection("general").insertOne(datos);
         db.close()
 
 
@@ -43,7 +43,7 @@ module.exports = function (url, bd_nombre) {
             useNewUrlParser: true,// Usa la herramienta para analizar las cadenas de conexión con mongoDB
         });
         const dbo = db.db(this.bd_nombre);
-        let thing = await dbo.collection("userAdmin").countDocuments();
+        let thing = await dbo.collection("general").countDocuments();
         await db.close();
         if (thing > 0) {
             return true;
@@ -74,7 +74,7 @@ module.exports = function (url, bd_nombre) {
             useNewUrlParser: true,// Usa la herramienta para analizar las cadenas de conexión con mongoDB
         });
         const dbo = db.db(this.bd_nombre);
-        let thing = await dbo.collection("userAdmin").countDocuments(admin);
+        let thing = await dbo.collection("general").countDocuments(admin);
         await db.close();
         if (thing > 0) {
             return true;
@@ -87,9 +87,44 @@ module.exports = function (url, bd_nombre) {
             useNewUrlParser: true,// Usa la herramienta para analizar las cadenas de conexión con mongoDB
         });
         const dbo = db.db(this.bd_nombre);
-        let thing = await dbo.collection("userAdmin").find({nombre:admin}).toArray();
+        let thing = await dbo.collection("general").find({ nombreAdmin: admin }).toArray();
         await db.close();
         return thing[0];
+    }
+
+    this.cambiarContra = async function (contra) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,// Usar el nuevo motor de tipografia
+            useNewUrlParser: true,// Usa la herramienta para analizar las cadenas de conexión con mongoDB
+        });
+        const dbo = db.db(this.bd_nombre);
+        try {
+            await dbo.collection("general").updateOne({}, { $set: { contraAdmin: contra } });
+            db.close();
+            return true
+        } catch (error) {
+            db.close();
+            console.log(error)
+            return false
+        }
+
+    }
+
+    this.cambiarDatos = async function(datos){
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,// Usar el nuevo motor de tipografia
+            useNewUrlParser: true,// Usa la herramienta para analizar las cadenas de conexión con mongoDB
+        });
+        const dbo = db.db(this.bd_nombre);
+        try {
+            await dbo.collection("general").updateOne({}, { $set: datos });
+            db.close();
+            return true
+        } catch (error) {
+            db.close();
+            console.log(error)
+            return false
+        }
     }
 
     /*

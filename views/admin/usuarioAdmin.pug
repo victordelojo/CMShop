@@ -1,6 +1,63 @@
 extends adminMenu.pug
 append datos
   div.row.m-0.p-0
-    div.col-12.mt-5=`Usuario admin ${datosUsu.nombre}`
+    div.col-12.mt-5.text-center
+      div(id="alerta")
+  div.row.m-0.p-0.pl-5.text-left
+    //div.col-12.mt-5=`Usuario admin ${datosUsu.nombre}`
+    div.col-12.mb-3.mt-5
+      h4 Cambiar de contraseña:
+    div.col-12.mt-3.pl-5
+      button.btn.btn-outline-secondary(data-toggle="modal" data-target="#contra") Contraseña
+    div.col-12.mt-5
+      h4 Datos del administrador:
+    div.col-12.mt-3.pl-5
+      h5 Nombre:
+      div.row.mb-3
+        div.col-12.col-sm-6.col-lg-3
+          input.form-control(type="text", id="nombreAdmin", value=datosUsu.nombreAdmin)
+          div.invalid-feedback Campo obligatorio
+      h5 Correo electrónico:
+      div.row
+        div.col-12.col-sm-6.col-lg-3
+          input.form-control(type="email", id="correoAdmin",value=datosUsu.correoAdmin)
+          div.invalid-feedback(id="errorCorreo") Campo obligatorio
+    div.col-12.text-center.mt-5
+      button.btn.btn-outline-secondary.mr-3(id="btnGuardar") Guadar
+      button.btn.btn-dark.ml-3(id="btnCerrar") Cerrar Sesión
+
+
+  //**************  Contraseña ***********************************************************
+
+
+  div.modal.fade(id="contra" tabindex="-1" role="dialog" aria-labelledby="borrarTitle" aria-hidden="true")
+    div.modal-dialog.modal-dialog-centered(role="document")
+      div.modal-content
+        div.modal-header
+          h5.modal-title(id="exampleModalLongTitle") Cambiar contraseña
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") &times;
+        div.modal-body
+            h5.m-3 Contraseña: 
+            input.form-control(type="password",id="contraUno" name="contra")
+            div.invalid-feedback Campo obligatorio
+            h5.m-3 Repite Contraseña:
+            input.form-control(type="password" id="contraDos", name="correo")
+            div.invalid-feedback(id="errorContra") Campo obligatorio
+        div.modal-footer
+          button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
+          button.btn.btn-dark(type="button",id="btnContra") Guardar
+
+
+  //**************  CARGAR ***********************************************************
+
+
+  div.modal.bg-transparent.border-0.fade(id="cargar" tabindex="-1" role="dialog" aria-labelledby="editarTitle" aria-hidden="true")
+    div.modal-dialog.bg-transparent.modal-dialog-centered(role="document")
+      div.modal-content.bg-transparent.border-0
+        div.modal-body.bg-transparent
+          div.spinner-grow.text-dark(role="status")
+            span.sr-only Loading...
 append script
+  script(src="../javascript/admin/usuarioAdmin.js")
   
