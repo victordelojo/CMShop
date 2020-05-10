@@ -166,21 +166,22 @@ module.exports = function(url, bd_nombre) {
             var aux;
             if (mes < 10) {
                 if (mes == 9) {
-                    aux = await dbo.collection("clientes").aggregate([{ $unwind: "$pedidos" }, { $match: { 'pedidos.fecha': { $gte: new Date(anio + "-0" + mes + "-01"), $lt: new Date(anio + "-10-01") } } }, { $group: { _id: null, total: { $sum: 1 } } }]).toArray()
+                    aux = await dbo.collection("pedidos").find({fechaInicio:{ $gte: new Date(anio + "-0" + mes + "-01")},fechaInicio:{ $lt: new Date(anio + "-10-01") }}).toArray()
                 } else {
-                    aux = await dbo.collection("clientes").aggregate([{ $unwind: "$pedidos" }, { $match: { 'pedidos.fecha': { $gte: new Date(anio + "-0" + mes + "-01"), $lt: new Date(anio + "-0" + (mes + 1) + "-01") } } }, { $group: { _id: null, total: { $sum: 1 } } }]).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio:{ $gte: new Date(anio + "-0" + mes + "-01")}, fechaInicio:{$lt: new Date(anio + "-0" + (mes + 1) + "-01") } }).toArray()
                 }
             } else {
                 if (mes == 12) {
-                    aux = await dbo.collection("clientes").aggregate([{ $unwind: "$pedidos" }, { $match: { 'pedidos.fecha': { $gte: new Date(anio + "-" + mes + "-01"), $lt: new Date((anio + 1) + "-01-01") } } }, { $group: { _id: null, total: { $sum: 1 } } }]).toArray()
+                    aux = await dbo.collection("pedidos").find({fechaInicio:{$gte: new Date(anio + "-" + mes + "-01")},fechaInicio:{$lt: new Date((anio + 1) + "-01-01") }}).toArray()
                 } else {
-                    aux = await dbo.collection("clientes").aggregate([{ $unwind: "$pedidos" }, { $match: { 'pedidos.fecha': { $gte: new Date(anio + "-" + mes + "-01"), $lt: new Date(anio + "-" + (mes + 1) + "-01") } } }, { $group: { _id: null, total: { $sum: 1 } } }]).toArray()
+                    aux = await dbo.collection("pedidos").find({fechaInicio:{ $gte: new Date(anio + "-" + mes + "-01")}, fechaInicio:{$lt: new Date(anio + "-" + (mes + 1) + "-01") }}).toArray()
                 }
             }
             if (aux.length == 0) {
                 salida[i - 1] = 0;
             } else {
-                salida[i - 1] = aux[0].total;
+                /**/
+                salida[i - 1] = aux.length;
             }
             if (mes == 1) {
                 mes = 12;
@@ -206,21 +207,28 @@ module.exports = function(url, bd_nombre) {
             var aux;
             if (mes < 10) {
                 if (mes == 9) {
-                    aux = await dbo.collection("clientes").aggregate([{ $unwind: "$pedidos" }, { $match: { 'pedidos.fecha': { $gte: new Date(anio + "-0" + mes + "-01"), $lt: new Date(anio + "-10-01") } } }, { $group: { _id: "$pedidos.producto", total: { $sum: 1 } } }]).toArray()
+                    aux = await dbo.collection("pedidos").find({fechaInicio:{ $gte: new Date(anio + "-0" + mes + "-01")},fechaInicio:{ $lt: new Date(anio + "-10-01") }}).toArray()
                 } else {
-                    aux = await dbo.collection("clientes").aggregate([{ $unwind: "$pedidos" }, { $match: { 'pedidos.fecha': { $gte: new Date(anio + "-0" + mes + "-01"), $lt: new Date(anio + "-0" + (mes + 1) + "-01") } } }, { $group: { _id: "$pedidos.producto", total: { $sum: 1 } } }]).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio:{ $gte: new Date(anio + "-0" + mes + "-01")}, fechaInicio:{$lt: new Date(anio + "-0" + (mes + 1) + "-01") } }).toArray()
                 }
             } else {
                 if (mes == 12) {
-                    aux = await dbo.collection("clientes").aggregate([{ $unwind: "$pedidos" }, { $match: { 'pedidos.fecha': { $gte: new Date(anio + "-" + mes + "-01"), $lt: new Date((anio + 1) + "-01-01") } } }, { $group: { _id: "$pedidos.producto", total: { $sum: 1 } } }]).toArray()
+                    aux = await dbo.collection("pedidos").find({fechaInicio:{$gte: new Date(anio + "-" + mes + "-01")},fechaInicio:{$lt: new Date((anio + 1) + "-01-01") }}).toArray()
                 } else {
-                    aux = await dbo.collection("clientes").aggregate([{ $unwind: "$pedidos" }, { $match: { 'pedidos.fecha': { $gte: new Date(anio + "-" + mes + "-01"), $lt: new Date(anio + "-" + (mes + 1) + "-01") } } }, { $group: { _id: "$pedidos.producto", total: { $sum: 1 } } }]).toArray()
+                    aux = await dbo.collection("pedidos").find({fechaInicio:{ $gte: new Date(anio + "-" + mes + "-01")}, fechaInicio:{$lt: new Date(anio + "-" + (mes + 1) + "-01") }}).toArray()
                 }
             }
             if (aux.length == 0) {
                 salida[i - 1] = 0;
             } else {
-                salida[i - 1] = aux;
+                var aux2=0;
+                for(var x=0;x<aux.length;x++){
+                    for(var y=0;y<aux[x].contenido.length;y++){
+                        var aux3=await this.getProductoById(aux[x].contenido[y].producto)
+                        aux2+=(aux[x].contenido[y].cantidad*aux3.precio)
+                    }
+                }
+                salida[i - 1] = aux2;
             }
             if (mes == 1) {
                 mes = 12;
@@ -229,23 +237,10 @@ module.exports = function(url, bd_nombre) {
                 mes--;
             }
         }
-        var aux1;
-        var salida1 = [];
-        for (i = 0; i < salida.length; i++) {
-            if (Array.isArray(salida[i])) {
-                var suma = 0;
-                for (x = 0; x < salida[i].length; x++) {
-                    aux1 = await dbo.collection("productos").find({ _id: new this.mongodb.ObjectId(salida[i][x]._id) }, { _id: 0, precio: 1 }).toArray();
-                    suma += aux1[0].precio * salida[i][x].total;
-                }
-                salida1.push(suma);
-            } else {
-                salida1.push(0);
-            }
-        }
+       
         db.close();
 
-        return salida1;
+        return salida;
     }
 
 }

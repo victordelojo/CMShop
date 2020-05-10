@@ -2,5 +2,25 @@ extends adminMenu.pug
 append datos
   div.row.m-0.p-0
     div.col-12.mt-5="Pedidos"
+  div.mt-5.accordion(id="accordion2")
+    each val in pedidos
+      div.card
+        div.card-header(id=val._id)
+          a.collapsed(data-toggle="collapse", href="#c"+val._id, aria-expanded="false" aria-controls="c"+val._id)
+            h6.mb-0=val._id
+            div.col-12
+              button.mt-3.btn.btn-primary(type="button") #{val.estado}
+        div.collapse.show.bg-secondary(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
+          div.card-body.p-0
+              div.card.border-0
+                div.card-body.border-0.row.align-items-center(id=val._id)
+                  h5.text-center.w-100 Total: #{val.total}
+                  table.table.table-hover.table-responsive-sm
+                    tbody
+                      each val2 in val.contenido
+                        tr
+                          td.align-middle Producto: #{val2.producto}
+                          td.align-middle Precio: #{val2.precio}
+                          td.align-middle Cantidad: #{val2.cantidad}
 append script
-  
+  script(src="../javascript/admin/pedidos.js")

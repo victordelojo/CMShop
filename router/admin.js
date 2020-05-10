@@ -5,6 +5,7 @@ var fs = require("fs")
 var Categoria = require("../controller_db/Categoria")
 var Producto = require("../controller_db/Producto")
 var Usuario = require("../controller_db/Usuario")
+var Pedidos = require("../controller_db/Pedidos")
 
 var comprobarpost = async function (req, res, next) {
     if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
@@ -302,7 +303,7 @@ app.get("/productos", comprobarget, async function (req, res) {
     var productos = new Producto(url, DB_CONF.db_name);
     var num = parseInt(req.query.num) || 0
     var cat = req.query.cat || 0
-    var categorias = new Categoria(url,DB_CONF.db_name)
+    var categorias = new Categoria(url, DB_CONF.db_name)
     if (cat != 0) {
         if (num >= await productos.getNumTotalProductosByCategoria(cat)) {
             num -= 4
@@ -330,7 +331,7 @@ app.get("/fotos", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
-    var categorias = new Categoria(url,DB_CONF.db_name)
+    var categorias = new Categoria(url, DB_CONF.db_name)
     var num = parseInt(req.query.num) || 0
     var cat = req.query.cat || 0
     if (cat != 0) {
@@ -456,7 +457,7 @@ app.post("/productos/borrar/foto", async function (req, res) {
 app.get("/confSitio", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    var usuAdmin = new admin(url, DB_CONF.db_name); res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "adminD": DB_CONF.Direccion_Admin })
+    res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "adminD": DB_CONF.Direccion_Admin })
 
 })
 
@@ -468,7 +469,7 @@ app.get("/confSitio", comprobarget, async function (req, res) {
 app.get("/general", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    var usuAdmin = new admin(url, DB_CONF.db_name); res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "adminD": DB_CONF.Direccion_Admin })
+    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "adminD": DB_CONF.Direccion_Admin })
 })
 
 // **************************************************************************************************************************************************
@@ -514,8 +515,6 @@ app.post("/usuarioAdmin/datos", async function (req, res) {
     }
 })
 app.post("/usuarioAdmin/cerrar", async function (req, res) {
-    var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     req.session.destroy()
     res.json({ estado: true })
 })
@@ -526,7 +525,28 @@ app.post("/usuarioAdmin/cerrar", async function (req, res) {
 
 app.get("/pedidos", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
-    res.render('./admin/pedidos.pug', { location: "Pedidos", "adminD": DB_CONF.Direccion_Admin })
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var pedidos = new Pedidos(url, DB_CONF.db_name);
+    var productos= new Producto(url,DB_CONF.db_name)
+    var num = parseInt(req.query.num) || 0
+    if (num >= await pedidos.getNumeroPedidos()) {
+        num -= 5
+    } else if (num < 0) {
+        num = 0
+    }
+    var pedido = await pedidos.getPedidosSkip(num)
+    for(var i=0;i<pedido.length;i++){
+        var total=0;
+        for(var x=0;x<pedido[i].contenido.length;x++){
+            var aux=await productos.getProductoById(pedido[i].contenido[x].producto)
+            total+=(pedido[i].contenido[x].cantidad*aux.precio)
+            pedido[i].contenido[x].producto=aux.nombre
+            pedido[i].contenido[x].precio=aux.precio
+        }
+        pedido[i].total=total
+    }
+    console.log(pedido[0].contenido[0])
+    res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido })
 })
 
 
