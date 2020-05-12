@@ -8,7 +8,7 @@ Antes de la descarga del CMShop debes de tener instalado:
 <li>git</li>
 <li>MongoDB</li>
 <li>node > v8.10.0</li>
-<li>Gestro de servicio pm2</li>
+<li>Gestor de servicio pm2</li>
 </ul>
 </p>
 <p>Para iniciar la aplicacion sigues los siguientes pasos en la terminal:</p>
@@ -30,7 +30,9 @@ Si instalas dentro de una distribución linux debes de especificar la distribuci
 Posibles problemas:
 </h2>
 <ul>
-<li>Error: listen EACCES 0.0.0.0:80 <br> Iniciar el servicio como <b>administrador</b>, ya que necesita permisos para utilizar el puerto 80</li><br>
+<li>Error: listen EACCES 0.0.0.0:80 (LINUX)<br> Iniciar el servicio como <b>administrador</b>, ya que necesita permisos para utilizar el puerto 80</li><br>
+
+<li>La ejecución de scripts está deshabilitada en este sistema (pm2 en WINDOWS)<br> Abre la terminal como <b>administrador</b>, ya que necesita permisos para utilizar el puerto 80</li><br></li>
 <li>
 Al Terminar la configuración de CMShop vuelve a pedir los parámetros de configuración <br> <b>Reinicia el servicio</b>.
 </li><br>
