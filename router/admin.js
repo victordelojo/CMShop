@@ -192,14 +192,16 @@ app.get('/usuarios', comprobarget, async function (req, res) {
     if (nombre != 0) {
         if (num >= await usuarios.getNumTotalUsuariosByNombre(nombre)) {
             num -= 5
-        } else if (num < 0) {
+        }
+        if (num < 0) {
             num = 0
         }
         var usuario = await usuarios.getUsuariosByNombre(num, nombre);
     } else {
         if (num >= await usuarios.getNumTotalUsuarios()) {
             num -= 5
-        } else if (num < 0) {
+        }
+        if (num < 0) {
             num = 0
         }
         var usuario = await usuarios.getUsuarios(num);
@@ -307,14 +309,16 @@ app.get("/productos", comprobarget, async function (req, res) {
     if (cat != 0) {
         if (num >= await productos.getNumTotalProductosByCategoria(cat)) {
             num -= 4
-        } else if (num < 0) {
+        }
+        if (num < 0) {
             num = 0
         }
         var productosSalida = await productos.getProductosByCategoria(num, cat);
     } else {
         if (num >= await productos.getNumTotalProductos()) {
             num -= 4
-        } else if (num < 0) {
+        }
+        if (num < 0) {
             num = 0
         }
         var productosSalida = await productos.getProductos(num);
@@ -337,14 +341,16 @@ app.get("/fotos", comprobarget, async function (req, res) {
     if (cat != 0) {
         if (num >= await productos.getNumTotalProductosByCategoria(cat)) {
             num -= 4
-        } else if (num < 0) {
+        }
+        if (num < 0) {
             num = 0
         }
         var productosSalida = await productos.getProductosByCategoria(num, cat);
     } else {
         if (num >= await productos.getNumTotalProductos()) {
             num -= 4
-        } else if (num < 0) {
+        }
+        if (num < 0) {
             num = 0
         }
         var productosSalida = await productos.getProductos(num);
@@ -504,7 +510,7 @@ app.post("/usuarioAdmin/datos", async function (req, res) {
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (req.body && req.body.nombreAdmin && req.body.correoAdmin) {
-        if (await usuAdmin.cambiarDatos(req.body)) {
+        if (await usuAdmin.cambiarDatos({nombreAdmin:req.body.nombreAdmin,correoAdmin:req.body.correoAdmin})) {
             req.session.nombre = req.body.nombreAdmin
             res.json({ estado: true })
         } else {
@@ -531,7 +537,8 @@ app.get("/pedidos", comprobarget, async function (req, res) {
     var num = parseInt(req.query.num) || 0
     if (num >= await pedidos.getNumeroPedidos()) {
         num -= 5
-    } else if (num < 0) {
+    }
+    if (num < 0) {
         num = 0
     }
     var pedido = await pedidos.getPedidosSkip(num)
@@ -545,7 +552,6 @@ app.get("/pedidos", comprobarget, async function (req, res) {
         }
         pedido[i].total=total
     }
-    console.log(pedido[0].contenido[0])
     res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido })
 })
 
