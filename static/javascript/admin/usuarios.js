@@ -3,6 +3,7 @@ addEventListener("load", cargar)
 var borrarId = ""
 
 function cargar() {
+    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
     document.getElementById("guardarUsu").addEventListener("click", guardarUsu)
     var borr = document.getElementsByClassName("borrar")
     for (var i = 0; i < borr.length; i++) {

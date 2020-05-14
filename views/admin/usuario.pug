@@ -30,7 +30,6 @@ append datos
             th(scope="col") Contraseña
             th(scope="col") Pedidos
             th(scope="col") 
-            th(scope="col") 
         each val in usuarios
           tbody
             tr
@@ -39,8 +38,6 @@ append datos
               td #{val.contra}
               td
                 a(href="./pedidos?client="+val._id) Ir
-              td
-                button.btn.btn-outline-dark.editar(value=val._id) Editar
               td 
                 button.btn.btn-dark.borrar(data-toggle="modal" data-target="#borrar",value=val._id) Borrar
       if usuarios.length==0

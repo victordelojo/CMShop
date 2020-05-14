@@ -463,7 +463,7 @@ app.post("/productos/borrar/foto", async function (req, res) {
 app.get("/confSitio", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "adminD": DB_CONF.Direccion_Admin })
+    res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [],"port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin,https:DB_CONF.https })
 
 })
 
@@ -475,7 +475,7 @@ app.get("/confSitio", comprobarget, async function (req, res) {
 app.get("/general", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "adminD": DB_CONF.Direccion_Admin })
+    res.render('./admin/general.pug', { location: "Configuración General", categorias: [],"port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin })
 })
 
 // **************************************************************************************************************************************************
@@ -535,13 +535,26 @@ app.get("/pedidos", comprobarget, async function (req, res) {
     var pedidos = new Pedidos(url, DB_CONF.db_name);
     var productos= new Producto(url,DB_CONF.db_name)
     var num = parseInt(req.query.num) || 0
-    if (num >= await pedidos.getNumeroPedidos()) {
-        num -= 5
+    var client=req.query.client || 0
+    if(client!=0){
+        if (num >= await pedidos.getNumeroPedidosByUsu(client)) {
+            num -= 5
+        }
+    }else{
+        if (num >= await pedidos.getNumeroPedidos()) {
+            num -= 5
+        }
     }
     if (num < 0) {
         num = 0
     }
-    var pedido = await pedidos.getPedidosSkip(num)
+    
+    
+    if(client!=0){
+        var pedido = await pedidos.getPedidosSkipByUsu(num,client)
+    }else{
+        var pedido = await pedidos.getPedidosSkip(num)
+    }
     for(var i=0;i<pedido.length;i++){
         var total=0;
         for(var x=0;x<pedido[i].contenido.length;x++){

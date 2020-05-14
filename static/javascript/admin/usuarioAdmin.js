@@ -10,6 +10,7 @@ function cargar() {
 }
 
 function guardarDatos() {
+    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
     $('#cargar').modal('show');
     if (nombre != document.getElementById("nombreAdmin").value || correo != document.getElementById("correoAdmin").value) {
         var xhttp = new XMLHttpRequest();

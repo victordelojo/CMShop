@@ -4,7 +4,7 @@ borrarImg = ""
 borrarId = ""
 
 function cargar() {
-
+    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
     var aux = document.getElementsByClassName("imagenes");
     if (aux.length > 1) {
         for (var i = 0; i < aux.length; i++) {

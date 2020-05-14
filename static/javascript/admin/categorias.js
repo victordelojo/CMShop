@@ -3,6 +3,7 @@ var borrar = ""
 var editar = ""
 
 function cargar() {
+    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
     document.getElementById("guardarCategoria").addEventListener("click", guardarCategoria);
     var borrarBtn = document.getElementsByClassName("borrar")
     for (var i = 0; i < borrarBtn.length; i++) {

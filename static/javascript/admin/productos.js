@@ -10,6 +10,7 @@ var categoriaMod
 var fotoAntiguaMod;
 
 function cargar() {
+    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
     nombreMod = document.getElementById("nombreProductoMod")
     descripcionMod = document.getElementById("descipcionProductoMod")
     cantidadMod = document.getElementById("cantProductoMod")

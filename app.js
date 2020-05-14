@@ -159,7 +159,7 @@ app.use(function (err, res, next) {
     res.status(404).sendFile(__dirname + '/static/404.html');
 });
 
-if (DB_CONF.https) {
+/*if (DB_CONF.https) {
 
     var privateKey = fs.readFileSync(DB_CONF.httpsKey, 'utf8');
     var certificate = fs.readFileSync(DB_CONF.httpsCrt, 'utf8');
@@ -169,8 +169,8 @@ if (DB_CONF.https) {
     var httpsServer = https.createServer(credentials, app);
 
     httpsServer.listen(DB_CONF.port || 3000);
-} else {
+} else {*/
     app.listen(DB_CONF.port || 3000, function () { // Arranca el servidor e
-        console.log(`Example app listening on port ${DB_CONF.port}!`);
+        console.log(`Example app listening on port ${DB_CONF.port || 3000}!`);
     });
-}
+//}
