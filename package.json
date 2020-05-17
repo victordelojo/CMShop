@@ -22,7 +22,8 @@
     "utf-8-validate": "^5.0.2",
     "https": "1.0.0",
     "express-fileupload": "1.1.7-alpha.3",
-    "crypto": "1.0.1"
+    "crypto": "1.0.1",
+    "unzipper": "0.10.11"
   },
   "repository": {
     "type": "https",

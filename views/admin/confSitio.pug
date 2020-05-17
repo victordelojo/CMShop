@@ -6,15 +6,11 @@ append datos
       input.form-control.mt-3(type="text", name="nombreSitio" value=host id="nombreSitio")
       h4.mt-5 Puerto del sitio:
       input.form-control.mt-3(type="number", name="postSitio" value=port)
-      h4.mt-5 Https:
-      input.mt-3(type="checkbox", name="https", id="https", checked=https)
-      fieldset(disabled=!https id="disabled")
-        div.custom-file.mt-3
-          input.custom-file-input(type="file",id="htppsCRT",name="htppsCRT")
-          label.custom-file-label(id="nombreCRT",for="customFileLang") Selecciona crt
-        div.custom-file.mt-3
-          input.custom-file-input(type="file",id="htppsKEY",name="htppsKEY")
-          label.custom-file-label(id="nombreKEY",for="customFileLang") Selecciona key
+      h4.mt-5 Tema:
+      small (Debe de ser un archivo .zip)
+      div.custom-file.mt-3
+        input.custom-file-input(type="file",id="tema",name="tema")
+        label.custom-file-label(id="nombreTema",for="customFileLang") Selecciona tema
       button.mt-5.btn.btn-outline-dark(id="guardar") Guardar
       
 append script

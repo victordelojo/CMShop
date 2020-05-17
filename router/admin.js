@@ -31,14 +31,19 @@ var comprobarget = async function (req, res, next) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var usuAdmin = new admin(url, DB_CONF.db_name);
-        if (await usuAdmin.comprobarInicio()) {
-            if (req.session.nombre) {
-                return next();
-            } else {
-                res.redirect("/" + DB_CONF.Direccion_Admin + "/login");
-            }
+        var aux = await usuAdmin.comprobarInicio();
+        if (aux === 0) {
+            res.status(504).sendFile('/504.html', { root: __dirname + "/../static" });
         } else {
-            res.redirect("/");
+            if (aux) {
+                if (req.session.nombre) {
+                    return next();
+                } else {
+                    res.redirect("/" + DB_CONF.Direccion_Admin + "/login");
+                }
+            } else {
+                res.redirect("/");
+            }
         }
     } else {
         res.redirect("/confCMShopUser");
@@ -326,6 +331,10 @@ app.get("/productos", comprobarget, async function (req, res) {
     for (var i = 0; i < productosSalida.length; i++) {
         let aux = await categorias.getCategoriaById(productosSalida[i].categoria)
         productosSalida[i].categoria = aux.nombre;
+        if (productosSalida[i].descripcion.length > 50) {
+            productosSalida[i].descripcion = productosSalida[i].descripcion.substr(0, 49);
+            productosSalida[i].descripcion += "..."
+        }
     }
     res.render('./admin/productos.pug', { location: "Productos", categorias: await categorias.getnombreCategorias(), productos: productosSalida, "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, "num": num, "cat": cat })
 
@@ -463,8 +472,15 @@ app.post("/productos/borrar/foto", async function (req, res) {
 app.get("/confSitio", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [],"port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin,https:DB_CONF.https })
+    res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin })
 
+})
+
+app.post("/confSitio/descomprimir", comprobarpost, async function (req, res) {
+
+    var unzipper = require('unzipper')
+
+    fs.createReadStream(__dirname+'/../views/ryzen.zip').pipe(unzipper.Extract({ path: __dirname+'/../views/ryzen' }));
 })
 
 
@@ -475,7 +491,7 @@ app.get("/confSitio", comprobarget, async function (req, res) {
 app.get("/general", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    res.render('./admin/general.pug', { location: "Configuración General", categorias: [],"port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin })
+    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https })
 })
 
 // **************************************************************************************************************************************************
@@ -510,7 +526,7 @@ app.post("/usuarioAdmin/datos", async function (req, res) {
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (req.body && req.body.nombreAdmin && req.body.correoAdmin) {
-        if (await usuAdmin.cambiarDatos({nombreAdmin:req.body.nombreAdmin,correoAdmin:req.body.correoAdmin})) {
+        if (await usuAdmin.cambiarDatos({ nombreAdmin: req.body.nombreAdmin, correoAdmin: req.body.correoAdmin })) {
             req.session.nombre = req.body.nombreAdmin
             res.json({ estado: true })
         } else {
@@ -533,14 +549,19 @@ app.get("/pedidos", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var pedidos = new Pedidos(url, DB_CONF.db_name);
-    var productos= new Producto(url,DB_CONF.db_name)
+    var productos = new Producto(url, DB_CONF.db_name)
     var num = parseInt(req.query.num) || 0
-    var client=req.query.client || 0
-    if(client!=0){
+    var client = req.query.client || 0
+    var id = req.query.id || 0;
+    var est = req.query.est || 0
+    var pre = req.query.pre || 0
+    var estados = ["No pagado", "Pagado", "Confirmado", "En preparación", "Preparado", "Enviado", "Entregado", "Anulado"];
+    var precios = ["Mas caros primeros", "Mas baratos primero"]
+    if (client != 0) {
         if (num >= await pedidos.getNumeroPedidosByUsu(client)) {
             num -= 5
         }
-    }else{
+    } else {
         if (num >= await pedidos.getNumeroPedidos()) {
             num -= 5
         }
@@ -548,25 +569,26 @@ app.get("/pedidos", comprobarget, async function (req, res) {
     if (num < 0) {
         num = 0
     }
-    
-    
-    if(client!=0){
-        var pedido = await pedidos.getPedidosSkipByUsu(num,client)
-    }else{
+    if (client != 0) {
+        var pedido = await pedidos.getPedidosSkipByUsu(num, client)
+    } else {
         var pedido = await pedidos.getPedidosSkip(num)
     }
-    for(var i=0;i<pedido.length;i++){
-        var total=0;
-        for(var x=0;x<pedido[i].contenido.length;x++){
-            var aux=await productos.getProductoById(pedido[i].contenido[x].producto)
-            total+=(pedido[i].contenido[x].cantidad*aux.precio)
-            pedido[i].contenido[x].producto=aux.nombre
-            pedido[i].contenido[x].precio=aux.precio
+    for (var i = 0; i < pedido.length; i++) {
+        var total = 0;
+        for (var x = 0; x < pedido[i].contenido.length; x++) {
+            var aux = await productos.getProductoById(pedido[i].contenido[x].producto)
+            total += (pedido[i].contenido[x].cantidad * aux.precio)
+            pedido[i].contenido[x].producto = aux.nombre
+            pedido[i].contenido[x].precio = aux.precio
         }
-        pedido[i].total=total
+        pedido[i].estado = estados[pedido[i].estado]
+        pedido[i].total = total
     }
-    res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido })
+    res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido, estados: estados, precios: precios })
 })
+
+
 
 
 module.exports = app;

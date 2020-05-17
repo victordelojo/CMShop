@@ -23,7 +23,6 @@ module.exports = function (url, bd_nombre) {
         const dbo = db.db(this.bd_nombre);
         var usuario = await dbo.collection("usuarios").find({_id: new this.mongodb.ObjectId(usu),pedidos:{$exists:true}},{_id:0,pedidos:1}).toArray()
         var pedidos=[]
-        console.log(usuario)
         if(usuario.length!=0){
             pedidos = await dbo.collection("pedidos").find({_id:{$in: usuario[0].pedidos}}).skip(num).limit(5).toArray()
         }

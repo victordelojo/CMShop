@@ -1,6 +1,16 @@
 extends adminMenu.pug
 append datos
-  div.row.m-0.p-0
-    div.col-12.mt-5 Configuración del Sitio
+  div.row.m-0.p-0.justify-content-center
+    div.col-12.col-lg-6.col-xl-4.mt-5
+      h4.mt-5 Https:
+      input.mt-3(type="checkbox", name="https", id="https", checked=https)
+      fieldset(disabled=!https id="disabled")
+        div.custom-file.mt-3
+          input.custom-file-input(type="file",id="htppsCRT",name="htppsCRT")
+          label.custom-file-label(id="nombreCRT",for="customFileLang") Selecciona crt
+        div.custom-file.mt-3
+          input.custom-file-input(type="file",id="htppsKEY",name="htppsKEY")
+          label.custom-file-label(id="nombreKEY",for="customFileLang") Selecciona key
+      button.mt-5.btn.btn-outline-dark(id="guardar") Guardar
 append script
-  
+  script(src="../javascript/admin/general.js")

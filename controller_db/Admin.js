@@ -38,14 +38,19 @@ module.exports = function (url, bd_nombre) {
     this.comprobarInicio = async function () {
 
         // Sincrono
-        let db = await this.mongodb.MongoClient.connect(this.url, {
-            useUnifiedTopology: true,// Usar el nuevo motor de tipografia
-            useNewUrlParser: true,// Usa la herramienta para analizar las cadenas de conexión con mongoDB
-        });
+        try{
+            var db = await this.mongodb.MongoClient.connect(this.url, {
+                useUnifiedTopology: true,// Usar el nuevo motor de tipografia
+                useNewUrlParser: true,// Usa la herramienta para analizar las cadenas de conexión con mongoDB
+            })
+        }catch(error){
+            return 0
+        }
         const dbo = db.db(this.bd_nombre);
-        let thing = await dbo.collection("general").countDocuments();
+        //dbo.collection("general").countDocuments()  CUENTA LOS DOCUMENTOS QUE HAY EN ESA COLECCIÓN
+        let thing = await dbo.collection("general").find({},{_id:0,nombreAdmin:1,contraAdmin:1}).toArray();
         await db.close();
-        if (thing > 0) {
+        if (thing.length > 0 && thing[0].nombreAdmin!=="" && thing.contraAdmin!=="") {
             return true;
         }
         return false;

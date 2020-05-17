@@ -17,7 +17,7 @@ html
             div.col-md-3.col-xl-2.d-none.d-md-inline-block
               img.img-fluid.p-3.ml-5(src="../logo.png", alt="Responsive image", style="width:60%")
             div.col-2.col-sm-2.d-md-none.d-inline-block
-              button.btn.btn-dark.w-100.navbar-btn.pull-right.p-0.h-sm-25(id="btn-menu",type="button" ,data-toggle="modal" ,data-target="#sidebar-left") 
+              button.btn.btn-dark.w-100.navbar-btn.pull-right.p-0.h-sm-25(id="btn-menu",type="button" ,data-toggle="modal" ,data-target="#sidebar-left", style="height:50px") 
                 span.typcn.typcn-th-menu
             div.col-7.col-sm-8.col-md-7.col-lg-8.col-xl-9.text-center 
               h4 #{location}
@@ -31,8 +31,13 @@ html
               div.accordion(id="accordionExample")
                 div.card.bg-dark
                   div.card-header(id="headingOne")
-                    a.collapsed(data-toggle="collapse", href="#collapseOne", aria-expanded="false" aria-controls="collapseOne")
-                      h6.mb-0.text-white Estadisticas
+                    div.row.m-0.justify-content-center.collapsed(data-toggle="collapse", href="#collapseOne", aria-expanded="false" aria-controls="collapseOne")
+                      div.col-1
+                        h6.text-white
+                          span.typcn.typcn-chart-pie-outline
+                      div.col-10
+                        a
+                          h6.mb-0.text-white Estadisticas 
                   div.collapse.bg-secondary(id="collapseOne", aria-labelledby="headingOne", data-parent="#accordionExample")
                     div.card-body.p-0
                       div.card-body.p-0
@@ -42,8 +47,13 @@ html
                               h6.mb-0 Estadisticas
                 div.card.bg-dark
                   div.card-header(id="headingTwo")
-                    a.collapsed(data-toggle="collapse", href="#collapseTwo", aria-expanded="false" aria-controls="collapseTwo")
-                      h6.mb-0.text-white Categorias
+                    div.row.m-0.justify-content-center.collapsed(data-toggle="collapse", href="#collapseTwo", aria-expanded="false" aria-controls="collapseTwo")
+                      div.col-1
+                        h6.text-white
+                          span.typcn.typcn-tag
+                      div.col-10
+                        a
+                          h6.mb-0.text-white Categorias 
                   div.collapse.bg-secondary(id="collapseTwo", aria-labelledby="headingTwo", data-parent="#accordionExample")
                     div.card-body.p-0
                       div.card-body.p-0
@@ -53,8 +63,13 @@ html
                               h6.mb-0 Todas
                 div.card.bg-dark
                   div.card-header(id="headingThree")
-                    a.collapsed(data-toggle="collapse", href="#collapseThree", aria-expanded="false" aria-controls="collapseThree")
-                      h6.mb-0.text-white Productos
+                    div.row.m-0.justify-content-center.collapsed(data-toggle="collapse", href="#collapseThree", aria-expanded="false" aria-controls="collapseThree")
+                      div.col-1
+                        h6.text-white
+                          span.typcn.typcn-archive
+                      div.col-10
+                        a
+                          h6.mb-0.text-white Productos 
                   div.collapse.bg-secondary(id="collapseThree", aria-labelledby="headingThree", data-parent="#accordionExample")
                     div.card-body.p-0
                       div.card.bg-secondary.border-0
@@ -68,8 +83,13 @@ html
                             h6.mb-0 Fotos
                 div.card.bg-dark
                   div.card-header(id="headingPedidos")
-                    a.collapsed(data-toggle="collapse", href="#collapsePedidos", aria-expanded="false" aria-controls="collapsePedidos")
-                      h6.mb-0.text-white Pedidos
+                    div.row.m-0.justify-content-center.collapsed(data-toggle="collapse", href="#collapsePedidos", aria-expanded="false" aria-controls="collapsePedidos")
+                      div.col-1
+                        h6.text-white
+                          span.typcn.typcn-edit
+                      div.col-10
+                        a
+                          h6.mb-0.text-white Pedidos 
                   div.collapse.bg-secondary(id="collapsePedidos", aria-labelledby="headingPedidos", data-parent="#accordionExample")
                     div.card-body.p-0
                       div.card.bg-secondary.border-0
@@ -78,8 +98,13 @@ html
                             h6.mb-0 Todos
                 div.card.bg-dark
                   div.card-header(id="headingFour")
-                    a.collapsed.te(data-toggle="collapse", href="#collapseFour", aria-expanded="false" aria-controls="collapseFour")
-                      h6.mb-0.text-white Usuarios
+                    div.row.m-0.justify-content-center.collapsed(data-toggle="collapse", href="#collapseFour", aria-expanded="false" aria-controls="collapseFour")
+                      div.col-1
+                        h6.text-white
+                          span.typcn.typcn-business-card
+                      div.col-10
+                        a
+                          h6.mb-0.text-white Usuarios 
                   div.collapse.bg-secondary(id="collapseFour", aria-labelledby="headingFour", data-parent="#accordionExample")
                     div.card-body.p-0
                       div.card.bg-secondary.border-0
@@ -93,8 +118,13 @@ html
                               h6.mb-0 Administrador
                 div.card.bg-dark
                   div.card-header(id="headingFive")
-                    a.collapsed(data-toggle="collapse", href="#collapseFive", aria-expanded="false" aria-controls="collapseFive")
-                      h6.mb-0.text-white Configuración
+                    div.row.m-0.justify-content-center.collapsed(data-toggle="collapse", href="#collapseFive", aria-expanded="false" aria-controls="collapseFive")
+                      div.col-1
+                        h6.text-white
+                          span.typcn.typcn-cog-outline
+                      div.col-10
+                        a
+                          h6.mb-0.text-white Configuración 
                   div.collapse.bg-secondary(id="collapseFive", aria-labelledby="headingFive", data-parent="#accordionExample")
                     div.card-body.p-0
                       div.card.bg-secondary.border-0
@@ -121,8 +151,13 @@ html
                     div.accordion.text-center(id="accordionExample")
                       div.card.bg-dark
                         div.card-header(id="headingOne")
-                          a.collapsed(data-toggle="collapse", href="#collapseOne", aria-expanded="false" aria-controls="collapseOne")
-                            h6.mb-0.text-white Estadisticas
+                          div.row.m-0.justify-content-center
+                            div.col-1
+                              h6.text-white
+                                span.typcn.typcn-chart-pie-outline
+                            div.col-7
+                              a.collapsed(data-toggle="collapse", href="#collapseOne", aria-expanded="false" aria-controls="collapseOne")
+                                h6.mb-0.text-white Estadisticas 
                         div.collapse.bg-secondary(id="collapseOne", aria-labelledby="headingOne", data-parent="#accordionExample")
                           div.card-body.p-0
                             div.card-body.p-0
@@ -132,8 +167,13 @@ html
                                     h6.mb-0 Estadisticas
                       div.card.bg-dark
                         div.card-header(id="headingTwo")
-                          a.collapsed(data-toggle="collapse", href="#collapseTwo", aria-expanded="false" aria-controls="collapseTwo")
-                            h6.mb-0.text-white Categorias
+                          div.row.m-0.justify-content-center
+                            div.col-1
+                              h6.text-white
+                                span.typcn.typcn-tag
+                            div.col-7
+                              a.collapsed(data-toggle="collapse", href="#collapseTwo", aria-expanded="false" aria-controls="collapseTwo")
+                                h6.mb-0.text-white Categorias 
                         div.collapse.bg-secondary(id="collapseTwo", aria-labelledby="headingTwo", data-parent="#accordionExample")
                           div.card-body.p-0
                             div.card-body.p-0
@@ -143,8 +183,13 @@ html
                                     h6.mb-0 Todas
                       div.card.bg-dark
                         div.card-header(id="headingThree")
-                          a.collapsed(data-toggle="collapse", href="#collapseThree", aria-expanded="false" aria-controls="collapseThree")
-                            h6.mb-0.text-white Productos
+                          div.row.m-0.justify-content-center
+                            div.col-1
+                              h6.text-white
+                                span.typcn.typcn-archive
+                            div.col-7
+                              a.collapsed(data-toggle="collapse", href="#collapseThree", aria-expanded="false" aria-controls="collapseThree")
+                                h6.mb-0.text-white Productos 
                         div.collapse.bg-secondary(id="collapseThree", aria-labelledby="headingThree", data-parent="#accordionExample")
                           div.card-body.p-0
                             div.card.bg-secondary.border-0
@@ -158,8 +203,13 @@ html
                                   h6.mb-0 Fotos
                       div.card.bg-dark
                         div.card-header(id="headingPedidos")
-                          a.collapsed(data-toggle="collapse", href="#collapsePedidos", aria-expanded="false" aria-controls="collapsePedidos")
-                            h6.mb-0.text-white Pedidos
+                          div.row.m-0.justify-content-center
+                            div.col-1
+                              h6.text-white
+                                span.typcn.typcn-edit
+                            div.col-7
+                              a.collapsed(data-toggle="collapse", href="#collapsePedidos", aria-expanded="false" aria-controls="collapsePedidos")
+                                h6.mb-0.text-white Pedidos 
                         div.collapse.bg-secondary(id="collapsePedidos", aria-labelledby="headingPedidos", data-parent="#accordionExample")
                           div.card-body.p-0
                             div.card.bg-secondary.border-0
@@ -168,8 +218,13 @@ html
                                   h6.mb-0 Todos
                       div.card.bg-dark
                         div.card-header(id="headingFour")
-                          a.collapsed.te(data-toggle="collapse", href="#collapseFour", aria-expanded="false" aria-controls="collapseFour")
-                            h6.mb-0.text-white Usuarios
+                          div.row.m-0.justify-content-center
+                            div.col-1
+                              h6.text-white
+                                span.typcn.typcn-business-card
+                            div.col-7
+                              a.collapsed.te(data-toggle="collapse", href="#collapseFour", aria-expanded="false" aria-controls="collapseFour")
+                                h6.mb-0.text-white Usuarios 
                         div.collapse.bg-secondary(id="collapseFour", aria-labelledby="headingFour", data-parent="#accordionExample")
                           div.card-body.p-0
                             div.card.bg-secondary.border-0
@@ -183,8 +238,13 @@ html
                                     h6.mb-0 Administrador
                       div.card.bg-dark
                         div.card-header(id="headingFive")
-                          a.collapsed(data-toggle="collapse", href="#collapseFive", aria-expanded="false" aria-controls="collapseFive")
-                            h6.mb-0.text-white Configuración
+                          div.row.m-0.justify-content-center
+                            div.col-1
+                              h6.text-white
+                                span.typcn.typcn-cog-outline
+                            div.col-7
+                              a.collapsed(data-toggle="collapse", href="#collapseFive", aria-expanded="false" aria-controls="collapseFive")
+                                h6.mb-0.text-white Configuración 
                         div.collapse.bg-secondary(id="collapseFive", aria-labelledby="headingFive", data-parent="#accordionExample")
                           div.card-body.p-0
                             div.card.bg-secondary.border-0
