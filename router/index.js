@@ -12,7 +12,8 @@ var exec = require('child_process').exec,
     child;
 
 if (os.platform() != "win32") {
-    child = exec('ls ./views/default | grep .pug',
+    var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+    child = exec('ls ./views/'+DB_CONF.tema+' | grep .pug',
         // Pasamos los parámetros error, stdout la salida 
         // que mostrara el comando
         function(error, stdout, stderr) {
@@ -25,7 +26,7 @@ if (os.platform() != "win32") {
                     }
                     router.get("/" + element, async function(req, res) {
                         if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
-                            var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+                            
                             var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
                             var usuAdmin = new admin(url, DB_CONF.db_name);
                             if (await usuAdmin.comprobarInicio().catch(function() { return false })) {
@@ -49,7 +50,8 @@ if (os.platform() != "win32") {
             }
         });
 } else {
-    child = exec('dir ' + __dirname + '\\..\\views\\default\\*.pug | find ".pug"',
+    var DB_CONF = require("../CONFIGURE.json")
+    child = exec('dir ' + __dirname + '\\..\\views\\'+DB_CONF.tema+'\\*.pug | find ".pug"',
         // Pasamos los parámetros error, stdout la salida 
         // que mostrara el comando
         function(error, stdout, stderr) {
@@ -62,7 +64,6 @@ if (os.platform() != "win32") {
                     }
                     router.get("/" + element.split(".")[0].trim(), async function(req, res) {
                         if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
-                            var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
                             var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
                             var usuAdmin = new admin(url, DB_CONF.db_name);
                             if (await usuAdmin.comprobarInicio().catch(function() { return false })) {

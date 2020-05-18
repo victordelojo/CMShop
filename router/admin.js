@@ -471,8 +471,25 @@ app.post("/productos/borrar/foto", async function (req, res) {
 
 app.get("/confSitio", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+
+    var exec = require('child_process').exec,
+    child;
+    var os = require("os");
+    var arra=[]
+    if (os.platform() != "win32") {
+        child = await exec('ls ' + __dirname + '/../views | grep ""',
+        // Pasamos los parámetros error, stdout la salida 
+        // que mostrara el comando
+        await function(error, stdout, stderr) {
+            arra = stdout.split("\n")
+            arra.pop();// Elimina la ultima posición del array que está vacia
+            arra.splice(arra.indexOf("admin"),1)
+            res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, temas:arra,tema:DB_CONF.tema })
+        })
+    }else{
+
+    }
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin })
 
 })
 
@@ -491,7 +508,7 @@ app.post("/confSitio/descomprimir", comprobarpost, async function (req, res) {
 app.get("/general", comprobarget, async function (req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https })
+    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https,smtp:DB_CONF.SMTP, smtpDatos:{correo:DB_CONF.SMTP_correo,contra:DB_CONF.SMTP_contrasenia} })
 })
 
 // **************************************************************************************************************************************************

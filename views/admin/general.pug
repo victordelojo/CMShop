@@ -3,6 +3,8 @@ append datos
   div.row.m-0.p-0.justify-content-center
     div.col-12.col-lg-6.col-xl-4.mt-5
       h4.mt-5 Https:
+      small (Si activas https el puerto del sitio web se cambiará al 443)
+      br
       input.mt-3(type="checkbox", name="https", id="https", checked=https)
       fieldset(disabled=!https id="disabled")
         div.custom-file.mt-3
@@ -11,6 +13,14 @@ append datos
         div.custom-file.mt-3
           input.custom-file-input(type="file",id="htppsKEY",name="htppsKEY")
           label.custom-file-label(id="nombreKEY",for="customFileLang") Selecciona key
+      
+      h4.mt-5 Correo SMTP:
+      input.mt-3(type="checkbox", name="smtp", id="smtp", checked=smtp)
+      fieldset(disabled=!smtp id="disabledSMTP")
+        h6 Dirección de correo:
+        input.form-control.mt-3(type="email",id="smtpCorreo",name="smtpCorreo" value=smtpDatos.correo)
+        h6.mt-3 Contraseña:
+        input.form-control.mt-3(type="password",id="smtpContra",name="smtpContra" value=smtpDatos.contra)
       button.mt-5.btn.btn-outline-dark(id="guardar") Guardar
 append script
   script(src="../javascript/admin/general.js")

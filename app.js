@@ -168,7 +168,7 @@ app.use(function (err, res, next) {
 
     var httpsServer = https.createServer(credentials, app);
 
-    httpsServer.listen(DB_CONF.port || 3000);
+    httpsServer.listen(443);
 } else {*/
     app.listen(DB_CONF.port || 3000, function () { // Arranca el servidor e
         console.log(`Example app listening on port ${DB_CONF.port || 3000}!`);
