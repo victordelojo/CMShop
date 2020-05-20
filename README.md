@@ -63,9 +63,9 @@ Ambos:
 </li>
 <ul>
 <li>
-Al Terminar la configuración de CMShop vuelve a pedir los parámetros de configuración <br> <b>Reinicia el servicio</b>.
+Al Terminar la configuración de CMShop vuelve a pedir los parámetros de configuración: <br> <b>Reinicia el servicio</b>.
 </li><br>
 <li>
-No inicia sesión en admin <br> Comprobar si la dirección de donde está alojado el CMShop esta bien configurado en el archivo <b>CONFIGURE.json</b>
+No inicia sesión en admin <br> Comprobar si la dirección de donde está alojado el CMShop esta bien configurado en el archivo: <b>CONFIGURE.json</b>
 </li>
 </ul>
