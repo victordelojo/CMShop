@@ -4,7 +4,7 @@ borrarImg = ""
 borrarId = ""
 
 function cargar() {
-    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
+    $('#idDelModal').modal({ backdrop: 'static', keyboard: false })
     var aux = document.getElementsByClassName("imagenes");
     if (aux.length > 1) {
         for (var i = 0; i < aux.length; i++) {
@@ -14,7 +14,7 @@ function cargar() {
     }
     var guardar = document.getElementsByClassName("insertar");
     for (var i = 0; i < guardar.length; i++) {
-        guardar[i].addEventListener("click", function (e) {
+        guardar[i].addEventListener("click", function(e) {
             insertar = e.target.getAttribute("value");
         })
     }
@@ -43,12 +43,12 @@ function cambiarNombre(e) {
 function borrarFoto() {
     $('#cargar').modal('show');
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
+    xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             datos = JSON.parse(this.responseText);
             console.log(datos)
             if (datos.estado) {
-                location.href="./fotos?id="+borrarId;
+                location.href = "./fotos?id=" + borrarId;
             } else {
                 $('#borrar').modal('hide')
                 setTimeout(() => { $('#cargar').modal('hide'); }, 500);
@@ -62,7 +62,7 @@ function borrarFoto() {
 
         }
     };
-    xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/borrar/foto", true);
+    xhttp.open("POST", "/" + conf.adminD + "/productos/borrar/foto", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("id=" + borrarId + "&foto=" + borrarImg);
 }
@@ -81,12 +81,12 @@ function guardarfoto() {
         formulario.appendChild(id)
         formulario.enctype = "multipart/form-data"
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/insertar/foto", true);
-        xhttp.addEventListener("readystatechange", function () {
+        xhttp.open("POST", "/" + conf.adminD + "/productos/insertar/foto", true);
+        xhttp.addEventListener("readystatechange", function() {
             if (this.readyState == 4 && this.status == 200) {
                 datos = JSON.parse(this.responseText);
                 if (datos.estado) {
-                    location.href="./fotos?id="+insertar;
+                    location.href = "./fotos?id=" + insertar;
                 } else {
                     $('#nuevo').modal('hide')
                     setTimeout(() => { $('#cargar').modal('hide'); }, 500);
@@ -119,7 +119,7 @@ function boton(e) {
 
 function sinBoton(e) {
     if (e.target.parentElement.parentElement.children.length > 2) {
-        setTimeout(function () {
+        setTimeout(function() {
             e.target.lastChild.remove();
         }, 100);
     }

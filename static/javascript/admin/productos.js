@@ -10,7 +10,7 @@ var categoriaMod
 var fotoAntiguaMod;
 
 function cargar() {
-    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
+    $('#idDelModal').modal({ backdrop: 'static', keyboard: false })
     nombreMod = document.getElementById("nombreProductoMod")
     descripcionMod = document.getElementById("descipcionProductoMod")
     cantidadMod = document.getElementById("cantProductoMod")
@@ -34,7 +34,7 @@ function cargar() {
             categoriaMod.disabled = true
             IdEditar = e.target.value
             var xhttp1 = new XMLHttpRequest();
-            xhttp1.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/obtenerUno", true);
+            xhttp1.open("POST", "/" + conf.adminD + "/productos/obtenerUno", true);
             xhttp1.addEventListener("readystatechange", function() {
                 if (this.readyState == 4 && this.status == 200) {
                     nombreMod.disabled = false
@@ -70,14 +70,14 @@ function cargar() {
         })
     }
     document.getElementById("fotoProducto").addEventListener("change", cambiarNombre);
-    document.getElementById("categoria").addEventListener("change",filtro)
+    document.getElementById("categoria").addEventListener("change", filtro)
 }
 
-function filtro(e){
-    if(e.target.value==0){
-        location.href="./productos";
-    }else{
-        location.href="./productos?cat="+e.target.value;
+function filtro(e) {
+    if (e.target.value == 0) {
+        location.href = "./productos";
+    } else {
+        location.href = "./productos?cat=" + e.target.value;
     }
 }
 
@@ -91,7 +91,7 @@ function cambiarNombre(e) {
 
 function borrar() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/borrar", true);
+    xhttp.open("POST", "/" + conf.adminD + "/productos/borrar", true);
     xhttp.addEventListener("readystatechange", function() {
         if (this.readyState == 4 && this.status == 200) {
             datos = JSON.parse(this.responseText);

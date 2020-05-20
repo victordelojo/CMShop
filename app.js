@@ -12,7 +12,7 @@ try {
     DB_CONF = require("./CONFIGURE.json") //Carga la configuración
     adminD = DB_CONF.Direccion_Admin;
 } catch (err) {
-    console.log("no esta")
+    console.log("No existe configuración del CMShop")
 }
 const session = require('express-session'); // Para poder manejar sesiones
 var nodemailer = require('nodemailer'); // Para enviar correos
@@ -25,6 +25,7 @@ var favicon = require('serve-favicon');
 var inicio = require("./router/index");
 var admin = require("./router/admin");
 var correo = require("./router/correo");
+var ajax = require("./router/ajax")
 
 app.use(fileUpload())
 app.use(favicon(__dirname + '/static/logo.png')); // 
@@ -52,7 +53,9 @@ app.use("/" + adminD, admin)
 
 app.use("/correo", correo)
 
-app.post("/confCMShopUser", async function (req, res) {
+app.use("/ajax", ajax)
+
+app.post("/confCMShopUser", async function(req, res) {
     if (!fs.existsSync(__dirname + "/../CONFIGURE.json")) {
         var nombre = req.body.nombre || ''; // Recoge el parámetro nombre y si no existe lo pone en blanco
         if (nombre != "") {
@@ -74,7 +77,7 @@ app.post("/confCMShopUser", async function (req, res) {
                 html: '<h1>Muchas gracias de utilizar CMShop</h1><br>\
           '
             };
-            await transporter.sendMail(mailOptions, async function (error, info) {
+            await transporter.sendMail(mailOptions, async function(error, info) {
                 if (error) {
                     console.log(error);
                 } else {
@@ -155,7 +158,7 @@ app.post("/confCMShopUser", async function (req, res) {
 
 
 
-app.use(function (err, res, next) {
+app.use(function(err, res, next) {
     res.status(404).sendFile(__dirname + '/static/404.html');
 });
 
@@ -170,7 +173,7 @@ app.use(function (err, res, next) {
 
     httpsServer.listen(443);
 } else {*/
-    app.listen(DB_CONF.port || 3000, function () { // Arranca el servidor e
-        console.log(`Example app listening on port ${DB_CONF.port || 3000}!`);
-    });
+app.listen(DB_CONF.port || 3000, function() { // Arranca el servidor e
+    console.log(`Example app listening on port ${DB_CONF.port || 3000}!`);
+});
 //}

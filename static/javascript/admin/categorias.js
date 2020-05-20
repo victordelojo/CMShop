@@ -3,7 +3,7 @@ var borrar = ""
 var editar = ""
 
 function cargar() {
-    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
+    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     document.getElementById("guardarCategoria").addEventListener("click", guardarCategoria);
     var borrarBtn = document.getElementsByClassName("borrar")
     for (var i = 0; i < borrarBtn.length; i++) {
@@ -52,7 +52,7 @@ function editarCategoria() {
                     }
                 }
             })
-            xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/categorias/editar", true);
+            xhttp.open("POST", "/" + conf.adminD + "/categorias/editar", true);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send("nombreA=" + editar + "&nombreN=" + nuevo);
         }
@@ -86,7 +86,7 @@ function borrarCategoria() {
             }
         }
     })
-    xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/categorias/borrar", true);
+    xhttp.open("POST", "/" + conf.adminD + "/categorias/borrar", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("nombre=" + borrar);
 }
@@ -111,7 +111,7 @@ function guardarCategoria() {
                 }
             }
         })
-        xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/categorias/insertar", true);
+        xhttp.open("POST", "/" + conf.adminD + "/categorias/insertar", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("nombre=" + nombre);
     } else {

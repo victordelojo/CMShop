@@ -1,4 +1,4 @@
-module.exports = function (url, bd_nombre) {
+module.exports = function(url, bd_nombre) {
 
     this.mongodb = require('mongodb'); // 
     this.f = require('util').format;
@@ -7,7 +7,7 @@ module.exports = function (url, bd_nombre) {
     this.bd_nombre = bd_nombre;
 
 
-    this.getUsuarios = async function (num) {
+    this.getUsuarios = async function(num) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
@@ -18,7 +18,18 @@ module.exports = function (url, bd_nombre) {
         return usuarios;
     }
 
-    this.getUsuariosByNombre = async function (num, nombre) {
+    this.getUsuarioById = async function(id) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var usuario = await dbo.collection("usuarios").find({ _id: new this.mongodb.ObjectId(id) }, { pedidos: 0 })
+        db.close();
+        return usuario[0];
+    }
+
+    this.getUsuariosByNombre = async function(num, nombre) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
@@ -36,18 +47,18 @@ module.exports = function (url, bd_nombre) {
 
     }
 
-    this.getNumTotalUsuariosByNombre = async function (nombre) {
+    this.getNumTotalUsuariosByNombre = async function(nombre) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        var usuarios = await dbo.collection("usuarios").find({ nombre: { $regex: nombre,$options: "i" } }).toArray()
+        var usuarios = await dbo.collection("usuarios").find({ nombre: { $regex: nombre, $options: "i" } }).toArray()
         db.close();
         return usuarios.length;
     }
 
-    this.getNumTotalUsuarios = async function () {
+    this.getNumTotalUsuarios = async function() {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
@@ -58,7 +69,7 @@ module.exports = function (url, bd_nombre) {
         return usuarios.length;
     }
 
-    this.borrar = async function (id) {
+    this.borrar = async function(id) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
@@ -72,7 +83,7 @@ module.exports = function (url, bd_nombre) {
         return true;
     }
 
-    this.insertar = async function (datos) {
+    this.insertar = async function(datos) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,

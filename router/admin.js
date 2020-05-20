@@ -7,7 +7,7 @@ var Producto = require("../controller_db/Producto")
 var Usuario = require("../controller_db/Usuario")
 var Pedidos = require("../controller_db/Pedidos")
 
-var comprobarpost = async function (req, res, next) {
+var comprobarpost = async function(req, res, next) {
     if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
@@ -26,7 +26,7 @@ var comprobarpost = async function (req, res, next) {
     }
 }
 
-var comprobarget = async function (req, res, next) {
+var comprobarget = async function(req, res, next) {
     if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
@@ -51,7 +51,7 @@ var comprobarget = async function (req, res, next) {
 }
 
 
-app.get("/reiniciar", async function (req, res) { //Cambia los parámetros del archivo de configuración y reinicia el servicio
+app.get("/reiniciar", async function(req, res) { //Cambia los parámetros del archivo de configuración y reinicia el servicio
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
@@ -78,7 +78,7 @@ app.get("/reiniciar", async function (req, res) { //Cambia los parámetros del a
     res.redirect("http://" + DB_CONF.direccion + ":" + 3000 + "/" + DB_CONF.Direccion_Admin)
 })
 
-app.get("/", comprobarget, async function (req, res) {
+app.get("/", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var categorias = new Categoria(url, DB_CONF.db_name);
@@ -164,12 +164,12 @@ app.get("/", comprobarget, async function (req, res) {
 // **************************************************************************************************************************************************
 //----------LOGIN-------------------------------------------------------------------------------------------------------------------------------
 
-app.get('/login', async function (req, res) {
+app.get('/login', async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     res.render("./admin/adminLogin.pug", { "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin })
 })
 
-app.post('/login/comprobar', async function (req, res) {
+app.post('/login/comprobar', async function(req, res) {
     if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
@@ -188,10 +188,11 @@ app.post('/login/comprobar', async function (req, res) {
     //----------USUARIOS-------------------------------------------------------------------------------------------------------------------------------
 
 })
-app.get('/usuarios', comprobarget, async function (req, res) {
+app.get('/usuarios', comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    var usuAdmin = new admin(url, DB_CONF.db_name); var usuarios = new Usuario(url, DB_CONF.db_name)
+    var usuAdmin = new admin(url, DB_CONF.db_name);
+    var usuarios = new Usuario(url, DB_CONF.db_name)
     var num = parseInt(req.query.num) || 0
     var nombre = req.query.nombre || 0
     if (nombre != 0) {
@@ -223,13 +224,14 @@ app.get('/usuarios', comprobarget, async function (req, res) {
         location: "Usuarios",
         usuarios: usuario,
         "adminD": DB_CONF.Direccion_Admin,
-        "port": DB_CONF.port, "host": DB_CONF.direccion,
+        "port": DB_CONF.port,
+        "host": DB_CONF.direccion,
         "num": num,
         "nombre": nombre
     })
 })
 
-app.post("/usuarios/insertar", comprobarpost, async function (req, res) {
+app.post("/usuarios/insertar", comprobarpost, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuario = new Usuario(url, DB_CONF.db_name);
@@ -240,7 +242,7 @@ app.post("/usuarios/insertar", comprobarpost, async function (req, res) {
     }
 })
 
-app.post("/usuarios/borrar", comprobarpost, async function (req, res) {
+app.post("/usuarios/borrar", comprobarpost, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuario = new Usuario(url, DB_CONF.db_name);
@@ -255,15 +257,16 @@ app.post("/usuarios/borrar", comprobarpost, async function (req, res) {
 // **************************************************************************************************************************************************
 //----------CATEGORIAS-------------------------------------------------------------------------------------------------------------------------------
 
-app.get("/categorias", comprobarget, async function (req, res) {
+app.get("/categorias", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    var usuAdmin = new admin(url, DB_CONF.db_name); var categoriasT = new Categoria(url, DB_CONF.db_name);
+    var usuAdmin = new admin(url, DB_CONF.db_name);
+    var categoriasT = new Categoria(url, DB_CONF.db_name);
     var categoriasTo = await categoriasT.getCategorias();
     res.render('./admin/categorias.pug', { location: "Categorias", categorias: categoriasTo, "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin })
 
 })
-app.post("/categorias/insertar", comprobarpost, async function (req, res) {
+app.post("/categorias/insertar", comprobarpost, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var categorias = new Categoria(url, DB_CONF.db_name);
@@ -275,7 +278,7 @@ app.post("/categorias/insertar", comprobarpost, async function (req, res) {
     }
 })
 
-app.post("/categorias/borrar", async function (req, res) {
+app.post("/categorias/borrar", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var categorias = new Categoria(url, DB_CONF.db_name);
@@ -286,7 +289,7 @@ app.post("/categorias/borrar", async function (req, res) {
         res.json({ estado: false, error: "No existe esa categoría" });
     }
 })
-app.post("/categorias/editar", async function (req, res) {
+app.post("/categorias/editar", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var categorias = new Categoria(url, DB_CONF.db_name);
@@ -304,7 +307,7 @@ app.post("/categorias/editar", async function (req, res) {
 //----------PRODUCTOS-------------------------------------------------------------------------------------------------------------------------------
 
 
-app.get("/productos", comprobarget, async function (req, res) {
+app.get("/productos", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
@@ -340,7 +343,7 @@ app.get("/productos", comprobarget, async function (req, res) {
 
 })
 
-app.get("/fotos", comprobarget, async function (req, res) {
+app.get("/fotos", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
@@ -372,13 +375,13 @@ app.get("/fotos", comprobarget, async function (req, res) {
 
 })
 
-app.post("/productos/insertar", async function (req, res) {
+app.post("/productos/insertar", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
     try {
         let foto = req.files.foto
-        if (! await fs.existsSync(`./static/fotos/${foto.name}`)) {
+        if (!await fs.existsSync(`./static/fotos/${foto.name}`)) {
             await foto.mv(`./static/fotos/${foto.name}`)
             await productos.insertar({ nombre: req.body.nombre, descripcion: req.body.descripcion, precio: req.body.precio, cantidad: req.body.cant, foto: [foto.name], categoria: req.body.categoria })
             res.json({ estado: true })
@@ -390,7 +393,7 @@ app.post("/productos/insertar", async function (req, res) {
     }
 })
 
-app.post("/productos/actualizar", async function (req, res) {
+app.post("/productos/actualizar", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
@@ -404,14 +407,14 @@ app.post("/productos/actualizar", async function (req, res) {
     }
 })
 
-app.post("/productos/obtenerUno", async function (req, res) {
+app.post("/productos/obtenerUno", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
     res.json(await productos.getProductoById(req.body.id))
 })
 
-app.post("/productos/borrar", async function (req, res) {
+app.post("/productos/borrar", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
@@ -425,14 +428,14 @@ app.post("/productos/borrar", async function (req, res) {
     }
     res.json(await productos.borrar(req.body.id))
 })
-app.post("/productos/insertar/foto", async function (req, res) {
+app.post("/productos/insertar/foto", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
     if (req.body.id) {
         try {
             let foto = req.files.foto
-            if (! await fs.existsSync(`./static/fotos/${foto.name}`)) {
+            if (!await fs.existsSync(`./static/fotos/${foto.name}`)) {
                 await foto.mv(`./static/fotos/${foto.name}`)
                 await productos.insertarFotoById(req.body.id, foto.name)
                 res.json({ estado: true })
@@ -450,7 +453,7 @@ app.post("/productos/insertar/foto", async function (req, res) {
 })
 
 
-app.post("/productos/borrar/foto", async function (req, res) {
+app.post("/productos/borrar/foto", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Producto(url, DB_CONF.db_name);
@@ -469,35 +472,46 @@ app.post("/productos/borrar/foto", async function (req, res) {
 // **************************************************************************************************************************************************
 //----------CONFIGURACIÓN DEL SITIO-------------------------------------------------------------------------------------------------------------------------------
 
-app.get("/confSitio", comprobarget, async function (req, res) {
+app.get("/confSitio", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
 
     var exec = require('child_process').exec,
-    child;
+        child;
     var os = require("os");
-    var arra=[]
+    var arra = []
     if (os.platform() != "win32") {
         child = await exec('ls ' + __dirname + '/../views | grep ""',
-        // Pasamos los parámetros error, stdout la salida 
-        // que mostrara el comando
-        await function(error, stdout, stderr) {
-            arra = stdout.split("\n")
-            arra.pop();// Elimina la ultima posición del array que está vacia
-            arra.splice(arra.indexOf("admin"),1)
-            res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, temas:arra,tema:DB_CONF.tema })
-        })
-    }else{
-
+            // Pasamos los parámetros error, stdout la salida 
+            // que mostrara el comando
+            await
+            function(error, stdout, stderr) {
+                arra = stdout.split("\n")
+                arra.pop(); // Elimina la ultima posición del array que está vacia
+                arra.splice(arra.indexOf("admin"), 1)
+                res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, temas: arra, tema: DB_CONF.tema })
+            })
+    } else {
+        child = exec('dir ' + __dirname + '\\..\\views /AD /b',
+            await
+            function(error, stdout, atderr) {
+                var arra = stdout.split("\r\n")
+                for (let i = 0; i < arra.length; i++) {
+                    arra[i].replace("\n", "")
+                }
+                arra.pop()
+                arra.splice(arra.indexOf("admin"), 1)
+                res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, temas: arra, tema: DB_CONF.tema })
+            })
     }
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
 
 })
 
-app.post("/confSitio/descomprimir", comprobarpost, async function (req, res) {
+app.post("/confSitio/descomprimir", comprobarpost, async function(req, res) {
 
     var unzipper = require('unzipper')
 
-    fs.createReadStream(__dirname+'/../views/ryzen.zip').pipe(unzipper.Extract({ path: __dirname+'/../views/ryzen' }));
+    fs.createReadStream(__dirname + '/../views/ryzen.zip').pipe(unzipper.Extract({ path: __dirname + '/../views/ryzen' }));
 })
 
 
@@ -505,17 +519,17 @@ app.post("/confSitio/descomprimir", comprobarpost, async function (req, res) {
 // **************************************************************************************************************************************************
 //----------CONFIGURACIÓN GENERAL-------------------------------------------------------------------------------------------------------------------------------
 
-app.get("/general", comprobarget, async function (req, res) {
+app.get("/general", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https,smtp:DB_CONF.SMTP, smtpDatos:{correo:DB_CONF.SMTP_correo,contra:DB_CONF.SMTP_contrasenia} })
+    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https, smtp: DB_CONF.SMTP, smtpDatos: { correo: DB_CONF.SMTP_correo, contra: DB_CONF.SMTP_contrasenia } })
 })
 
 // **************************************************************************************************************************************************
 // **************************************************************************************************************************************************
 //----------CONFIGURACIÓN DEL ADMINISTRADOR-------------------------------------------------------------------------------------------------------------------------------
 
-app.get("/usuarioAdmin", comprobarget, async function (req, res) {
+app.get("/usuarioAdmin", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
@@ -523,7 +537,7 @@ app.get("/usuarioAdmin", comprobarget, async function (req, res) {
 
 })
 
-app.post("/usuarioAdmin/contrasenia", async function (req, res) {
+app.post("/usuarioAdmin/contrasenia", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
@@ -538,7 +552,7 @@ app.post("/usuarioAdmin/contrasenia", async function (req, res) {
     }
 })
 
-app.post("/usuarioAdmin/datos", async function (req, res) {
+app.post("/usuarioAdmin/datos", async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
@@ -553,7 +567,7 @@ app.post("/usuarioAdmin/datos", async function (req, res) {
         res.json({ estado: false, error: "No se han enviado bien los datos" })
     }
 })
-app.post("/usuarioAdmin/cerrar", async function (req, res) {
+app.post("/usuarioAdmin/cerrar", async function(req, res) {
     req.session.destroy()
     res.json({ estado: true })
 })
@@ -562,7 +576,7 @@ app.post("/usuarioAdmin/cerrar", async function (req, res) {
 // **************************************************************************************************************************************************
 //----------PEDIDOS-------------------------------------------------------------------------------------------------------------------------------
 
-app.get("/pedidos", comprobarget, async function (req, res) {
+app.get("/pedidos", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var pedidos = new Pedidos(url, DB_CONF.db_name);

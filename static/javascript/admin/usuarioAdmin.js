@@ -10,11 +10,11 @@ function cargar() {
 }
 
 function guardarDatos() {
-    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
+    $('#idDelModal').modal({ backdrop: 'static', keyboard: false })
     $('#cargar').modal('show');
     if (nombre != document.getElementById("nombreAdmin").value || correo != document.getElementById("correoAdmin").value) {
         var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
+        xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 datos = JSON.parse(this.responseText);
                 if (datos.estado) {
@@ -41,9 +41,9 @@ function guardarDatos() {
 
             }
         };
-        xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/usuarioAdmin/datos", true);
+        xhttp.open("POST", "/" + conf.adminD + "/usuarioAdmin/datos", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("nombreAdmin=" + document.getElementById("nombreAdmin").value+"&correoAdmin="+document.getElementById("correoAdmin").value);
+        xhttp.send("nombreAdmin=" + document.getElementById("nombreAdmin").value + "&correoAdmin=" + document.getElementById("correoAdmin").value);
     } else {
         $('#contra').modal('hide')
         setTimeout(() => { $('#cargar').modal('hide'); }, 500);
@@ -58,7 +58,7 @@ function guardarDatos() {
 
 function cerrarSesion() {
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
+    xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             datos = JSON.parse(this.responseText);
             if (datos.estado) {
@@ -76,7 +76,7 @@ function cerrarSesion() {
 
         }
     };
-    xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/usuarioAdmin/cerrar", true);
+    xhttp.open("POST", "/" + conf.adminD + "/usuarioAdmin/cerrar", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("contra=" + document.getElementById("contraUno").value);
 }
@@ -107,7 +107,7 @@ function guardarContra() {
         document.getElementById("contraDos").classList.remove("is-invalid");
     }
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
+    xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             datos = JSON.parse(this.responseText);
             if (!datos.estado) {
@@ -123,7 +123,7 @@ function guardarContra() {
 
         }
     };
-    xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/usuarioAdmin/contrasenia", true);
+    xhttp.open("POST", "/" + conf.adminD + "/usuarioAdmin/contrasenia", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("contra=" + document.getElementById("contraUno").value);
 }
