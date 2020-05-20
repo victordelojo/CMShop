@@ -56,7 +56,7 @@ Ya podemos utilizar el comando : <br><b>pm2 start -f app.js</b>
 Windows:
 </li>
 <ul>
-<li>`La ejecución de scripts está deshabilitada en este sistema (pm2 en WINDOWS)`:<br> Abre la terminal como <b>administrador</b>, ya que necesita permisos para utilizar el puerto 80</li><br></li>
+<li>ERROR: `La ejecución de scripts está deshabilitada en este sistema (pm2 en WINDOWS)`:<br> Abre la terminal como <b>administrador</b>, ya que necesita permisos para utilizar el puerto 80</li><br></li>
 </ul>
 <li>
 Ambos:
