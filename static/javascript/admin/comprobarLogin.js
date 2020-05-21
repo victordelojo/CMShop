@@ -7,7 +7,6 @@ function cargar() {
         if (window.innerWidth < 450) {
             window.innerWidth = 450;
         }
-        console.log("cambiar")
     }
 }
 
@@ -22,7 +21,6 @@ function comprobar() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             datos = JSON.parse(this.responseText);
-            console.log(datos)
             if (datos.estado) {
                 location.replace("/" + conf.adminD);
             } else {
