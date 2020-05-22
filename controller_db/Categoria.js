@@ -30,26 +30,26 @@ module.exports = function(url, bd_nombre) {
         db.close()
         return false;
     }
-    this.getCategoriaById=async function(id){
+    this.getCategoriaById = async function(id) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        var salida =  await dbo.collection("categorias").find({_id: new this.mongodb.ObjectId(id)}).toArray();
-        if(salida.length==0){
+        var salida = await dbo.collection("categorias").find({ _id: new this.mongodb.ObjectId(id) }).toArray();
+        if (salida.length == 0) {
             return false;
-        }else{
+        } else {
             return salida[0];
         }
     }
-    this.getnombreCategorias = async function(){
+    this.getnombreCategorias = async function() {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        return await dbo.collection("categorias").find({},{_id:1,nombre:1}).toArray();
+        return await dbo.collection("categorias").find({}, { _id: 1, nombre: 1 }).toArray();
     }
     this.getCategorias = async function() {
         let db = await this.mongodb.MongoClient.connect(this.url, {
@@ -121,7 +121,7 @@ module.exports = function(url, bd_nombre) {
         const dbo = db.db(this.bd_nombre);
         var categoria = await dbo.collection("categorias").find({ nombre: datos.nombre }).toArray();
         if (categoria.length > 0) {
-            await dbo.collection("productos").updateMany({ categoria: this.mongodb.ObjectId(categoria._id) }, { $unset: { categoria: "" } })
+            await dbo.collection("productos").updateMany({ categoria: new this.mongodb.ObjectId(categoria[0]._id) }, { $unset: { categoria: "" } })
             await dbo.collection("categorias").deleteOne({ nombre: datos.nombre });
             db.close();
             return true;

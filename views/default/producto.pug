@@ -1,0 +1,38 @@
+extends menu.pug
+block datos
+    div.row.m-0.mt-5.justify-content-center
+        div.col-12.col-md-11.col-lg-10 
+            div.card.mb-5
+                div.card-body
+                    div.row
+                        div.col-12.col-md-6
+                            img.img-fluid(src="", alt="" id="imagen")
+                        div.col-12.col-md-6.pl-5
+                            div.row.mb-5
+                                div.col-12
+                                    h4(id="nombre")
+                            div.row
+                                div.col-12
+                                    pre(id="descripcion")
+                            div.row
+                                div.col-12.text-right
+                                    h4.mr-5(id="precio")
+                            div.row.justify-content-center
+                                div.col-6
+                                    div.row
+                                        div.col-6.p-0
+                                            span Cantidad: 
+                                        div.col.pl-0.pr-4
+                                            input.form-control.form-control-sm(type="number" min=1 value=1)
+                                div.col-5
+                                    button.btn.btn-outline-dark Añadir al carro
+        div.col-12.col-md-11.col-lg-10 
+            h3 Relacionados
+            hr
+            div.row(id="relacionados")
+
+
+block script
+    if id
+        script var id='#{id}'
+    script(src="../javascript/default/producto.js")

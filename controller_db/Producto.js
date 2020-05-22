@@ -6,6 +6,17 @@ module.exports = function(url, bd_nombre) {
     this.url = url;
     this.bd_nombre = bd_nombre;
 
+    this.getProductosAjax = async function(num = 0) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var productos = await dbo.collection("productos").find({ categoria: { $exists: true } }).sort({ $natural: -1 }).toArray()
+        db.close();
+        return productos;
+    }
+
     this.getProductos = async function(num = 0) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
@@ -16,13 +27,13 @@ module.exports = function(url, bd_nombre) {
         db.close();
         return productos;
     }
-    this.getProductosByCategoria= async function(num,cat){
+    this.getProductosByCategoria = async function(num, cat) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        var productos = await dbo.collection("productos").find({categoria:new this.mongodb.ObjectId(cat)}).skip(num).limit(4).toArray()
+        var productos = await dbo.collection("productos").find({ categoria: new this.mongodb.ObjectId(cat) }).skip(num).limit(4).toArray()
         db.close();
         return productos;
     }
@@ -44,7 +55,7 @@ module.exports = function(url, bd_nombre) {
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        var productos = await dbo.collection("productos").find({categoria: new this.mongodb.ObjectId(cat)}).toArray()
+        var productos = await dbo.collection("productos").find({ categoria: new this.mongodb.ObjectId(cat) }).toArray()
         db.close();
         return productos.length;
     }
@@ -166,15 +177,15 @@ module.exports = function(url, bd_nombre) {
             var aux;
             if (mes < 10) {
                 if (mes == 9) {
-                    aux = await dbo.collection("pedidos").find({fechaInicio:{ $gte: new Date(anio + "-0" + mes + "-01")},fechaInicio:{ $lt: new Date(anio + "-10-01") }}).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") }, fechaInicio: { $lt: new Date(anio + "-10-01") } }).toArray()
                 } else {
-                    aux = await dbo.collection("pedidos").find({ fechaInicio:{ $gte: new Date(anio + "-0" + mes + "-01")}, fechaInicio:{$lt: new Date(anio + "-0" + (mes + 1) + "-01") } }).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") }, fechaInicio: { $lt: new Date(anio + "-0" + (mes + 1) + "-01") } }).toArray()
                 }
             } else {
                 if (mes == 12) {
-                    aux = await dbo.collection("pedidos").find({fechaInicio:{$gte: new Date(anio + "-" + mes + "-01")},fechaInicio:{$lt: new Date((anio + 1) + "-01-01") }}).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") }, fechaInicio: { $lt: new Date((anio + 1) + "-01-01") } }).toArray()
                 } else {
-                    aux = await dbo.collection("pedidos").find({fechaInicio:{ $gte: new Date(anio + "-" + mes + "-01")}, fechaInicio:{$lt: new Date(anio + "-" + (mes + 1) + "-01") }}).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") }, fechaInicio: { $lt: new Date(anio + "-" + (mes + 1) + "-01") } }).toArray()
                 }
             }
             if (aux.length == 0) {
@@ -207,25 +218,25 @@ module.exports = function(url, bd_nombre) {
             var aux;
             if (mes < 10) {
                 if (mes == 9) {
-                    aux = await dbo.collection("pedidos").find({fechaInicio:{ $gte: new Date(anio + "-0" + mes + "-01")},fechaInicio:{ $lt: new Date(anio + "-10-01") }}).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") }, fechaInicio: { $lt: new Date(anio + "-10-01") } }).toArray()
                 } else {
-                    aux = await dbo.collection("pedidos").find({ fechaInicio:{ $gte: new Date(anio + "-0" + mes + "-01")}, fechaInicio:{$lt: new Date(anio + "-0" + (mes + 1) + "-01") } }).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") }, fechaInicio: { $lt: new Date(anio + "-0" + (mes + 1) + "-01") } }).toArray()
                 }
             } else {
                 if (mes == 12) {
-                    aux = await dbo.collection("pedidos").find({fechaInicio:{$gte: new Date(anio + "-" + mes + "-01")},fechaInicio:{$lt: new Date((anio + 1) + "-01-01") }}).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") }, fechaInicio: { $lt: new Date((anio + 1) + "-01-01") } }).toArray()
                 } else {
-                    aux = await dbo.collection("pedidos").find({fechaInicio:{ $gte: new Date(anio + "-" + mes + "-01")}, fechaInicio:{$lt: new Date(anio + "-" + (mes + 1) + "-01") }}).toArray()
+                    aux = await dbo.collection("pedidos").find({ fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") }, fechaInicio: { $lt: new Date(anio + "-" + (mes + 1) + "-01") } }).toArray()
                 }
             }
             if (aux.length == 0) {
                 salida[i - 1] = 0;
             } else {
-                var aux2=0;
-                for(var x=0;x<aux.length;x++){
-                    for(var y=0;y<aux[x].contenido.length;y++){
-                        var aux3=await this.getProductoById(aux[x].contenido[y].producto)
-                        aux2+=(aux[x].contenido[y].cantidad*aux3.precio)
+                var aux2 = 0;
+                for (var x = 0; x < aux.length; x++) {
+                    for (var y = 0; y < aux[x].contenido.length; y++) {
+                        var aux3 = await this.getProductoById(aux[x].contenido[y].producto)
+                        aux2 += (aux[x].contenido[y].cantidad * aux3.precio)
                     }
                 }
                 salida[i - 1] = aux2;
@@ -237,7 +248,7 @@ module.exports = function(url, bd_nombre) {
                 mes--;
             }
         }
-       
+
         db.close();
 
         return salida;

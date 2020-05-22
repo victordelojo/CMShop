@@ -10,7 +10,7 @@ var categoriaMod
 var fotoAntiguaMod;
 
 function cargar() {
-    $('#idDelModal').modal({ backdrop: 'static', keyboard: false })
+
     nombreMod = document.getElementById("nombreProductoMod")
     descripcionMod = document.getElementById("descipcionProductoMod")
     cantidadMod = document.getElementById("cantProductoMod")
@@ -55,7 +55,7 @@ function cargar() {
                         categoriaMod.value = datos.categoria;
                     }
                 } else if (this.readyState == 4) {
-                    $('#cargar').modal('hide')
+                    setTimeout(() => { $('#cargar').modal('hide'); }, 500);
                     $('#editar').modal('hide')
                     document.getElementById("alerta").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>\
                 <strong>No se a podido cargar los datos</strong>\
@@ -99,6 +99,7 @@ function borrar() {
                 location.reload();
             } else {
                 $('#borrar').modal('hide')
+                setTimeout(() => { $('#cargar').modal('hide'); }, 500);
                 document.getElementById("alerta").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>\
                 <strong>" + datos.error + "</strong>\
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>\
@@ -184,13 +185,8 @@ function editarProducto() {
         })
         xhttp.send(new FormData(formulario))
     } else {
-        $('#editar').modal('hide')
-        document.getElementById("alerta").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>\
-<strong>" + datos.error + "</strong>\
-<button type='button' class='close' data-dismiss='alert' aria-label='Close'>\
-<span aria-hidden='true'>&times;</span>\
-</button>\
-</div>"
+        setTimeout(() => { $('#cargar').modal('hide'); }, 500);
+
     }
 }
 

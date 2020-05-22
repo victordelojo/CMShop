@@ -4,40 +4,23 @@ function cargar() {
     var xhttp = new XMLHttpRequest();
     xhttp.addEventListener("readystatechange", function() {
         if (this.readyState == 4 && this.status == 200) {
-            datos = JSON.parse(this.responseText);
-            if (datos.estado == false) {
-                document.getElementById("productos").innerHTML = "No hay productos"
-            } else {
-                for (let i = 0; i < 3 && i < datos.length; i++) {
-                    var carr = document.getElementById("fotosCar")
-                    var uno = document.createElement("div")
-                    uno.classList.add("carousel-item")
-                    if (i == 0) {
-                        uno.classList.add("active")
-                    }
-                    var imgUno = document.createElement("img")
-                    imgUno.classList.add("d-block")
-                    imgUno.classList.add("w-100")
-                    imgUno.classList.add("img-fluid")
-                    imgUno.style.maxHeight = "400px"
-                    imgUno.src = "../fotos/" + datos[i].foto[0]
-                    imgUno.alt = i + " slide"
-                    var divUno = document.createElement("div")
-                    divUno.classList.add("carousel-caption")
-                    divUno.classList.add("d-none")
-                    divUno.classList.add("d-md-block")
-                    var btnUno = document.createElement("button")
-                    btnUno.classList.add("btn")
-                    btnUno.classList.add("btn-outline-dark")
-                    btnUno.innerHTML = "VER"
-                    btnUno.value = datos[i]._id
-                    divUno.appendChild(btnUno)
-                    uno.appendChild(imgUno)
-                    uno.appendChild(divUno)
-                    carr.appendChild(uno)
+            var datos = JSON.parse(this.responseText);
+            var cat = ""
+            var idRe = ""
+            datos.forEach((element, key) => {
+                if (element._id == id) {
+                    document.getElementById("nombre").innerHTML = element.nombre
+                    document.getElementById("descripcion").innerHTML = element.descripcion
+                    document.getElementById("precio").innerHTML = element.precio + "€"
+                    document.getElementById("imagen").src = "../fotos/" + element.foto[0]
+                    cat = element.categoria;
+                    idRe = element._id
                 }
-                for (let i = 0; i < 9 && i < datos.length; i++) {
-
+            });
+            var x = 0
+            for (let i = 0; i < datos.length && x < 3; i++) {
+                if (cat == datos[i].categoria && datos[i]._id != idRe) {
+                    x++;
                     var a = document.createElement("div");
                     a.classList.add("col-12")
                     a.classList.add("col-sm-6")
@@ -80,7 +63,7 @@ function cargar() {
                     c.appendChild(d)
                     b.appendChild(c)
                     a.appendChild(b)
-                    document.getElementById("productos").appendChild(a)
+                    document.getElementById("relacionados").appendChild(a)
                 }
             }
         }

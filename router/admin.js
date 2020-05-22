@@ -13,7 +13,7 @@ var comprobarpost = async function(req, res, next) {
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var usuAdmin = new admin(url, DB_CONF.db_name);
         if (await usuAdmin.comprobarInicio()) {
-            if (req.session.nombre) {
+            if (req.session.admin) {
                 return next();
             } else {
                 res.json({ estado: false, error: "No estas logueado como administrador" });
@@ -36,7 +36,7 @@ var comprobarget = async function(req, res, next) {
             res.status(504).sendFile('/504.html', { root: __dirname + "/../static" });
         } else {
             if (aux) {
-                if (req.session.nombre) {
+                if (req.session.admin) {
                     return next();
                 } else {
                     res.redirect("/" + DB_CONF.Direccion_Admin + "/login");
@@ -175,7 +175,7 @@ app.post('/login/comprobar', async function(req, res) {
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var usuAdmin = new admin(url, DB_CONF.db_name);
         if (await usuAdmin.comprobarAdmin({ "nombreAdmin": req.body.nombre, "contraAdmin": req.body.pass })) {
-            req.session.nombre = req.body.nombre;
+            req.session.admin = req.body.nombre;
             res.json({ estado: true });
         } else {
             res.json({ estado: false });
@@ -191,7 +191,6 @@ app.post('/login/comprobar', async function(req, res) {
 app.get('/usuarios', comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    var usuAdmin = new admin(url, DB_CONF.db_name);
     var usuarios = new Usuario(url, DB_CONF.db_name)
     var num = parseInt(req.query.num) || 0
     var nombre = req.query.nombre || 0
@@ -533,7 +532,7 @@ app.get("/usuarioAdmin", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var usuAdmin = new admin(url, DB_CONF.db_name);
-    res.render('./admin/usuarioAdmin.pug', { location: "Configurar Adminstrador", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, datosUsu: await usuAdmin.recojerDatos(req.session.nombre) })
+    res.render('./admin/usuarioAdmin.pug', { location: "Configurar Adminstrador", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, datosUsu: await usuAdmin.recojerDatos(req.session.admin) })
 
 })
 
@@ -558,7 +557,7 @@ app.post("/usuarioAdmin/datos", async function(req, res) {
     var usuAdmin = new admin(url, DB_CONF.db_name);
     if (req.body && req.body.nombreAdmin && req.body.correoAdmin) {
         if (await usuAdmin.cambiarDatos({ nombreAdmin: req.body.nombreAdmin, correoAdmin: req.body.correoAdmin })) {
-            req.session.nombre = req.body.nombreAdmin
+            req.session.admin = req.body.nombreAdmin
             res.json({ estado: true })
         } else {
             res.json({ estado: false, error: "No se ha podido actualizar la contraseña" })

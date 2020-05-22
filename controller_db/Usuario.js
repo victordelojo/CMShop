@@ -77,9 +77,11 @@ module.exports = function(url, bd_nombre) {
         const dbo = db.db(this.bd_nombre);
         var usuarios = await dbo.collection("usuarios").find({ _id: new this.mongodb.ObjectId(id) }).toArray()
         if (usuarios.length == 0) {
+            db.close();
             return false;
         }
         await dbo.collection("usuarios").deleteOne({ _id: new this.mongodb.ObjectId(id) });
+        db.close();
         return true;
     }
 
@@ -91,9 +93,28 @@ module.exports = function(url, bd_nombre) {
         const dbo = db.db(this.bd_nombre);
         var usuarios = await dbo.collection("usuarios").find({ correo: datos.correo }).toArray()
         if (usuarios.length > 0) {
+            db.close();
             return false;
         }
         await dbo.collection("usuarios").insertOne(datos);
+        db.close();
         return true;
+    }
+    this.pedidoNuevo = async function(datos) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var usuarios = await dbo.collection("usuarios").find({ correo: datos.correo }).toArray()
+        if (usuarios.length == 0) {
+            var id = new this.mongodb.ObjectId();
+            await dbo.collection("usuarios").updateOne({ correo: datos.correo }, { $push: { pedidos: new this.mongodb.ObjectId(id) } });
+            await dbo.collection("pedidos").insertOne({ _id: new this.mongodb.ObjectId(id), contenido: datos.productos, estado: datos.estado, fechaInicio: new Date() })
+            db.close();
+            return true;
+        }
+        db.close();
+        return false;
     }
 }

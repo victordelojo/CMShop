@@ -27,7 +27,7 @@ router.post("/productos", comprobarpost, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var productos = new Productos(url, DB_CONF.db_name);
-    res.json(await productos.getProductos());
+    res.json(await productos.getProductosAjax());
 })
 router.post("/categorias", comprobarpost, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
@@ -52,6 +52,25 @@ router.post("/usuario", comprobarpost, async function(req, res) {
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var usuario = new Usuario(url, DB_CONF.db_name);
         res.json(await usuario.getUsuarioById(req.session.nombre));
+    } else {
+        res.json({ estado: false, error: "No estas logeado" });
+
+    }
+})
+router.post("/comprar", comprobarpost, async function(req, res) {
+    if (req.session.nombre) {
+        var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+        var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+        var usuario = new Usuario(url, DB_CONF.db_name)
+        if (req.body) {
+            if (await usuario.pedidoNuevo(req.body)) {
+                res.json({ estado: true })
+            } else {
+                res.json({ estado: false, error: "No se a podido crear el pedido" });
+            }
+        } else {
+            res.json({ estado: false, error: "No se ha enviado los datos correctamente" });
+        }
     } else {
         res.json({ estado: false, error: "No estas logeado" });
     }

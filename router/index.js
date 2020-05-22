@@ -34,7 +34,12 @@ if (os.platform() != "win32") {
                                 if (element == "") {
                                     element = "index"
                                 }
-                                res.render("./default/" + element + ".pug"); // Envia el archivo que se va a visualizar
+                                if (req.query) {
+                                    res.render("./default/" + element + ".pug", req.query);
+                                } else {
+                                    res.render("./default/" + element + ".pug");
+                                }
+                                // Envia el archivo que se va a visualizar
                             } else {
                                 res.render("./admin/configurar_CMShop.pug")
                             }
@@ -71,7 +76,11 @@ if (os.platform() != "win32") {
                                 if (element == "") {
                                     element = "index"
                                 }
-                                res.render("./default/" + element.trim()); // Envia el archivo que se va a visualizar
+                                if (req.query) {
+                                    res.render("./default/" + element.trim(), req.query);
+                                } else {
+                                    res.render("./default/" + element.trim()); // Envia el archivo que se va a visualizar
+                                }
                             } else {
                                 res.render("./admin/configurar_CMShop.pug")
                             }
