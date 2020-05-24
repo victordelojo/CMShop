@@ -96,8 +96,14 @@ function siguiente2() {
 }
 
 function comprobar() {
+    if (!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(document.getElementById("email").value))) {
+        document.getElementById("email").setCustomValidity("Correo mal escrito")
+        return false;
+    } else {
+        document.getElementById("email").setCustomValidity("")
+    }
     if (document.getElementById("pass1").value.length < 8) {
-        document.getElementById("pass1").setCustomValidity("Longitud de contraseña incorrecto " + document.getElementById("pass1").value.length);
+        document.getElementById("pass1").setCustomValidity("Longitud de contraseña incorrecto ");
         return false;
     } else {
         document.getElementById("pass1").setCustomValidity("");
@@ -108,12 +114,7 @@ function comprobar() {
     } else {
         document.getElementById("pass2").setCustomValidity("")
     }
-    if (!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(document.getElementById("email").value))) {
-        document.getElementById("email").setCustomValidity("Correo mal escrito")
-        return false;
-    } else {
-        document.getElementById("email").setCustomValidity("")
-    }
+
     return true;
     //document.getElementById("email").setCustomValidity("I am expecting an e-mail address!");
 }
