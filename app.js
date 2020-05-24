@@ -127,6 +127,7 @@ app.post("/confCMShopUser", async function(req, res) {
 
                 "_comentario": "Configuración del Sitio Web",
 
+                "tema": "dafault",
                 "direccion": req.body.nombreHost,
                 "port": req.body.portHost,
                 "Direccion_Admin": "admin",
