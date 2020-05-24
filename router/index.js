@@ -98,7 +98,9 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
                 }
             });
     } else {
-        res.render("./admin/configurar_CMShop.pug")
+        router.get("/", function(req, res) {
+            res.render("./admin/configurar_CMShop.pug")
+        })
     }
 
 }
