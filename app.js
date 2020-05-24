@@ -127,7 +127,7 @@ app.post("/confCMShopUser", async function(req, res) {
 
                 "_comentario": "Configuración del Sitio Web",
 
-                "tema": "dafault",
+                "tema": "default",
                 "direccion": req.body.nombreHost,
                 "port": req.body.portHost,
                 "Direccion_Admin": "admin",
@@ -143,7 +143,7 @@ app.post("/confCMShopUser", async function(req, res) {
             child = exec('pm2 restart app.js')
         }
     }
-    res.redirect("/");
+    res.redirect("http://" + req.body.nombreHost);
 })
 
 
