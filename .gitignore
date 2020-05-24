@@ -4,4 +4,4 @@ package-lock.json
 CA.crt
 CA.csr
 CA.key
-static/fotos/*
+static/fotos/*.*
