@@ -33,7 +33,7 @@ append datos
   div.mt-5.accordion(id="accordion2")
     each val in pedidos
       div.card
-        div.card-header(id=val._id)
+        div.card-header.border-bottom.border-dark(id=val._id)
           a.collapsed(data-toggle="collapse", href="#c"+val._id, aria-expanded="false" aria-controls="c"+val._id)
             h6.mb-0 ID: #{val._id}  
             div.row.justify-content-around
@@ -43,25 +43,25 @@ append datos
               div.col-4
                 button.mt-3.btn.btn-danger(type="button") Anular
         if val._id==pedidos[0]._id
-          div.collapse.show.bg-secondary(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
+          div.collapse.show(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
             div.card-body.p-0
               div.card.border-0
                 div.card-body.border-0.row.align-items-center(id=val._id)
                   h5.text-center.w-100 Total: #{val.total}
-                  table.table.table-hover.table-responsive-sm
-                    tbody
+                  table.table.table-hover.table-dark.table-responsive-sm
+                    tbody.text-white
                       each val2 in val.contenido
                         tr
                           td.align-middle Producto: #{val2.producto}
                           td.align-middle Precio: #{val2.precio}
                           td.align-middle Cantidad: #{val2.cantidad}
         else
-          div.collapse.bg-secondary(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
+          div.collapse(id="c"+val._id, aria-labelledby=val._id, data-parent="#accordion2")
             div.card-body.p-0
                 div.card.border-0
                   div.card-body.border-0.row.align-items-center(id=val._id)
                     h5.text-center.w-100 Total: #{val.total}
-                    table.table.table-hover.table-responsive-sm
+                    table.table.table-hover.table-dark.table-responsive-sm
                       tbody
                         each val2 in val.contenido
                           tr
@@ -70,15 +70,15 @@ append datos
                             td.align-middle Cantidad: #{val2.cantidad}
   div.row.m-0.mb-5.mt-5
     div.col-6
-      a(href="./pedidos?num=0&est="+est) 
+      a(id="atras0" href="./pedidos")
         button.btn.btn-outline-dark
           span.typcn.typcn-chevron-left
           span.typcn.typcn-chevron-left
-      a(href="./pedidos?num="+(num-4)+"&est="+est) 
+      a(id="atras" href="./pedidos") 
         button.btn.btn-outline-dark
           span.typcn.typcn-chevron-left
     div.col-6
-      a(href="./pedidos?num="+(num+4)+"&est="+est)
+      a(id="siguiente" href="./pedidos")
         button.btn.btn-outline-dark
           span.typcn.typcn-chevron-right
 append script
