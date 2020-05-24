@@ -97,6 +97,8 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
                     console.log('exec error: ' + error);
                 }
             });
+    } else {
+        res.render("./admin/configurar_CMShop.pug")
     }
 
 }
