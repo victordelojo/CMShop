@@ -108,6 +108,12 @@ function comprobar() {
     } else {
         document.getElementById("pass2").setCustomValidity("")
     }
+    if (!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(document.getElementById("email").value))) {
+        document.getElementById("email").setCustomValidity("Correo mal escrito")
+        return false;
+    } else {
+        document.getElementById("email").setCustomValidity("")
+    }
     return true;
     //document.getElementById("email").setCustomValidity("I am expecting an e-mail address!");
 }
