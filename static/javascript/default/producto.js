@@ -13,6 +13,19 @@ function cargar() {
                     document.getElementById("descripcion").innerHTML = element.descripcion
                     document.getElementById("precio").innerHTML = element.precio + "€"
                     document.getElementById("imagen").src = "../fotos/" + element.foto[0]
+                    for (let i = 0; i < element.foto.length; i++) {
+                        console.log(element.foto[i])
+                        var div = document.createElement("div");
+                        div.classList.add("col-3")
+                        div.classList.add("p-0")
+                        div.classList.add("m-2")
+                        var img = document.createElement("img")
+                        img.classList.add("img-fluid")
+                        img.src = "../fotos/" + element.foto[i]
+                        div.appendChild(img)
+                        div.addEventListener("click", cambiarFoto);
+                        document.getElementById("imagenes").appendChild(div)
+                    }
                     cat = element.categoria;
                     idRe = element._id
                 }
@@ -71,4 +84,8 @@ function cargar() {
     xhttp.open("POST", "/ajax/productos", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send();
+}
+
+function cambiarFoto(e) {
+    document.getElementById("imagen").src = e.target.src
 }
