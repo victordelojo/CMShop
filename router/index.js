@@ -64,37 +64,47 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
             function(error, stdout, stderr) {
                 // Imprimimos en pantalla con console.log
                 var arra = stdout.match(/\s\w{1,}.pug/gi)
-                arra.forEach(element => {
-                    if (element !== "") {
-                        if (element.trim() == "index.pug") {
-                            element = ""
-                        }
-                        router.get("/" + element.split(".")[0].trim(), async function(req, res) {
-                            if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
-                                var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-                                var usuAdmin = new admin(url, DB_CONF.db_name);
-                                if (await usuAdmin.comprobarInicio().catch(function() { return false })) {
-                                    if (element == "") {
-                                        element = "index"
-                                    }
-                                    if (req.query) {
-                                        res.render("./default/" + element.trim(), req.query);
+                try {
+                    arra.forEach(element => {
+                        if (element !== "") {
+                            if (element.trim() == "index.pug") {
+                                element = ""
+                            }
+                            router.get("/" + element.split(".")[0].trim(), async function(req, res) {
+                                if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+                                    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+                                    var usuAdmin = new admin(url, DB_CONF.db_name);
+                                    if (await usuAdmin.comprobarInicio().catch(function() { return false })) {
+                                        if (element == "") {
+                                            element = "index"
+                                        }
+                                        if (req.query) {
+                                            res.render("./" + DB_CONF.tema + "/" + element.trim(), req.query);
+                                        } else {
+                                            res.render("./" + DB_CONF.tema + "/" + element.trim()); // Envia el archivo que se va a visualizar
+                                        }
                                     } else {
-                                        res.render("./default/" + element.trim()); // Envia el archivo que se va a visualizar
+                                        res.render("./admin/configurar_CMShop.pug")
                                     }
                                 } else {
                                     res.render("./admin/configurar_CMShop.pug")
                                 }
-                            } else {
-                                res.render("./admin/configurar_CMShop.pug")
-                            }
-                        });
-                    }
+                            });
+                        }
 
-                });
+                    });
+                } catch (error) {
+                    router.get("/", function(req, res) {
+                        res.render("./default/NoTema.pug");
+                    })
+                }
+
                 // controlamos el error
                 if (error !== null) {
-                    console.log('exec error: ' + error);
+                    console.log("Error del tema");
+                    router.get("/", function(req, res) {
+                        res.render("./default/NoTema.pug");
+                    })
                 }
             });
     } else {

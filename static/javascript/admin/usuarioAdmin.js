@@ -10,8 +10,7 @@ function cargar() {
 }
 
 function guardarDatos() {
-    $('#idDelModal').modal({ backdrop: 'static', keyboard: false })
-    $('#cargar').modal('show');
+    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     if (nombre != document.getElementById("nombreAdmin").value || correo != document.getElementById("correoAdmin").value) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -82,7 +81,7 @@ function cerrarSesion() {
 }
 
 function guardarContra() {
-    $('#cargar').modal('show');
+    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     if (document.getElementById("contraUno").value == "") {
         document.getElementById("contraUno").classList.add("is-invalid");
         setTimeout(() => { $('#cargar').modal('hide'); }, 500);

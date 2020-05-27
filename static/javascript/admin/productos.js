@@ -191,7 +191,7 @@ function editarProducto() {
 }
 
 function guardar() {
-    $('#cargar').modal('hide');
+    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     var seguir = true;
     var nombre = document.getElementById("nombreProducto")
     var descripcion = document.getElementById("descipcionProducto")

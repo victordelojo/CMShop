@@ -3,43 +3,42 @@ addEventListener("load", cargar)
 var borrarId = ""
 
 function cargar() {
-    $('#idDelModal').modal({backdrop: 'static', keyboard: false})
     document.getElementById("guardarUsu").addEventListener("click", guardarUsu)
     var borr = document.getElementsByClassName("borrar")
     for (var i = 0; i < borr.length; i++) {
-        borr[i].addEventListener("click", function (e) {
+        borr[i].addEventListener("click", function(e) {
             borrarId = e.target.value
         })
     }
     document.getElementById("borrarUsu").addEventListener("click", borrarUsu)
     document.getElementById("btnNombre").addEventListener("click", buscarNombre)
-    document.getElementById("busquedaNombre").addEventListener("keyup",function(){
+    document.getElementById("busquedaNombre").addEventListener("keyup", function() {
         if (event.keyCode === 13) {
             buscarNombre();
         }
     })
-    if(document.getElementById("borrarFiltro")){
-        document.getElementById("borrarFiltro").addEventListener("click",function(){
-            location.href="./usuarios"
+    if (document.getElementById("borrarFiltro")) {
+        document.getElementById("borrarFiltro").addEventListener("click", function() {
+            location.href = "./usuarios"
         })
     }
 }
 
 function buscarNombre() {
-    $('#cargar').modal('show');
+    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     if (document.getElementById("busquedaNombre").value == "") {
         document.getElementById("busquedaNombre").classList.add("is-invalid");
         setTimeout(() => { $('#cargar').modal('hide'); }, 500);
     } else {
-        location.href="./usuarios?nombre="+document.getElementById("busquedaNombre").value
+        location.href = "./usuarios?nombre=" + document.getElementById("busquedaNombre").value
     }
 }
 
 function borrarUsu() {
-    $('#cargar').modal('show');
+    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/usuarios/borrar", true);
-    xhttp.addEventListener("readystatechange", function () {
+    xhttp.open("POST", "/" + conf.adminD + "/usuarios/borrar", true);
+    xhttp.addEventListener("readystatechange", function() {
         if (this.readyState == 4 && this.status == 200) {
             datos = JSON.parse(this.responseText);
             if (datos.estado) {
@@ -112,14 +111,14 @@ function guardarUsu() {
     }
 
     if (guardar) {
-        $('#cargar').modal('show');
+        $('#cargar').modal({ backdrop: 'static', keyboard: false })
         var formulario = document.createElement("form")
         formulario.appendChild(document.getElementById("nombreUsuNuevo").cloneNode(true));
         formulario.appendChild(document.getElementById("correoUsuNuevo").cloneNode(true));
         formulario.appendChild(document.getElementById("contraUnoNuevo").cloneNode(true));
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/usuarios/insertar", true);
-        xhttp.addEventListener("readystatechange", function () {
+        xhttp.open("POST", "/" + conf.adminD + "/usuarios/insertar", true);
+        xhttp.addEventListener("readystatechange", function() {
             if (this.readyState == 4 && this.status == 200) {
                 datos = JSON.parse(this.responseText);
                 if (datos.estado) {

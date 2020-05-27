@@ -6,6 +6,8 @@ var Categoria = require("../controller_db/Categoria")
 var Producto = require("../controller_db/Producto")
 var Usuario = require("../controller_db/Usuario")
 var Pedidos = require("../controller_db/Pedidos")
+var General = require("../controller_db/General")
+var path = require("path")
 
 var comprobarpost = async function(req, res, next) {
     if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
@@ -502,16 +504,169 @@ app.get("/confSitio", comprobarget, async function(req, res) {
                 res.render('./admin/confSitio.pug', { location: "Configuración del Sitio Web", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, temas: arra, tema: DB_CONF.tema })
             })
     }
-    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
 
+})
+
+app.post("/confSitio/temas", comprobarpost, async function(req, res) {
+
+    res.json({ estado: false })
 })
 
 app.post("/confSitio/descomprimir", comprobarpost, async function(req, res) {
+    if (req.files && req.files.temaZip) {
+        if (!fs.existsSync(__dirname + `/../views/${req.files.temaZip.name.split(".")[0]}/`)) {
+            try {
+                await req.files.temaZip.mv(`./views/${req.files.temaZip.name}`)
+                var unzipper = require('unzipper')
+                fs.createReadStream(__dirname + `/../views/${req.files.temaZip.name}`).pipe(unzipper.Extract({ path: __dirname + `/../views/${req.files.temaZip.name.split('.')[0]}` }));
+                if (fs.existsSync(__dirname + `/../views/${req.files.temaZip.name}/js`)) {
+                    var antiguo = path.join(__dirname + `/../views/${req.files.temaZip.name}/js`)
+                    var nuevo = path.join(__dirname + `/../static/javascript/${req.files.temaZip.split('.')[0]}`)
+                    fs.renameSync(antiguo, nuevo)
+                }
+                fs.unlinkSync(`./views/${req.files.temaZip.name}`)
+                res.json({ estado: true })
+            } catch (err) {
+                console.log(err)
+                res.json({ estado: false, error: "No se a podido subir el archivo" })
+            }
 
-    var unzipper = require('unzipper')
+        } else {
+            res.json({ estado: false, error: "Ya existe ese tema" })
+        }
 
-    fs.createReadStream(__dirname + '/../views/ryzen.zip').pipe(unzipper.Extract({ path: __dirname + '/../views/ryzen' }));
+
+    } else {
+        res.json({ estado: false, error: "No se han enviado parámetros" })
+    }
+
 })
+
+app.post("/confSitio/borrarTema", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json")
+    var rimraf = require("rimraf");
+    if (req.body) {
+        if (fs.existsSync(__dirname + `/../views/${req.body.tema}`)) {
+            if (req.body.tema == DB_CONF.tema) {
+                DB_CONF.tema = "default"
+                await fs.writeFileSync('../CONFIGURE.json', JSON.stringify({
+                    "_comentario": "Configuración de la base de datos",
+
+                    "db_user": DB_CONF.db_user,
+                    "db_auth": DB_CONF.db_auth,
+                    "db_pass": DB_CONF.db_pass,
+                    "db_port": DB_CONF.db_port,
+                    "db_direccion": DB_CONF.db_direccion,
+                    "db_name": DB_CONF.db_name,
+
+
+                    "_comentario": "Configuración del Sitio Web",
+
+                    "tema": DB_CONF.tema,
+                    "direccion": DB_CONF.direccion,
+                    "port": DB_CONF.port,
+                    "Direccion_Admin": DB_CONF.Direccion_Admin,
+                    "https": DB_CONF.https,
+                    "SMTP": DB_CONF.SMTP
+                }, null, 4));
+            }
+            rimraf.sync(`./views/${req.body.tema}`)
+            if (fs.existsSync(__dirname + `/../static/javascript/${req.body.tema}`)) {
+                rimraf.sync(`./static/javascript/${req.body.tema}`)
+            }
+            res.json({ estado: true })
+        } else {
+            console.log(__dirname + `/../views/${req.body.tema}`)
+            res.json({ estado: false, error: "No existe el tema seleccionado" })
+        }
+
+    } else {
+        res.json({ estado: false, error: "No se han enviado parámetros" })
+    }
+})
+
+app.post("/confSitio/guardar", comprobarpost, async function(req, res) {
+
+    var DB_CONF = require("../CONFIGURE.json")
+    if (req.body) {
+        if (req.body.nombreSitio) {
+            DB_CONF.direccion = req.body.nombreSitio;
+        }
+        if (req.body.portSitio) {
+            DB_CONF.port = req.body.portSitio
+        }
+        if (req.body.tema) {
+            DB_CONF.tema = req.body.tema
+        }
+        if (req.body.nombreAdmin) {
+
+            var exec = require('child_process').exec,
+                child;
+            var os = require("os");
+            var arra = []
+            if (os.platform() != "win32") {
+                child = exec('ls ./views/' + DB_CONF.tema + ' | grep .pug',
+                    // Pasamos los parámetros error, stdout la salida 
+                    // que mostrara el comando
+                    async function(error, stdout, stderr) {
+                        // Imprimimos en pantalla con console.log
+                        arra = stdout.split(".pug\n")
+                        var esta = false
+                        for (let i = 0; i < arra.length; i++) {
+                            if (arra[i] == req.body.tema) {
+                                esta = true
+                            }
+                        }
+                        if (!esta) {
+
+                        } else {
+                            res.json({ estado: false, error: "El tema actual utiliza esa dirección" })
+                        }
+                        await fs.writeFileSync('./CONFIGURE.json', JSON.stringify(DB_CONF, null, 4));
+                        var exec = require('child_process').exec,
+                            child;
+                        child = await exec('pm2 restart app.js')
+                        res.json({ estado: true })
+                    })
+            } else {
+                child = await exec('dir ' + __dirname + '\\..\\views\\' + DB_CONF.tema + '\\*.pug | find ".pug"',
+                    // Pasamos los parámetros error, stdout la salida 
+                    // que mostrara el comando
+                    async function(error, stdout, stderr) {
+                        // Imprimimos en pantalla con console.log
+                        arra = stdout.match(/\s\w{1,}.pug/gi)
+                        for (let i = 0; i < arra.length; i++) {
+                            arra[i] = arra[i].split(".")[0].trim()
+                        }
+                        var esta = false
+                        for (let i = 0; i < arra.length; i++) {
+                            if (arra[i] == req.body.nombreAdmin) {
+                                esta = true
+                            }
+                        }
+                        if (!esta) {
+                            DB_CONF.Direccion_Admin = req.body.nombreAdmin
+                            await fs.writeFileSync('./CONFIGURE.json', JSON.stringify(DB_CONF, null, 4));
+                            var exec = require('child_process').exec,
+                                child;
+                            child = await exec('pm2 restart app.js')
+                            res.json({ estado: true })
+                        } else {
+                            res.json({ estado: false, error: "El tema actual utiliza esa dirección" })
+                        }
+
+                    })
+            }
+        } else {
+            await fs.writeFileSync('./CONFIGURE.json', JSON.stringify(DB_CONF, null, 4));
+            var exec = require('child_process').exec,
+                child;
+            child = await exec('pm2 restart app.js')
+            res.json({ estado: true })
+        }
+    }
+})
+
 
 
 // **************************************************************************************************************************************************
@@ -576,49 +731,60 @@ app.post("/usuarioAdmin/cerrar", async function(req, res) {
 //----------PEDIDOS-------------------------------------------------------------------------------------------------------------------------------
 
 app.get("/pedidos", comprobarget, async function(req, res) {
+        var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+        var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+        var pedidos = new Pedidos(url, DB_CONF.db_name);
+        var productos = new Producto(url, DB_CONF.db_name)
+        var num = parseInt(req.query.num) || 0
+        var client = req.query.client || 0
+        var id = req.query.id || 0;
+        var est = req.query.est || 0
+        var pre = req.query.pre || 0
+        var estados = ["No pagado", "Pagado", "Confirmado", "En preparación", "Preparado", "Enviado", "Entregado", "Anulado"];
+        var precios = ["Mas caros primeros", "Mas baratos primero"]
+        if (client != 0) {
+            if (num >= await pedidos.getNumeroPedidosByUsu(client)) {
+                num -= 5
+            }
+        } else {
+            if (num >= await pedidos.getNumeroPedidos()) {
+                num -= 5
+            }
+        }
+        if (num < 0) {
+            num = 0
+        }
+        if (client != 0) {
+            var pedido = await pedidos.getPedidosSkipByUsu(num, client)
+        } else {
+            var pedido = await pedidos.getPedidosSkip(num)
+        }
+        for (var i = 0; i < pedido.length; i++) {
+            var total = 0;
+            for (var x = 0; x < pedido[i].contenido.length; x++) {
+                var aux = await productos.getProductoById(pedido[i].contenido[x].producto)
+                total += (pedido[i].contenido[x].cantidad * aux.precio)
+                pedido[i].contenido[x].producto = aux.nombre
+                pedido[i].contenido[x].precio = aux.precio
+            }
+            pedido[i].estado = estados[pedido[i].estado]
+            pedido[i].total = total
+        }
+        res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido, estados: estados, precios: precios })
+    })
+    // **************************************************************************************************************************************************
+    // **************************************************************************************************************************************************
+    //----------Informacio de la empresa-------------------------------------------------------------------------------------------------------------------------------
+
+app.get("/informacionEmpresa", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    var pedidos = new Pedidos(url, DB_CONF.db_name);
-    var productos = new Producto(url, DB_CONF.db_name)
-    var num = parseInt(req.query.num) || 0
-    var client = req.query.client || 0
-    var id = req.query.id || 0;
-    var est = req.query.est || 0
-    var pre = req.query.pre || 0
-    var estados = ["No pagado", "Pagado", "Confirmado", "En preparación", "Preparado", "Enviado", "Entregado", "Anulado"];
-    var precios = ["Mas caros primeros", "Mas baratos primero"]
-    if (client != 0) {
-        if (num >= await pedidos.getNumeroPedidosByUsu(client)) {
-            num -= 5
-        }
-    } else {
-        if (num >= await pedidos.getNumeroPedidos()) {
-            num -= 5
-        }
-    }
-    if (num < 0) {
-        num = 0
-    }
-    if (client != 0) {
-        var pedido = await pedidos.getPedidosSkipByUsu(num, client)
-    } else {
-        var pedido = await pedidos.getPedidosSkip(num)
-    }
-    for (var i = 0; i < pedido.length; i++) {
-        var total = 0;
-        for (var x = 0; x < pedido[i].contenido.length; x++) {
-            var aux = await productos.getProductoById(pedido[i].contenido[x].producto)
-            total += (pedido[i].contenido[x].cantidad * aux.precio)
-            pedido[i].contenido[x].producto = aux.nombre
-            pedido[i].contenido[x].precio = aux.precio
-        }
-        pedido[i].estado = estados[pedido[i].estado]
-        pedido[i].total = total
-    }
-    res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido, estados: estados, precios: precios })
+    var general = new General(url, DB_CONF.db_name)
+    res.render('./admin/informacionEmpresa.pug', { location: "Información de la Empresa", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, datos: await general.getInformacionEmpresa() })
 })
-
-
-
+app.post("/informacionEmpresa", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+})
 
 module.exports = app;

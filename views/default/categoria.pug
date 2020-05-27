@@ -1,0 +1,11 @@
+extends menu.pug
+block datos
+    div.row.m-0.mt-5.justify-content-center
+        div.col-12.col-md-11.col-lg-10
+            h3(id="nombreCate")
+            hr
+            div.row(id="productos")
+block script
+    if categoria
+        script var idCategoria='#{categoria}'
+    script(src="../javascript/default/categoria.js")

@@ -1,0 +1,8 @@
+extends adminMenu.pug
+block datos
+    div.row.m-0.p-0.justify-content-center
+        div.col-12.col-lg-6.col-xl-4.mt-3
+            p Nombre de la empresa:
+            input(type="text", name="nombreEmpresa" value=datos.nombreEmpresa)
+block script
+    script(src="../javascript/default/busqueda.js")

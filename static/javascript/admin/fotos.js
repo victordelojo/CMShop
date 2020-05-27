@@ -4,7 +4,6 @@ borrarImg = ""
 borrarId = ""
 
 function cargar() {
-    $('#idDelModal').modal({ backdrop: 'static', keyboard: false })
     var aux = document.getElementsByClassName("imagenes");
     if (aux.length > 1) {
         for (var i = 0; i < aux.length; i++) {
@@ -41,7 +40,7 @@ function cambiarNombre(e) {
 }
 
 function borrarFoto() {
-    $('#cargar').modal('show');
+    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -72,7 +71,7 @@ function guardarfoto() {
         document.getElementById("fotoProductoNuevo").classList.add("is-invalid");
     } else {
         document.getElementById("fotoProductoNuevo").classList.remove("is-invalid");
-        $('#cargar').modal('show');
+        $('#cargar').modal({ backdrop: 'static', keyboard: false })
         var formulario = document.createElement("form");
         formulario.appendChild(document.getElementById("fotoProductoNuevo").cloneNode(true))
         var id = document.createElement("input");

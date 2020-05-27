@@ -67,7 +67,7 @@ module.exports = function(url, bd_nombre) {
 
                 //Para compara 2 ids se necesitan el método equals para compara ya que es un objeto y no un String
                 if (salida2[i]._id.equals(productos[x]._id)) {
-                    salida[i] = { nombre: salida2[i].nombre, productos: productos[x].total, ganancias: salida2[i].ganancias };
+                    salida[i] = { id: salida2[i]._id, nombre: salida2[i].nombre, productos: productos[x].total, ganancias: salida2[i].ganancias };
                     aux = true;
                 }
             }

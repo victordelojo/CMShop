@@ -31,13 +31,13 @@ html
               a.nav-link.dropdown-toggle(href="#", id="navbarDropdown", role="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Categorías"
               div.dropdown-menu(aria-labelledby="navbarDropdown" id="categorias")
             li.nav-item
-              a.nav-link(href="#")="Quienes Somos"
+              a.nav-link(href="/quienesSomos")="Quienes Somos"
                 span.sr-only="(current)"
             li.nav-item
               a.nav-link(href="#")="Ayuda"
           form.form-inline.my-2.my-lg-0
-            input.form-control.mr-sm-2(type="search", placeholder="Buscar...", aria-label="Search")
-            button.btn.btn-outline-dark.my-2.my-sm-0(type="button")
+            input.form-control.mr-sm-2(type="search", placeholder="Buscar...", aria-label="Search" id="buscar")
+            button.btn.btn-outline-dark.my-2.my-sm-0(type="button" id="btnBuscar")
               span.typcn.typcn-zoom
           button.btn.btn-outline-dark.ml-3.my-2.my-sm-0.rounded-circle
             span.typcn.typcn-shopping-cart.w-100
