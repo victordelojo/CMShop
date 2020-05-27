@@ -613,20 +613,21 @@ app.post("/confSitio/guardar", comprobarpost, async function(req, res) {
                         arra = stdout.split(".pug\n")
                         var esta = false
                         for (let i = 0; i < arra.length; i++) {
-                            if (arra[i] == req.body.tema) {
+                            if (arra[i] == req.body.nombreAdmin) {
                                 esta = true
                             }
                         }
                         if (!esta) {
-
+                            DB_CONF.Direccion_Admin = req.body.nombreAdmin
+                            await fs.writeFileSync('./CONFIGURE.json', JSON.stringify(DB_CONF, null, 4));
+                            var exec = require('child_process').exec,
+                                child;
+                            child = await exec('pm2 restart app.js')
+                            res.json({ estado: true })
                         } else {
                             res.json({ estado: false, error: "El tema actual utiliza esa dirección" })
                         }
-                        await fs.writeFileSync('./CONFIGURE.json', JSON.stringify(DB_CONF, null, 4));
-                        var exec = require('child_process').exec,
-                            child;
-                        child = await exec('pm2 restart app.js')
-                        res.json({ estado: true })
+
                     })
             } else {
                 child = await exec('dir ' + __dirname + '\\..\\views\\' + DB_CONF.tema + '\\*.pug | find ".pug"',
