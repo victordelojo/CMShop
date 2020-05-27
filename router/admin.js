@@ -507,35 +507,35 @@ app.get("/confSitio", comprobarget, async function(req, res) {
 
 })
 
-app.post("/confSitio/temas", comprobarpost, async function(req, res) {
-
-    res.json({ estado: false })
-})
 
 app.post("/confSitio/descomprimir", comprobarpost, async function(req, res) {
     if (req.files && req.files.temaZip) {
-        if (!fs.existsSync(__dirname + `/../views/${req.files.temaZip.name.split(".")[0]}/`)) {
+        try {
+            fs.statSync(__dirname + `/../views/${req.files.temaZip.name.split(".")[0]}`)
+            res.json({ estado: false, error: "Ya existe ese tema" })
+        } catch (error) {
             try {
                 await req.files.temaZip.mv(`./views/${req.files.temaZip.name}`)
                 var unzipper = require('unzipper')
-                fs.createReadStream(__dirname + `/../views/${req.files.temaZip.name}`).pipe(unzipper.Extract({ path: __dirname + `/../views/${req.files.temaZip.name.split('.')[0]}` }));
-                if (fs.existsSync(__dirname + `/../views/${req.files.temaZip.name}/js`)) {
-                    var antiguo = path.join(__dirname + `/../views/${req.files.temaZip.name}/js`)
-                    var nuevo = path.join(__dirname + `/../static/javascript/${req.files.temaZip.split('.')[0]}`)
-                    fs.renameSync(antiguo, nuevo)
-                }
+                await fs.createReadStream(__dirname + `/../views/${req.files.temaZip.name}`).pipe(unzipper.Extract({ path: __dirname + `/../views/${req.files.temaZip.name.split('.')[0]}` })).on('close', async function() {
+                    try {
+                        fs.statSync(__dirname + `/../views/${req.files.temaZip.name.split(".")[0]}/js`)
+                        var antiguo = path.join(__dirname + `/../views/${req.files.temaZip.name.split(".")[0]}/js/`)
+                        var nuevo = path.join(__dirname + `/../static/javascript/${req.files.temaZip.name.split('.')[0]}`)
+                        fs.renameSync(antiguo, nuevo)
+                        console.log("entra")
+                    } catch (error) {
+                        console.log(error)
+                    }
+                });
+
                 fs.unlinkSync(`./views/${req.files.temaZip.name}`)
                 res.json({ estado: true })
             } catch (err) {
                 console.log(err)
                 res.json({ estado: false, error: "No se a podido subir el archivo" })
             }
-
-        } else {
-            res.json({ estado: false, error: "Ya existe ese tema" })
         }
-
-
     } else {
         res.json({ estado: false, error: "No se han enviado parámetros" })
     }
