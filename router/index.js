@@ -35,9 +35,9 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
                                     element = "index"
                                 }
                                 if (req.query) {
-                                    res.render("./default/" + element + ".pug", req.query);
+                                    res.render("./" + DB_CONF.tema + "/" + element + ".pug", req.query);
                                 } else {
-                                    res.render("./default/" + element + ".pug");
+                                    res.render("./" + DB_CONF.tema + "/" + element + ".pug");
                                 }
                                 // Envia el archivo que se va a visualizar
                             } else {

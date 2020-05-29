@@ -113,7 +113,11 @@ function guardarDatos() {
             $('#nuevo').modal('hide')
             setTimeout(() => { $('#cargar').modal('hide'); }, 500);
             if (datos.estado) {
-                setInterval(function() { location.href = "http://" + nombre.value + ":" + port.value + "/" + admin.value }, 500)
+                if (port.value == 443) {
+                    setInterval(function() { location.href = "https://" + nombre.value + "/" + admin.value }, 500)
+                } else {
+                    setInterval(function() { location.href = "http://" + nombre.value + ":" + port.value + "/" + admin.value }, 500)
+                }
             } else {
 
                 document.getElementById("alerta").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>\

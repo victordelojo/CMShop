@@ -1,5 +1,7 @@
 extends adminMenu.pug
 append datos
+  div.col-12
+    div(id="alerta")
   div.row.m-0.p-0.justify-content-center
     div.col-12.col-lg-6.col-xl-4.mt-5
       h4.mt-5 Https:
@@ -15,12 +17,16 @@ append datos
           label.custom-file-label(id="nombreKEY",for="customFileLang") Selecciona key
       
       h4.mt-5 Correo SMTP:
+      small (Una vez activado y configurado se enviará mensajes automáticos a los clientes sobre sus pedidos)
+      br
       input.mt-3(type="checkbox", name="smtp", id="smtp", checked=smtp)
       fieldset(disabled=!smtp id="disabledSMTP")
         h6 Dirección de correo:
         input.form-control.mt-3(type="email",id="smtpCorreo",name="smtpCorreo" value=smtpDatos.correo)
         h6.mt-3 Contraseña:
         input.form-control.mt-3(type="password",id="smtpContra",name="smtpContra" value=smtpDatos.contra)
+        small (Se reiniciará el servicio para actualizar la configuración)
+        br
       button.mt-5.mb-5.btn.btn-outline-dark(id="guardar") Guardar
 append script
   script(src="../javascript/admin/general.js")

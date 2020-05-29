@@ -523,7 +523,16 @@ app.post("/confSitio/descomprimir", comprobarpost, async function(req, res) {
                         var antiguo = path.join(__dirname + `/../views/${req.files.temaZip.name.split(".")[0]}/js/`)
                         var nuevo = path.join(__dirname + `/../static/javascript/${req.files.temaZip.name.split('.')[0]}`)
                         fs.renameSync(antiguo, nuevo)
-                        console.log("entra")
+                        console.log("js encontrado")
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    try {
+                        fs.statSync(__dirname + `/../views/${req.files.temaZip.name.split(".")[0]}/css`)
+                        var antiguo = path.join(__dirname + `/../views/${req.files.temaZip.name.split(".")[0]}/css/`)
+                        var nuevo = path.join(__dirname + `/../static/css/${req.files.temaZip.name.split('.')[0]}`)
+                        fs.renameSync(antiguo, nuevo)
+                        console.log("css encontrado")
                     } catch (error) {
                         console.log(error)
                     }
@@ -549,26 +558,7 @@ app.post("/confSitio/borrarTema", comprobarpost, async function(req, res) {
         if (fs.existsSync(__dirname + `/../views/${req.body.tema}`)) {
             if (req.body.tema == DB_CONF.tema) {
                 DB_CONF.tema = "default"
-                await fs.writeFileSync('../CONFIGURE.json', JSON.stringify({
-                    "_comentario": "Configuración de la base de datos",
-
-                    "db_user": DB_CONF.db_user,
-                    "db_auth": DB_CONF.db_auth,
-                    "db_pass": DB_CONF.db_pass,
-                    "db_port": DB_CONF.db_port,
-                    "db_direccion": DB_CONF.db_direccion,
-                    "db_name": DB_CONF.db_name,
-
-
-                    "_comentario": "Configuración del Sitio Web",
-
-                    "tema": DB_CONF.tema,
-                    "direccion": DB_CONF.direccion,
-                    "port": DB_CONF.port,
-                    "Direccion_Admin": DB_CONF.Direccion_Admin,
-                    "https": DB_CONF.https,
-                    "SMTP": DB_CONF.SMTP
-                }, null, 4));
+                await fs.writeFileSync('../CONFIGURE.json', JSON.stringify(DB_CONF, null, 4));
             }
             rimraf.sync(`./views/${req.body.tema}`)
             if (fs.existsSync(__dirname + `/../static/javascript/${req.body.tema}`)) {
@@ -593,7 +583,17 @@ app.post("/confSitio/guardar", comprobarpost, async function(req, res) {
             DB_CONF.direccion = req.body.nombreSitio;
         }
         if (req.body.portSitio) {
-            DB_CONF.port = req.body.portSitio
+            if (!DB_CONF.https) {
+                if (req.body.portSitio == "443") {
+                    console.log("entra")
+                    res.json({ estado: false, error: "Para utilizar ese puerto se necesíta tener activada la opción https" })
+                } else {
+                    DB_CONF.port = req.body.portSitio
+                }
+            } else if (req.body.portSitio != "443") {
+                console.log("entra")
+                res.json({ estado: false, error: "No se puede cambiar el puerto mientras esté la  opción https activada" })
+            }
         }
         if (req.body.tema) {
             DB_CONF.tema = req.body.tema
@@ -676,8 +676,52 @@ app.post("/confSitio/guardar", comprobarpost, async function(req, res) {
 
 app.get("/general", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
-    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https, smtp: DB_CONF.SMTP, smtpDatos: { correo: DB_CONF.SMTP_correo, contra: DB_CONF.SMTP_contrasenia } })
+    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https, smtp: DB_CONF.SMTP, smtpDatos: { correo: DB_CONF.emailSMTP, contra: DB_CONF.contraSMTP } })
+})
+
+app.post("/general/guardar", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+    if (req.body) {
+        DB_CONF.https = req.body.https
+        DB_CONF.SMTP = req.body.smtp
+        if (DB_CONF.SMTP) {
+            if (req.body.smtpCorreo && req.body.smtpContra) {
+                DB_CONF.emailSMTP = req.body.smtpCorreo
+                DB_CONF.contraSMTP = req.body.smtpContra
+            } else {
+                DB_CONF.SMTP = false
+            }
+        }
+        if (req.files && DB_CONF.https) {
+            if (req.files.htppsCRT && req.files.htppsKEY) {
+                await fs.readdir("./crt", await
+                    function(err, files) {
+                        if (err) throw err;
+
+                        for (const file of files) {
+                            fs.unlink(path.join("./crt", file), err => {
+                                if (err) throw err;
+                            });
+                        }
+                    })
+                await req.files.htppsCRT.mv(`./crt/${req.files.htppsCRT.name}`)
+                await req.files.htppsKEY.mv(`./crt/${req.files.htppsKEY.name}`)
+                DB_CONF.httpsKey = `./crt/${req.files.htppsKEY.name}`
+                DB_CONF.httpsCrt = `./crt/${req.files.htppsCRT.name}`
+                DB_CONF.port = 443
+            } else {
+                DB_CONF.https = false
+                DB_CONF.port = 80
+            }
+        }
+        var exec = require('child_process').exec,
+            child;
+        child = await exec('pm2 restart app.js')
+        await fs.writeFileSync('./CONFIGURE.json', JSON.stringify(DB_CONF, null, 4));
+        res.json({ estado: true })
+    } else {
+        res.json({ estado: false, error: "No se ha enviado ningún parámetro" })
+    }
 })
 
 // **************************************************************************************************************************************************

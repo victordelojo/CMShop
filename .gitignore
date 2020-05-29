@@ -1,7 +1,7 @@
 node_modules/
 CONFIGURE.json
 package-lock.json
-CA.crt
-CA.csr
-CA.key
+*.crt
+*.csr
+*.key
 static/fotos/*.*
