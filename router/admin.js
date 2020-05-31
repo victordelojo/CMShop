@@ -694,16 +694,11 @@ app.post("/general/guardar", comprobarpost, async function(req, res) {
         }
         if (req.files && DB_CONF.https) {
             if (req.files.htppsCRT && req.files.htppsKEY) {
-                await fs.readdir("./crt", await
-                    function(err, files) {
-                        if (err) throw err;
-
-                        for (const file of files) {
-                            fs.unlink(path.join("./crt", file), err => {
-                                if (err) throw err;
-                            });
-                        }
-                    })
+                var files = fs.readdirSync("./crt")
+                for (var i in files) {
+                    fs.unlinkSync("./crt/" + files[i]);
+                    console.log("Borrado ./crt/" + files[i])
+                }
                 await req.files.htppsCRT.mv(`./crt/${req.files.htppsCRT.name}`)
                 await req.files.htppsKEY.mv(`./crt/${req.files.htppsKEY.name}`)
                 DB_CONF.httpsKey = `./crt/${req.files.htppsKEY.name}`
@@ -718,7 +713,7 @@ app.post("/general/guardar", comprobarpost, async function(req, res) {
             child;
         child = await exec('pm2 restart app.js')
         await fs.writeFileSync('./CONFIGURE.json', JSON.stringify(DB_CONF, null, 4));
-        res.json({ estado: true })
+        res.json({ estado: true, datos: DB_CONF })
     } else {
         res.json({ estado: false, error: "No se ha enviado ningún parámetro" })
     }
@@ -830,6 +825,25 @@ app.get("/informacionEmpresa", comprobarget, async function(req, res) {
 app.post("/informacionEmpresa", comprobarpost, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var general = new General(url, DB_CONF.db_name)
+    if (req.body) {
+        if (req.files && req.files.logoEmpresa) {
+            if (fs.existsSync(__dirname + "../static/logo.png")) {
+                fs.unlinkSync(`./static/logo.png`)
+            }
+            req.files.logoEmpresa.mv("./static/logo.png")
+        }
+        if (req.files && req.files.iconoEmpresa) {
+            if (fs.existsSync(__dirname + "../static/favicon.ico")) {
+                fs.unlinkSync(`./static/favicon.ico`)
+            }
+            req.files.iconoEmpresa.mv("./static/favicon.ico")
+        }
+        general.setInformacioEmpresa(req.body)
+        res.json({ estado: true })
+    } else {
+        res.json({ estado: false, error: "No se han enviado ninigun parámetro" })
+    }
 })
 
 module.exports = app;

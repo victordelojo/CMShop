@@ -1,8 +1,14 @@
 extends menu.pug
 block datos
     div.row.m-0.mt-5.justify-content-center
-        div.col-12.col-md-11.col-lg-10
-            div.row(id="mapa")
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1589.1985459247335!2d-5.776755961854583!3d37.19079669761123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd127f065d36a7fb%3A0x29791adb6630adbc!2sCalle%20Constelaci%C3%B3n%20Cruz%20del%20Sur%2C%2029%2C%2041710%20Utrera%2C%20Sevilla!5e0!3m2!1ses!2ses!4v1590416848964!5m2!1ses!2ses" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        div.col-12.col-md-6.col-lg-6
+            div.row.p-5(id="mapa")
+                
+        div.col-12.col-md-6.col-lg-6
+            div.row.p-5
+                .col
+                    h3(id="nombreEmpresa") s
+                    h5(id="informacionEmpresa") sssssssssss
+                    h5(id="emailContacto") Correo de contacto: 
 block script
-    script(src="../javascript/default/busqueda.js")
+    script(src="../javascript/default/quienesSomos.js")

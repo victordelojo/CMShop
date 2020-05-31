@@ -23,7 +23,7 @@ module.exports = function(url, bd_nombre) {
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        await dbo.collection("general").updateOne({}, { $set: { datos } });
+        await dbo.collection("general").updateOne({}, { $set: datos });
         db.close()
     }
 

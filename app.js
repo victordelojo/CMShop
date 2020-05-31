@@ -28,7 +28,7 @@ var correo = require("./router/correo");
 var ajax = require("./router/ajax")
 
 app.use(fileUpload())
-app.use(favicon(__dirname + '/static/logo.png')); // 
+app.use(favicon(__dirname + '/static/favicon.ico')); // 
 app.use(express.static("static")) // Añade la carpeta con los archivos estaticos de la aplicación
 app.use(body_parser.urlencoded({ extended: true })); // Usa el parseo para el metodo POST
 app.set("view engine", "pug") // Indicamos el motor de plantilla que utilizaremos  

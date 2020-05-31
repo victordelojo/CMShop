@@ -58,7 +58,11 @@ function guardar() {
             $('#nuevo').modal('hide')
             setTimeout(() => { $('#cargar').modal('hide'); }, 500);
             if (datos.estado) {
-                location.reload()
+                if (document.getElementById("https").checked) {
+                    location.href = "https://" + datos.datos.direccion + ":" + datos.datos.port + "/" + datos.datos.Direccion_Admin
+                } else {
+                    location.href = "http://" + datos.datos.direccion + ":" + datos.datos.port + "/" + datos.datos.Direccion_Admin
+                }
             } else {
 
                 document.getElementById("alerta").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>\

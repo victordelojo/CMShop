@@ -1,8 +1,33 @@
 extends adminMenu.pug
 block datos
+    div.row.m-0.p-0
+        div.col-12.mt-5.text-center
+            div(id="alerta")
     div.row.m-0.p-0.justify-content-center
         div.col-12.col-lg-6.col-xl-4.mt-3
-            p Nombre de la empresa:
-            input(type="text", name="nombreEmpresa" value=datos.nombreEmpresa)
+            h5.mt-4 Nombre de la empresa:
+            input.form-control(type="text", name="nombreEmpresa" id="nombreEmpresa" value=datos.nombreEmpresa)
+            h5.mt-4 Logo de la empresa:
+            small (Imágen .png)
+            br
+            div.custom-file.mt-3
+                input.custom-file-input(type="file",id="logo",name="logoEmpresa")
+                label.custom-file-label(id="nombreLogo",for="customFileLang") Selecciona Logo
+            h5.mt-4 Icono de la empresa:
+            small (Imágen .ico. Reinicie el servidor para poder ver el cambio)
+            br
+            div.custom-file.mt-3
+                input.custom-file-input(type="file",id="icono",name="iconoEmpresa")
+                label.custom-file-label(id="nombreIco",for="customFileLang") Selecciona Icono
+            h5.mt-4 Localización de la empresa:
+            small (Inserta el iframe que puedes optener en maps de google)
+            br
+            input.form-control(type="text", name="localizacionEmpresa" id="localizacion" value=datos.localizacionEmpresa)
+            h5.mt-4 Correo de contacto de la empresa:
+            input.form-control(type="email" name="emailContacto" id="email" value=datos.emailContacto)
+            h5.mt-4 Información de la empresa:
+            textarea.form-control(name="informacionEmpresa" id="informacionEmpresa", cols="50", rows="10")=datos.informacionEmpresa
+
+            button.btn.btn-outline-secondary.mt-5.mb-5(id="guardar") Guardar
 block script
-    script(src="../javascript/default/busqueda.js")
+    script(src="../javascript/admin/informacion.js")

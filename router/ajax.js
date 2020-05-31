@@ -6,6 +6,7 @@ var Categorias = require("../controller_db/Categoria")
 var Productos = require("../controller_db/Producto");
 var Usuario = require("../controller_db/Usuario")
 var admin = require("../controller_db/Admin.js")
+var General = require("../controller_db/General.js")
 
 
 
@@ -74,6 +75,13 @@ router.post("/comprar", comprobarpost, async function(req, res) {
     } else {
         res.json({ estado: false, error: "No estas logeado" });
     }
+})
+
+router.post("/informacionEmpresa", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var general = new General(url, DB_CONF.db_name);
+    res.json(await general.getInformacionEmpresa())
 })
 
 module.exports = router
