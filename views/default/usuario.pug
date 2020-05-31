@@ -1,0 +1,25 @@
+extends menu.pug
+block datos
+    div.row.m-0.mt-5.justify-content-center
+        div.col-12.col-md-11.col-lg-10
+            h3 Usuario
+            hr
+            div.row
+                div.col-12.col-sm-6.col-lg-4.mb-5
+                    h5 Nombre usuario:
+                    input.form-control(type="text" id="nombreUsu")
+                    h5.mt-5 Correo del usuario:
+                    input.form-control(type="email" id="correoUsu")
+                    h5.mt-5 Cambiar contraseña:
+                    button.btn.btn-outline-dark Cambiar
+                    h5.mt-5 Dirección de envío:
+                    input.form-control(type="text" id="direccionUsu")
+                div.col-12
+                    div.row.justify-content-center
+                        div.col-12.col-md-3.col-lg-2
+                            button.mb-5.btn.btn-outline-dark Guardar
+                        div.col-12.col-md-3.col-lg-2
+                            button.mb-5.btn.btn-outline-danger Cerrar Sesión
+
+block script
+    script(src="../javascript/default/usuario.js")

@@ -19,22 +19,6 @@ block datos
       hr
       div.row(id="productos")
 
-      
-  h1 Paga ya
-  form(id="realizarPago", action="https://www.paypal.com/cgi-bin/webscr", method="post")
-    input(name="cmd", type="hidden", value="_cart")
-    input(name="upload" type="hidden" value="1")
-    input(name="business" type="hidden" value="victordelojogalvan27@gmail.com")
-    input(name="shopping_url" type="hidden" value="http://martin27.ddns.net:6969/")
-    input(name="currency_code" type="hidden" value="EUR")
-    input(name="return" type="hidden" value="http://martin27.ddns.net:6969/carro/pago/correcto")
-
-    input(name="rm" type="hidden" value="2")
-    input(name="item_number_1" type="hidden" value="1")
-    input(name="item_name_1" type="hidden" value="prueba")
-    input(name="amount_1" type="hidden" value="0.01")
-    input(name="quantity_1" type="hidden" value="2")
-    input(type="submit" value="pagar")
 block script
   script(src="../javascript/default/index.js")
   if esta

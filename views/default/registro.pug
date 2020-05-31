@@ -1,0 +1,54 @@
+doctype html
+html
+    head
+        title="Title"
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+        link(rel="stylesheet" ,href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css", integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T", crossorigin="anonymous")
+        script var conf = {port:'#{port}',host:'#{host}',adminD:'#{adminD}'};
+    body
+        h1.text-center="Registro"
+        div.container.text-center.col-s-6.col-m-5.mt-5
+            form(id="formulario", method="POST", action="/admin/login/comprobar")
+                div.card
+                    div.card-body.bg-light
+                        div.card-text
+                            div.form-group(id="alerta")
+
+                            div.form-group.d-flex.justify-content-center
+                                label(for="exampleInputEmail1")="Nombre de usuario"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control(type="text" id="nombre" name="nombre" required)
+                            div.form-group.d-flex.justify-content-center
+                                label(for="exampleInputEmail1")="Correo electrónico"
+                            div.form-group.d-flex.justify-content-center
+                                input.form-control(type="email" id="correo" name="correo" required)
+                            div.form-group.justify-content-center.d-flex.mb-0
+                                label(for="exampleInputPassword1")="Contraseña"
+                            div.form-group.justify-content-center.d-flex.container
+                            div.row
+                              div.col
+                                  input.form-control.col-12(type="password" id="pass" name="pass" required)
+                            div.form-group.justify-content-center.d-flex.mb-0
+                                label(for="exampleInputPassword2")="Repite contraseña"
+                            div.form-group.justify-content-center.d-flex.container
+                            div.row
+                              div.col
+                                  input.form-control.col-12(type="password2" id="pass2" name="pass2" required)
+                            div.row.mt-5
+                              div.col
+                                input.btn.btn-primary(type="submit",id="boton",value="Registrarse")
+                                a.m-3(href="/inicio") Iniciar Sesion
+                            
+                            br
+                            a.m-3(href="/") Volver
+                
+                
+
+
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        script(src="../javascript/admin/comprobarLogin.js")
+        script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js", integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1", crossorigin="anonymous")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js", integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM", crossorigin="anonymous")

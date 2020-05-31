@@ -29,6 +29,30 @@ module.exports = function(url, bd_nombre) {
         return usuario[0];
     }
 
+    this.getUsuarioByCorreo = async function(correo) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var usuario = await dbo.collection("usuarios").find({ correo: correo }, { pedidos: 0 }).toArray()
+        db.close();
+        return usuario[0];
+    }
+
+    this.isUsuarioByCorreo = async function(correo, contra) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var usuario = await dbo.collection("usuarios").find({ correo: correo, contra: contra }).toArray()
+        if (usuario.length == 1) {
+            return true;
+        }
+        return false;
+    }
+
     this.getUsuariosByNombre = async function(num, nombre) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,

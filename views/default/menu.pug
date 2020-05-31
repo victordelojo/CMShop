@@ -41,8 +41,11 @@ html
               span.typcn.typcn-zoom
           button.btn.btn-outline-dark.ml-3.my-2.my-sm-0.rounded-circle
             span.typcn.typcn-shopping-cart.w-100
-          button.btn.btn-lg.p-0.ml-3(style="width: 50px;height: 50px;")
-            img.img-fluid(src="./usuario.png", alt="")
+          a.btn.btn-lg.p-0.ml-3(style="width: 50px;height: 50px;" href="/inicio")
+            if !sesion
+              img.img-fluid(src="./usuario.png", alt="")
+            else
+              img.img-fluid(src="./usuarioIn.png", alt="")
     block datos
     
     <!-- Optional JavaScript -->

@@ -37,33 +37,36 @@ router.post("/categorias", comprobarpost, async function(req, res) {
     res.json(await categorias.getCategorias());
 })
 router.post("/pedidos", comprobarpost, async function(req, res) {
-    if (req.session.nombre) {
+    if (req.session.usuario) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var pedidos = new Pedidos(url, DB_CONF.db_name);
-        res.json(await pedidos.getPedidosByUsu(req.session.nombre));
+        res.json(await pedidos.getPedidosByUsu(req.session.usuario));
 
     } else {
         res.json({ estado: false, error: "No estas logeado" });
     }
 })
 router.post("/usuario", comprobarpost, async function(req, res) {
-    if (req.session.nombre) {
+    if (req.session.usuario) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var usuario = new Usuario(url, DB_CONF.db_name);
-        res.json(await usuario.getUsuarioById(req.session.nombre));
+        var aux = await usuario.getUsuarioByCorreo(req.session.usuario)
+        aux.estado = true;
+        res.json(aux);
     } else {
         res.json({ estado: false, error: "No estas logeado" });
 
     }
 })
 router.post("/comprar", comprobarpost, async function(req, res) {
-    if (req.session.nombre) {
+    if (req.session.usuario) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var usuario = new Usuario(url, DB_CONF.db_name)
         if (req.body) {
+            req.body.correo = req.session.usuario
             if (await usuario.pedidoNuevo(req.body)) {
                 res.json({ estado: true })
             } else {
@@ -82,6 +85,35 @@ router.post("/informacionEmpresa", comprobarpost, async function(req, res) {
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var general = new General(url, DB_CONF.db_name);
     res.json(await general.getInformacionEmpresa())
+})
+
+router.post("/usuario/inicio", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var usuario = new Usuario(url, DB_CONF.db_name);
+    if (await usuario.isUsuarioByCorreo(req.body.correo, req.body.contra)) {
+        req.session.usuario = req.body.correo;
+        res.json({ estado: true });
+    } else {
+        res.json({ estado: false, error: "Correo o contraseña incorrectos" });
+    }
+})
+
+router.post("/usuario/nuevo", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var usuario = new Usuario(url, DB_CONF.db_name);
+    if (await usuario.insertar({ nombre: req.body.nombre, correo: req.body.correo, contra: req.body.contra })) {
+        req.session.usuario = req.body.correo;
+        res.json({ estado: true });
+    } else {
+        res.json({ estado: false, error: "Ya existe un usuario con ese correo" });
+    }
+})
+
+router.post("/cerrarSesion", async function(req, res) {
+    req.session.destroy();
+    res.json({ estado: true })
 })
 
 module.exports = router

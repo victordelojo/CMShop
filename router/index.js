@@ -34,6 +34,11 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
                                 if (element == "") {
                                     element = "index"
                                 }
+                                if (req.session.usuario) {
+                                    req.query.sesion = true
+                                } else {
+                                    req.query.sesion = false
+                                }
                                 if (req.query) {
                                     res.render("./" + DB_CONF.tema + "/" + element + ".pug", req.query);
                                 } else {
@@ -78,7 +83,13 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
                                         if (element == "") {
                                             element = "index"
                                         }
+                                        if (req.session.usuario) {
+                                            req.query.sesion = true
+                                        } else {
+                                            req.query.sesion = false
+                                        }
                                         if (req.query) {
+
                                             res.render("./" + DB_CONF.tema + "/" + element.trim(), req.query);
                                         } else {
                                             res.render("./" + DB_CONF.tema + "/" + element.trim()); // Envia el archivo que se va a visualizar
@@ -114,6 +125,7 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
     }
 
 }
+
 
 
 module.exports = router;
