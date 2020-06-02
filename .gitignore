@@ -5,3 +5,5 @@ package-lock.json
 *.csr
 *.key
 static/fotos/*.*
+views/otro
+static/javascript/otro
