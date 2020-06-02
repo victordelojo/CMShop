@@ -5,13 +5,21 @@ module.exports = function(url, bd_nombre) {
     this.url = url;
     this.bd_nombre = bd_nombre;
 
-    this.getPedidosByUsu = async function(usu) {
+    this.getPedidosByCorreo = async function(usu) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        var pedidos = await dbo.collection("pedidos").find({}).sort({ $natural: -1 }).toArray()
+        var usuario = await dbo.collection("usuarios").find({ correo: usu, pedidos: { $exists: true } }, { _id: 0, pedidos: 1 }).toArray()
+        var pedidos = []
+        var estados = ["No pagado", "Pagado", "Confirmado", "En preparación", "Preparado", "Enviado", "Entregado", "Anulado"];
+        if (usuario.length != 0) {
+            pedidos = await dbo.collection("pedidos").find({ _id: { $in: usuario[0].pedidos } }).sort({ $natural: -1 }).toArray()
+            for (let i = 0; i < pedidos.length; i++) {
+                pedidos[i].estado = estados[pedidos[i].estado]
+            }
+        }
         db.close();
         return pedidos;
     }

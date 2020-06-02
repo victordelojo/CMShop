@@ -34,6 +34,7 @@ router.post("/categorias", comprobarpost, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var categorias = new Categorias(url, DB_CONF.db_name);
+    console.log(await categorias.getCategorias())
     res.json(await categorias.getCategorias());
 })
 router.post("/pedidos", comprobarpost, async function(req, res) {
@@ -41,8 +42,18 @@ router.post("/pedidos", comprobarpost, async function(req, res) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var pedidos = new Pedidos(url, DB_CONF.db_name);
-        res.json(await pedidos.getPedidosByUsu(req.session.usuario));
-
+        var salida = await pedidos.getPedidosByCorreo(req.session.usuario)
+        var productos = new Productos(url, DB_CONF.db_name)
+        for (let i = 0; i < salida.length; i++) {
+            for (let x = 0; x < salida[i].contenido.length; x++) {
+                var aux = await productos.getProductoById(salida[i].contenido[x].producto);
+                salida[i].contenido[x].producto = aux.nombre
+                salida[i].contenido[x].precio = aux.precio
+            }
+        }
+        console.log(salida)
+        console.log(salida[0].contenido[0])
+        res.json({ estado: true, pedidos: salida });
     } else {
         res.json({ estado: false, error: "No estas logeado" });
     }

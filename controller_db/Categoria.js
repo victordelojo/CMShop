@@ -82,6 +82,16 @@ module.exports = function(url, bd_nombre) {
         db.close()
         return salida;
     }
+
+    this.sumarGanancias = async function(id, precio) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        await dbo.collection("categorias").update({ _id: new this.mongodb.ObjectId(id) }, { $inc: { ganancias: precio } })
+    }
+
     this.getPedidosPrecioDeCategorias = async function() {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,

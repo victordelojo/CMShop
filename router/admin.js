@@ -708,6 +708,8 @@ app.post("/general/guardar", comprobarpost, async function(req, res) {
                 DB_CONF.https = false
                 DB_CONF.port = 80
             }
+        } else if (!DB_CONF.https) {
+            DB_CONF.port = 80
         }
         var exec = require('child_process').exec,
             child;
@@ -845,5 +847,6 @@ app.post("/informacionEmpresa", comprobarpost, async function(req, res) {
         res.json({ estado: false, error: "No se han enviado ninigun parámetro" })
     }
 })
+
 
 module.exports = app;

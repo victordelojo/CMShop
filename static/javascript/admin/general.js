@@ -1,15 +1,33 @@
 addEventListener("load", cargar)
 
 function cargar() {
-    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     document.getElementById("https").addEventListener("change", cambiarHttps);
     document.getElementById("smtp").addEventListener("change", cambiarSmtp);
+    document.getElementById("htppsCRT").addEventListener("change", cambiarNombreCrt)
+    document.getElementById("htppsKEY").addEventListener("change", cambiarNombreKey)
     document.getElementById("htppsCRT").accept = ".crt"
     document.getElementById("htppsKEY").accept = ".key"
     document.getElementById("guardar").addEventListener("click", guardar)
 }
 
+function cambiarNombreCrt(e) {
+    if (e.target.value == "") {
+        document.getElementById("nombreCRT").innerHTML = "Selecciona archivo " + e.target.accept
+    } else {
+        document.getElementById("nombreCRT").innerHTML = e.target.value.split("\\")[e.target.value.split("\\").length - 1]
+    }
+}
+
+function cambiarNombreKey(e) {
+    if (e.target.value == "") {
+        document.getElementById("nombreKEY").innerHTML = "Selecciona archivo " + e.target.accept
+    } else {
+        document.getElementById("nombreKEY").innerHTML = e.target.value.split("\\")[e.target.value.split("\\").length - 1]
+    }
+}
+
 function guardar() {
+    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     var formulario = document.createElement("form")
     formulario.appendChild(document.getElementById("https").cloneNode(true))
     formulario.appendChild(document.getElementById("smtp").cloneNode(true))
@@ -56,15 +74,19 @@ function guardar() {
         if (this.readyState == 4 && this.status == 200) {
             datos = JSON.parse(this.responseText);
             $('#nuevo').modal('hide')
-            setTimeout(() => { $('#cargar').modal('hide'); }, 500);
+
             if (datos.estado) {
                 if (document.getElementById("https").checked) {
-                    location.href = "https://" + datos.datos.direccion + ":" + datos.datos.port + "/" + datos.datos.Direccion_Admin
+                    setTimeout(() => { $('#cargar').modal('hide'); }, 500);
+                    setTimeout(() => { location.href = "https://" + datos.datos.direccion + "/" + datos.datos.Direccion_Admin }, 1000);
+
                 } else {
-                    location.href = "http://" + datos.datos.direccion + ":" + datos.datos.port + "/" + datos.datos.Direccion_Admin
+                    setTimeout(() => { $('#cargar').modal('hide'); }, 500);
+                    setTimeout(() => { location.href = "http://" + datos.datos.direccion + ":" + datos.datos.port + "/" + datos.datos.Direccion_Admin }, 1000);
+
                 }
             } else {
-
+                setTimeout(() => { $('#cargar').modal('hide'); }, 500);
                 document.getElementById("alerta").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>\
                 <strong>" + datos.error + "</strong>\
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>\

@@ -11,10 +11,10 @@ append datos
       fieldset(disabled=!https id="disabled")
         div.custom-file.mt-3
           input.custom-file-input(type="file",id="htppsCRT",name="htppsCRT")
-          label.custom-file-label(id="nombreCRT",for="customFileLang") Selecciona crt
+          label.custom-file-label(id="nombreCRT",for="customFileLang") Selecciona archivo .crt
         div.custom-file.mt-3
           input.custom-file-input(type="file",id="htppsKEY",name="htppsKEY")
-          label.custom-file-label(id="nombreKEY",for="customFileLang") Selecciona key
+          label.custom-file-label(id="nombreKEY",for="customFileLang") Selecciona archivo .key
       
       h4.mt-5 Correo SMTP:
       small (Una vez activado y configurado se enviará mensajes automáticos a los clientes sobre sus pedidos)
@@ -28,5 +28,11 @@ append datos
         small (Se reiniciará el servicio para actualizar la configuración)
         br
       button.mt-5.mb-5.btn.btn-outline-dark(id="guardar") Guardar
+  div.modal.bg-transparent.border-0.fade(id="cargar" tabindex="-1" role="dialog" aria-labelledby="editarTitle" aria-hidden="true")
+    div.modal-dialog.bg-transparent.modal-dialog-centered(role="document")
+      div.modal-content.bg-transparent.border-0
+        div.modal-body.bg-transparent
+          div.spinner-grow.text-dark(role="status")
+            span.sr-only Loading...
 append script
   script(src="../javascript/admin/general.js")

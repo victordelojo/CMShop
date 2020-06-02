@@ -1,0 +1,24 @@
+extends menu.pug
+block datos
+    div.row.m-0.mt-5.justify-content-center
+        div.col-12.col-md-11.col-lg-10
+            h3 Ayuda
+            hr
+            div.row.justify-content-center
+                div.col-12.col-sm-6
+                    h5 Nombre *
+                    input.mb-5.form-control(type="text" id="nombre" name="nombre")
+                    h5 Correo electrónico *
+                    input.mb-5.form-control(type="email", name="correo" id="correo")
+                    h5 Asunto *
+                    input.form-control(type="text" id="asunto" name="asunto")
+                    div.invalid-feedback(id="errorEmail") Todos los apartados tiene que estar rellenos
+                div.col-12.col-sm-6
+                    h5 Pregunta * 
+                    small (Maximo 450 letras)
+                    textarea.form-control(name="pregunta", cols="30", rows="10" id="pregunta")
+                    div.invalid-feedback(id="errorPregunta") Todos los apartados tiene que estar rellenos
+                
+                button.btn.btn-outline-dark.mt-5.mb-5(id="boton") Enviar
+block script
+    script(src="../javascript/default/ayuda.js")

@@ -133,6 +133,14 @@ module.exports = function(url, bd_nombre) {
         var usuarios = await dbo.collection("usuarios").find({ correo: datos.correo }).toArray()
         if (usuarios.length == 0) {
             var id = new this.mongodb.ObjectId();
+            var Categoria = require("../controller_db/Categoria")
+            var Producto = require("../controller_db/Producto")
+            var producto = new Producto(this.url, this.bd_nombre)
+            var categoria = new Categoria(this.url, this.bd_nombre);
+            for (let i = 0; i < datos.productos.length; i++) {
+                var idCate = await producto.getProductoById(datos.productos[i]._id).categoria
+                await categoria.sumarGanancias(idCate, datos.productos[i].cantidad * datos.productos[i].precio)
+            }
             await dbo.collection("usuarios").updateOne({ correo: datos.correo }, { $push: { pedidos: new this.mongodb.ObjectId(id) } });
             await dbo.collection("pedidos").insertOne({ _id: new this.mongodb.ObjectId(id), contenido: datos.productos, estado: datos.estado, fechaInicio: new Date() })
             db.close();

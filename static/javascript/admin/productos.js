@@ -114,7 +114,7 @@ function borrar() {
 }
 
 function editarProducto() {
-    $('#cargar').modal('show');
+    $('#cargar').modal({ backdrop: 'static', keyboard: false })
     var seguir = true
     if (nombreMod.value == "") {
         nombreMod.focus()
