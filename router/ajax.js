@@ -34,7 +34,6 @@ router.post("/categorias", comprobarpost, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var categorias = new Categorias(url, DB_CONF.db_name);
-    console.log(await categorias.getCategorias())
     res.json(await categorias.getCategorias());
 })
 router.post("/pedidos", comprobarpost, async function(req, res) {
@@ -51,8 +50,6 @@ router.post("/pedidos", comprobarpost, async function(req, res) {
                 salida[i].contenido[x].precio = aux.precio
             }
         }
-        console.log(salida)
-        console.log(salida[0].contenido[0])
         res.json({ estado: true, pedidos: salida });
     } else {
         res.json({ estado: false, error: "No estas logeado" });
