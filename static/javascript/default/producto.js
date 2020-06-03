@@ -1,6 +1,7 @@
 addEventListener("load", cargar)
 
 function cargar() {
+    document.getElementById("añadir").addEventListener("click", cesta)
     var xhttp = new XMLHttpRequest();
     xhttp.addEventListener("readystatechange", function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -12,6 +13,7 @@ function cargar() {
                     document.getElementById("nombre").innerHTML = element.nombre
                     document.getElementById("descripcion").innerHTML = element.descripcion
                     document.getElementById("precio").innerHTML = element.precio + "€"
+                    document.getElementById("stock").innerHTML += element.cantidad
                     document.getElementById("imagen").src = "../fotos/" + element.foto[0]
                     for (let i = 0; i < element.foto.length; i++) {
                         console.log(element.foto[i])
@@ -84,6 +86,25 @@ function cargar() {
     xhttp.open("POST", "/ajax/productos", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send();
+
+}
+
+function cesta() {
+    if (document.getElementById("cantidad").value > 0) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.addEventListener("readystatechange", function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (JSON.parse(this.responseText).estado) {
+                    location.reload()
+                } else {
+                    alert("No se a podido añadir a la cesta")
+                }
+            }
+        })
+        xhttp.open("POST", "/ajax/cesta/agregar", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("id=" + id + "&cantidad=" + document.getElementById("cantidad").value);
+    }
 }
 
 function cambiarFoto(e) {

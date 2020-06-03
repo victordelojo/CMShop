@@ -15,6 +15,7 @@ try {
     console.log("No existe configuración del CMShop")
 }
 const session = require('express-session'); // Para poder manejar sesiones
+var cookie = require("cookie-parser") // Para poder manejar las cookies
 var nodemailer = require('nodemailer'); // Para enviar correos
 var favicon = require('serve-favicon');
 
@@ -34,7 +35,7 @@ app.use(body_parser.urlencoded({ extended: true })); // Usa el parseo para el me
 app.set("view engine", "pug") // Indicamos el motor de plantilla que utilizaremos  
 
 app.use(session({ secret: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15), resave: false, saveUninitialized: true })); //Usa sieiones con una frase secreta
-
+app.use(cookie()) //Usa las cookies
 
 
 // Connection URL

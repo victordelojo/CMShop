@@ -39,6 +39,14 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
                                 } else {
                                     req.query.sesion = false
                                 }
+                                console.log("sldjvb")
+                                if (res.cookies.cesta) {
+                                    req.query.cesta = res.cookies.cesta.productos.length
+                                    console.log("sldjvb")
+                                } else {
+                                    req.query.cesta = 0
+                                    console.log("sldjvb")
+                                }
                                 if (req.query) {
                                     res.render("./" + DB_CONF.tema + "/" + element + ".pug", req.query);
                                 } else {
@@ -88,8 +96,12 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
                                         } else {
                                             req.query.sesion = false
                                         }
+                                        if (req.cookies.cesta) {
+                                            req.query.cesta = req.cookies.cesta.productos.length
+                                        } else {
+                                            req.query.cesta = 0
+                                        }
                                         if (req.query) {
-
                                             res.render("./" + DB_CONF.tema + "/" + element.trim(), req.query);
                                         } else {
                                             res.render("./" + DB_CONF.tema + "/" + element.trim()); // Envia el archivo que se va a visualizar

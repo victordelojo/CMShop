@@ -36,12 +36,14 @@ function guardar() {
         var key = document.getElementById("htppsKEY").cloneNode(true)
         if (crt.value == "") {
             document.getElementById("htppsCRT").classList.add("is-invalid")
+            setTimeout(() => { $('#cargar').modal('hide'); }, 500);
             return false
         } else {
             document.getElementById("htppsCRT").classList.remove("is-invalid")
         }
         if (key.value == "") {
             document.getElementById("htppsKEY").classList.add("is-invalid")
+            setTimeout(() => { $('#cargar').modal('hide'); }, 500);
             return false
         } else {
             document.getElementById("htppsKEY").classList.remove("is-invalid")
@@ -55,12 +57,14 @@ function guardar() {
         var contra = document.getElementById("smtpContra").cloneNode(true)
         if (correo.value == "") {
             document.getElementById("smtpCorreo").classList.add("is-invalid")
+            setTimeout(() => { $('#cargar').modal('hide'); }, 500);
             return false
         } else {
             document.getElementById("smtpCorreo").classList.remove("is-invalid")
         }
         if (contra.value == "") {
             document.getElementById("smtpContra").classList.add("is-invalid")
+            setTimeout(() => { $('#cargar').modal('hide'); }, 500);
             return false
         } else {
             document.getElementById("smtpContra").classList.remove("is-invalid")

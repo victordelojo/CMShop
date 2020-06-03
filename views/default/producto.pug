@@ -27,9 +27,12 @@ block datos
                                         div.col-6.p-0
                                             span Cantidad: 
                                         div.col.pl-0.pr-4
-                                            input.form-control.form-control-sm(type="number" min=1 value=1)
+                                            input.form-control.form-control-sm(type="number" min=1 value=1 id="cantidad")
                                 div.col-5
-                                    button.btn.btn-outline-dark Añadir al carro
+                                    button.btn.btn-outline-dark(id="añadir") Añadir al carro
+                            div.row
+                                div.col-12
+                                    small(id="stock") Stock: 
         div.col-12.col-md-11.col-lg-10 
             h3 Relacionados
             hr

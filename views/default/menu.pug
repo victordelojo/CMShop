@@ -40,7 +40,11 @@ html
             button.btn.btn-outline-dark.my-2.my-sm-0(type="button" id="btnBuscar")
               span.typcn.typcn-zoom
           a.btn.btn-outline-dark.ml-3.my-2.my-sm-0.rounded-circle(href="/cesta")
-            span.typcn.typcn-shopping-cart.w-100
+            if cesta>0
+              span.typcn.typcn-shopping-cart.w-100
+              small=cesta
+            else
+              span.typcn.typcn-shopping-cart.w-100
           a.btn.btn-lg.p-0.ml-3(style="width: 50px;height: 50px;" href="/inicio")
             if !sesion
               img.img-fluid(src="./usuario.png", alt="")

@@ -1,6 +1,7 @@
 var express = require("express")
 var router = express.Router()
 var fs = require("fs")
+var cookie = require("cookie-parser")
 var Pedidos = require("../controller_db/Pedidos")
 var Categorias = require("../controller_db/Categoria")
 var Productos = require("../controller_db/Producto");
@@ -122,6 +123,30 @@ router.post("/usuario/nuevo", comprobarpost, async function(req, res) {
 router.post("/cerrarSesion", async function(req, res) {
     req.session.destroy();
     res.json({ estado: true })
+})
+
+router.post("/cesta/agregar", comprobarpost, async function(req, res) {
+    //res.clearCookie("cesta")
+    if (req.body && req.body.id && req.body.cantidad) {
+        var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+        var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+        var producto = new Productos(url, DB_CONF.db_name)
+        var aux = await producto.getProductoById(req.body.id)
+        if (req.body.cantidad < aux.cantidad) {
+
+        }
+        if (!req.cookies) {
+            res.cookie("cesta", { productos: [{ id: req.body.id, cantidad: req.body.cantidad }] }, { maxAge: 1000 * 60 * 60 * 24 * 7 })
+        } else {
+            req.cookies.cesta.productos.push({ id: req.body.id, cantidad: req.body.cantidad })
+        }
+        res.json({ estado: true })
+    } else {
+        res.json({ estado: false, error: "No se han enviado bien los datos" })
+    }
+})
+router.post("/cesta", async function(req, res) {
+    res.json(req.cookies.productos)
 })
 
 module.exports = router
