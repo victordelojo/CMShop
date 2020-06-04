@@ -97,7 +97,7 @@ function cesta() {
                 if (JSON.parse(this.responseText).estado) {
                     location.reload()
                 } else {
-                    alert("No se a podido añadir a la cesta")
+                    alert(JSON.parse(this.responseText).error)
                 }
             }
         })

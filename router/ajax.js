@@ -132,21 +132,70 @@ router.post("/cesta/agregar", comprobarpost, async function(req, res) {
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var producto = new Productos(url, DB_CONF.db_name)
         var aux = await producto.getProductoById(req.body.id)
-        if (req.body.cantidad < aux.cantidad) {
-
-        }
-        if (!req.cookies) {
-            res.cookie("cesta", { productos: [{ id: req.body.id, cantidad: req.body.cantidad }] }, { maxAge: 1000 * 60 * 60 * 24 * 7 })
+        if (!req.cookies.cesta && req.body.cantidad <= aux.cantidad) {
+            res.cookie("cesta", { total: aux.precio * parseInt(req.body.cantidad), productos: [{ id: req.body.id, cantidad: parseInt(req.body.cantidad) }] }, { maxAge: 1000 * 60 * 60 * 24 * 7 }).json({ estado: true })
         } else {
-            req.cookies.cesta.productos.push({ id: req.body.id, cantidad: req.body.cantidad })
+            var esta = false;
+            for (let i = 0; i < req.cookies.cesta.productos.length; i++) {
+                if (req.cookies.cesta.productos[i].id == req.body.id) {
+                    esta = true
+                    if (parseInt(req.cookies.cesta.productos[i].cantidad) + parseInt(req.body.cantidad) <= aux.cantidad) {
+                        req.cookies.cesta.productos[i].cantidad = (parseInt(req.body.cantidad) + parseInt(req.cookies.cesta.productos[i].cantidad)) + "";
+                        req.cookies.cesta.total = parseFloat(req.cookies.cesta.total) + (aux.precio * parseInt(req.body.cantidad))
+                        res.cookie("cesta", req.cookies.cesta, { maxAge: 1000 * 60 * 60 * 24 * 7 }).json({ estado: true })
+                    } else {
+                        res.json({ estado: false, error: "No hay suficiente stock" })
+                    }
+                }
+            }
+            if (!esta) {
+                req.cookies.cesta.productos.push({ id: req.body.id, cantidad: req.body.cantidad })
+                req.cookies.cesta.total = parseFloat(req.cookies.cesta.total) + (aux.precio * parseInt(req.body.cantidad))
+                res.cookie("cesta", req.cookies.cesta, { maxAge: 1000 * 60 * 60 * 24 * 7 }).json({ estado: true })
+            }
         }
-        res.json({ estado: true })
+
     } else {
         res.json({ estado: false, error: "No se han enviado bien los datos" })
     }
 })
-router.post("/cesta", async function(req, res) {
-    res.json(req.cookies.productos)
+router.post("/cesta", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json")
+    var salida = []
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var producto = new Productos(url, DB_CONF.db_name)
+    for (let i = 0; i < req.cookies.cesta.productos.length; i++) {
+        var aux = await producto.getProductoById(req.cookies.cesta.productos[i].id)
+        salida.push({ producto: aux, cantidad: req.cookies.cesta.productos[i].cantidad })
+    }
+    res.json({ cesta: salida, total: req.cookies.cesta.total })
+})
+
+router.get("/pagar", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json")
+    if (DB_CONF.paypalEmail) {
+        if (req.session.usuario) {
+            if (req.cookies.cesta.productos) {
+                var salida = []
+                var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+                var producto = new Productos(url, DB_CONF.db_name)
+                for (let i = 0; i < req.cookies.cesta.productos.length; i++) {
+                    var aux = await producto.getProductoById(req.cookies.cesta.productos[i].id)
+                    if (aux.cantidad < req.cookies.cesta.productos[i].cantidad) {
+                        res.redirect(req.headers.referer + "?error=El producto '" + aux.nombre + "' no hay suficiente stock")
+                    }
+                    salida.push({ producto: aux, cantidad: req.cookies.cesta.productos[i].cantidad })
+                }
+                res.render("./default/pagar.pug", { cesta: salida, datos: DB_CONF })
+            } else {
+                res.redirect(req.headers.referer + "?error=No hay productos en la cesta")
+            }
+        } else {
+            res.redirect(req.headers.referer + "?session=off")
+                //res.json({ estado: false, error: "No se ha iniciado sesión" })
+        }
+    }
+
 })
 
 module.exports = router

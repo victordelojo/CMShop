@@ -27,6 +27,9 @@ append datos
         input.form-control.mt-3(type="password",id="smtpContra",name="smtpContra" value=smtpDatos.contra)
         small (Se reiniciará el servicio para actualizar la configuración)
         br
+      h4.mt-5 Email para paypal:
+      small (Si no hay ningún email no se hará los pagos en la tienda)
+      input.form-control.mt-3(type="email",id="paypalEmail",name="paypalEmail" value=paypal)
       button.mt-5.mb-5.btn.btn-outline-dark(id="guardar") Guardar
   div.modal.bg-transparent.border-0.fade(id="cargar" tabindex="-1" role="dialog" aria-labelledby="editarTitle" aria-hidden="true")
     div.modal-dialog.bg-transparent.modal-dialog-centered(role="document")

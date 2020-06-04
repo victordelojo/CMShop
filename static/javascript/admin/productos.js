@@ -165,7 +165,7 @@ function editarProducto() {
         id.name = "_id"
         formulario.appendChild(id)
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/actualizar", true);
+        xhttp.open("POST", "/" + conf.adminD + "/productos/actualizar", true);
         xhttp.addEventListener("readystatechange", function() {
             if (this.readyState == 4 && this.status == 200) {
                 datos = JSON.parse(this.responseText);
@@ -253,7 +253,7 @@ function guardar() {
         formulario.appendChild(foto.cloneNode(true))
         formulario.enctype = "multipart/form-data"
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "http://" + conf.host + ":" + conf.port + "/" + conf.adminD + "/productos/insertar", true);
+        xhttp.open("POST", "/" + conf.adminD + "/productos/insertar", true);
         xhttp.addEventListener("readystatechange", function() {
             if (this.readyState == 4 && this.status == 200) {
                 datos = JSON.parse(this.responseText);

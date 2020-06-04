@@ -1,4 +1,6 @@
 addEventListener("load", cargar)
+var httpsLoad;
+var smptLoad;
 
 function cargar() {
     document.getElementById("https").addEventListener("change", cambiarHttps);
@@ -8,6 +10,8 @@ function cargar() {
     document.getElementById("htppsCRT").accept = ".crt"
     document.getElementById("htppsKEY").accept = ".key"
     document.getElementById("guardar").addEventListener("click", guardar)
+    httpsLoad = document.getElementById("https").checked
+    smptLoad = document.getElementById("smtp").checked
 }
 
 function cambiarNombreCrt(e) {
@@ -31,9 +35,14 @@ function guardar() {
     var formulario = document.createElement("form")
     formulario.appendChild(document.getElementById("https").cloneNode(true))
     formulario.appendChild(document.getElementById("smtp").cloneNode(true))
-    if (document.getElementById("https").checked) {
+    var paypal = document.getElementById("paypalEmail").cloneNode(true)
+    if (paypal.value != "") {
+        formulario.appendChild(paypal)
+    }
+    if (document.getElementById("https").checked && !httpsLoad) {
         var crt = document.getElementById("htppsCRT").cloneNode(true)
         var key = document.getElementById("htppsKEY").cloneNode(true)
+
         if (crt.value == "") {
             document.getElementById("htppsCRT").classList.add("is-invalid")
             setTimeout(() => { $('#cargar').modal('hide'); }, 500);
@@ -48,11 +57,12 @@ function guardar() {
         } else {
             document.getElementById("htppsKEY").classList.remove("is-invalid")
         }
+
         formulario.appendChild(crt)
         formulario.appendChild(key)
 
     }
-    if (document.getElementById("smtp").checked) {
+    if (document.getElementById("smtp").checked && !smptLoad) {
         var correo = document.getElementById("smtpCorreo").cloneNode(true)
         var contra = document.getElementById("smtpContra").cloneNode(true)
         if (correo.value == "") {

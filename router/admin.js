@@ -676,7 +676,7 @@ app.post("/confSitio/guardar", comprobarpost, async function(req, res) {
 
 app.get("/general", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
-    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https, smtp: DB_CONF.SMTP, smtpDatos: { correo: DB_CONF.emailSMTP, contra: DB_CONF.contraSMTP } })
+    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https, smtp: DB_CONF.SMTP, smtpDatos: { correo: DB_CONF.emailSMTP, contra: DB_CONF.contraSMTP }, paypal: DB_CONF.paypalEmail })
 })
 
 app.post("/general/guardar", comprobarpost, async function(req, res) {
@@ -691,6 +691,9 @@ app.post("/general/guardar", comprobarpost, async function(req, res) {
             } else {
                 DB_CONF.SMTP = false
             }
+        }
+        if (req.body.paypalEmail) {
+            DB_CONF.paypalEmail = req.body.paypalEmail
         }
         if (req.files && DB_CONF.https) {
             if (req.files.htppsCRT && req.files.htppsKEY) {
