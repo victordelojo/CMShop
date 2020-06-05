@@ -676,7 +676,7 @@ app.post("/confSitio/guardar", comprobarpost, async function(req, res) {
 
 app.get("/general", comprobarget, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
-    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https, smtp: DB_CONF.SMTP, smtpDatos: { correo: DB_CONF.emailSMTP, contra: DB_CONF.contraSMTP }, paypal: DB_CONF.paypalEmail })
+    res.render('./admin/general.pug', { location: "Configuración General", categorias: [], "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, https: DB_CONF.https, smtp: DB_CONF.SMTP, smtpDatos: { correo: DB_CONF.SMTP_correo, contra: DB_CONF.SMTP_contrasenia }, paypal: DB_CONF.paypalEmail })
 })
 
 app.post("/general/guardar", comprobarpost, async function(req, res) {
@@ -686,8 +686,8 @@ app.post("/general/guardar", comprobarpost, async function(req, res) {
         DB_CONF.SMTP = req.body.smtp
         if (DB_CONF.SMTP) {
             if (req.body.smtpCorreo && req.body.smtpContra) {
-                DB_CONF.emailSMTP = req.body.smtpCorreo
-                DB_CONF.contraSMTP = req.body.smtpContra
+                DB_CONF.SMTP_correo = req.body.smtpCorreo
+                DB_CONF.SMTP_contrasenia = req.body.smtpContra
             } else {
                 DB_CONF.SMTP = false
             }

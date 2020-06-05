@@ -84,8 +84,8 @@ app.post("/ayuda", comprobarpost, async function(req, res) {
                 var transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                        user: DB_CONF.emailSMTP,
-                        pass: DB_CONF.contraSMTP
+                        user: DB_CONF.SMTP_correo,
+                        pass: DB_CONF.SMTP_contrasenia
                     }
                 });
 
@@ -111,6 +111,51 @@ app.post("/ayuda", comprobarpost, async function(req, res) {
             }
         } else {
             res.json({ estado: false, error: "No se han enviado los datos correctamente" });
+        }
+    } else {
+        res.json({ estado: false, error: "Esta opción está desabilitada actualmente" });
+    }
+})
+
+app.post("/compra", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json")
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var general = new General(url, DB_CONF.db_name)
+    var emailEmpresa = await general.getInformacionEmpresa()
+    if (emailEmpresa.emailContacto) {
+        if (req.session.usuario) {
+            if (DB_CONF.SMTP) {
+                var transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: DB_CONF.SMTP_correo,
+                        pass: DB_CONF.SMTP_contrasenia
+                    }
+                });
+
+                var mailOptions = {
+                    from: DB_CONF.SMTP_correo,
+                    to: req.session.usuario,
+                    subject: "Nuevo pedido",
+                    html: '<h1>' + req.body.nombre + '</h1><br>\
+                    <h2>Correo: ' + req.body.correo + '</h2>\
+                    <h3><pre>' + req.body.pregunta + '</pre></h3>\
+                    <br><br><small>Porfavor no contestar a este correo ya que es automático</small>\
+                    '
+                };
+                transporter.sendMail(mailOptions, async function(error, info) {
+                    if (error) {
+                        res.json({ estado: false, error: "No se ha podido enviar el correo" });
+                        console.log(error)
+                    } else {
+                        res.json({ estado: true })
+                    }
+                })
+            } else {
+                res.json({ estado: false, error: "Esta opción está desabilitada actualmente 2" });
+            }
+        } else {
+            res.json({ estado: false, error: "No se ha iniciado sesión" });
         }
     } else {
         res.json({ estado: false, error: "Esta opción está desabilitada actualmente" });

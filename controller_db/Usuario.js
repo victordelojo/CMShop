@@ -124,6 +124,23 @@ module.exports = function(url, bd_nombre) {
         db.close();
         return true;
     }
+
+    this.update=async function(correo, datos){
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var usuarios = await dbo.collection("usuarios").find({ correo: correo }).toArray()
+        if (usuarios.length == 1) {
+            await dbo.collection("usuarios").updateOne({correo:correo},{$set:datos})
+            db.close();
+            return true
+        }
+        db.close();
+        return false;
+    }
+
     this.pedidoNuevo = async function(datos) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,

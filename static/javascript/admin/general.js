@@ -1,6 +1,5 @@
 addEventListener("load", cargar)
 var httpsLoad;
-var smptLoad;
 
 function cargar() {
     document.getElementById("https").addEventListener("change", cambiarHttps);
@@ -11,7 +10,6 @@ function cargar() {
     document.getElementById("htppsKEY").accept = ".key"
     document.getElementById("guardar").addEventListener("click", guardar)
     httpsLoad = document.getElementById("https").checked
-    smptLoad = document.getElementById("smtp").checked
 }
 
 function cambiarNombreCrt(e) {
@@ -62,7 +60,7 @@ function guardar() {
         formulario.appendChild(key)
 
     }
-    if (document.getElementById("smtp").checked && !smptLoad) {
+    if (document.getElementById("smtp").checked) {
         var correo = document.getElementById("smtpCorreo").cloneNode(true)
         var contra = document.getElementById("smtpContra").cloneNode(true)
         if (correo.value == "") {

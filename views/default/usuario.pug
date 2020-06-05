@@ -2,18 +2,19 @@ extends menu.pug
 block datos
     div.row.m-0.mt-5.justify-content-center
         div.col-12.col-md-11.col-lg-10
+            div(id="alerta")
             h3 Usuario
             hr
             div.row
                 div.col-12.col-sm-6.col-lg-4.mb-5
                     h5 Nombre usuario:
-                    input.form-control(type="text" id="nombreUsu")
+                    input.form-control(type="text" id="nombreUsu" name="nombre")
                     h5.mt-5 Correo del usuario:
-                    input.form-control(type="email" id="correoUsu")
+                    input.form-control(type="email" id="correoUsu" name="correo")
                     h5.mt-5 Cambiar contraseña:
-                    button.btn.btn-outline-dark Cambiar
+                    button.btn.btn-outline-dark(data-toggle="modal" data-target="#cambiar") Cambiar
                     h5.mt-5 Dirección de envío:
-                    input.form-control(type="text" id="direccionUsu")
+                    input.form-control(type="text" id="direccionUsu" name="direccion")
                 div.col-12.col-sm-6.col-lg-8.pl-7
                     h5 Pedidos:
                     div(id="pedidos")
@@ -23,6 +24,24 @@ block datos
                             button.mb-5.btn.btn-outline-dark(id="guardar") Guardar
                         div.col-12.col-md-3.col-lg-2
                             button.mb-5.btn.btn-outline-danger(id="cerrar") Cerrar Sesión
+    div.modal.fade(id="cambiar" tabindex="-1" role="dialog" aria-labelledby="nuevoTitle" aria-hidden="true")
+        div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
+            div.modal-content
+                div.modal-header
+                    h5.modal-title(id="exampleModalLongTitle") Cambiar contraseña
+                    button.close(type="button" data-dismiss="modal" aria-label="Close")
+                        span(aria-hidden="true") &times;
+                div.modal-body
+                    h5.m-3 Contraseña:
+                    input.form-control(type="password" id="contraUno", name="contra")
+                    div.invalid-feedback Campo obligatorio
+                    h5.m-3 Repite Contraseña:
+                    input.form-control(type="password" id="contraDos", name="contra2")
+                    div.invalid-feedback(id="errorContra") Campo obligatorio
+
+                div.modal-footer
+                    button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
+                    button.btn.btn-dark(type="button",id="guardarContra") Guardar
 
 block script
     script(src="../javascript/default/usuario.js")
