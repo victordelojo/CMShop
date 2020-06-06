@@ -10,7 +10,7 @@ function guardar() {
     var correo = document.getElementById("correo")
     var contra1 = document.getElementById("pass")
     var contra2 = document.getElementById("pass2")
-    if (nombre == "") {
+    if (nombre.value == "") {
         nombre.classList.add("is-invalid")
         return false
     } else {
@@ -43,7 +43,25 @@ function guardar() {
             document.getElementById("errorContra").innerHTML = "Contraseñas no coinciden"
             return false
         } else {
-
+            contra2.classList.remove("is-invalid")
         }
     }
+    var formulario = document.createElement("form")
+    formulario.appendChild(nombre.cloneNode(true))
+    formulario.appendChild(contra1.cloneNode(true))
+    formulario.appendChild(correo.cloneNode(true))
+    var xhttp = new XMLHttpRequest();
+    xhttp.addEventListener("readystatechange", function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var datos = JSON.parse(this.responseText)
+            console.log(datos)
+            if (datos.estado) {
+                location.reload()
+            } else {
+                alert(datos.error)
+            }
+        }
+    })
+    xhttp.open("POST", "/ajax/usuario/nuevo", true);
+    xhttp.send(new FormData(formulario));
 }
