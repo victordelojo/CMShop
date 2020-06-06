@@ -135,6 +135,9 @@ if (os.platform() != "win32" && fs.existsSync(__dirname + "/../CONFIGURE.json"))
 
 }
 
+router.get("/default/correcto", async function(req, res) {
+    res.render("./default/correcto.pug", req.query)
+})
 
 
 module.exports = router;

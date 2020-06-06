@@ -49,6 +49,7 @@ router.post("/pedidos", comprobarpost, async function(req, res) {
                 var aux = await productos.getProductoById(salida[i].contenido[x].producto);
                 salida[i].contenido[x].producto = aux.nombre
                 salida[i].contenido[x].precio = aux.precio
+                salida[i].contenido[x].idProducto = aux._id
             }
         }
         res.json({ estado: true, pedidos: salida });
@@ -74,19 +75,43 @@ router.post("/comprar", comprobarpost, async function(req, res) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var usuario = new Usuario(url, DB_CONF.db_name)
-        if (req.body) {
-            req.body.correo = req.session.usuario
-            if (await usuario.pedidoNuevo(req.body)) {
-                res.json({ estado: true })
+        if (req.cookies && req.cookies.cesta && req.cookies.cesta.productos) {
+            var productos = req.cookies.cesta
+            productos.correo = req.session.usuario
+            var id = await usuario.pedidoNuevo(productos)
+            if (id != false) {
+                req.cookies.cesta.productos = []
+                req.cookies.cesta.total = 0
+                res.cookie("cesta", req.cookies.cesta).json({ estado: true, id: id })
             } else {
                 res.json({ estado: false, error: "No se a podido crear el pedido" });
             }
         } else {
-            res.json({ estado: false, error: "No se ha enviado los datos correctamente" });
+            res.json({ estado: false, error: "No hay pedidos en la cesta" });
         }
     } else {
         res.json({ estado: false, error: "No estas logeado" });
     }
+})
+
+router.post("/anular/pedido", comprobarpost, async function(req, res) {
+    var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var pedido = new Pedidos(url, DB_CONF.db_name);
+    if (req.session.usuario) {
+        if (req.body && req.body.id) {
+            if (await pedido.borrarPedidoById(req.body.id)) {
+                res.json({ estado: true })
+            } else {
+                res.json({ estado: false, error: "No se a podido anular el pedido" })
+            }
+        } else {
+            res.json({ estado: false, error: "No se han enviado los parámetros correctamente" })
+        }
+    } else {
+        res.json({ estado: false, error: "No se ha iniciado sesion" })
+    }
+
 })
 
 router.post("/informacionEmpresa", comprobarpost, async function(req, res) {
@@ -120,36 +145,36 @@ router.post("/usuario/nuevo", comprobarpost, async function(req, res) {
     }
 })
 
-router.post("/usuario/actualizar/datos",comprobarpost,async function(req,res){
-    if(req.session && req.session.usuario){
-        if(req.body){
+router.post("/usuario/actualizar/datos", comprobarpost, async function(req, res) {
+    if (req.session && req.session.usuario) {
+        if (req.body) {
             var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
             var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
             var usuario = new Usuario(url, DB_CONF.db_name);
-            if(req.body.nombre && req.body.correo && (req.body.direccion!=="" || req.body.direccion==="")){
-                if (await usuario.update(req.session.usuario,{ nombre: req.body.nombre, correo: req.body.correo, direccion: req.body.direccion })) {
+            if (req.body.nombre && req.body.correo && (req.body.direccion !== "" || req.body.direccion === "")) {
+                if (await usuario.update(req.session.usuario, { nombre: req.body.nombre, correo: req.body.correo, direccion: req.body.direccion })) {
                     req.session.usuario = req.body.correo;
                     res.json({ estado: true });
                 } else {
                     res.json({ estado: false, error: "No se ha podido actualizar el usuario" });
                 }
-            }else if(req.body.contra){
-                if (await usuario.update(req.session.usuario,{ contra: req.body.contra })) {
+            } else if (req.body.contra) {
+                if (await usuario.update(req.session.usuario, { contra: req.body.contra })) {
                     res.json({ estado: true });
                 } else {
                     res.json({ estado: false, error: "No se ha podido actualizar el usuario" });
                 }
-            }else{
-                res.json({estado:false,error:"No se han enviado los parámetros correctamente"})
+            } else {
+                res.json({ estado: false, error: "No se han enviado los parámetros correctamente" })
                 console.log(req.body)
             }
-        }else{
-            res.json({estado:false,error:"No se han enviado parámetros"})
+        } else {
+            res.json({ estado: false, error: "No se han enviado parámetros" })
         }
-    }else{
-        res.json({estado:false,error:"No has iniciado sesión"})
+    } else {
+        res.json({ estado: false, error: "No has iniciado sesión" })
     }
-    
+
 })
 
 router.post("/cerrarSesion", async function(req, res) {
@@ -164,11 +189,11 @@ router.post("/cesta/agregar", comprobarpost, async function(req, res) {
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var producto = new Productos(url, DB_CONF.db_name)
         var aux = await producto.getProductoById(req.body.id)
-        if (!req.cookies ||  !req.cookies.cesta) {
-            if(req.body.cantidad <= aux.cantidad){
+        if (!req.cookies || !req.cookies.cesta) {
+            if (req.body.cantidad <= aux.cantidad) {
                 res.cookie("cesta", { total: aux.precio * parseInt(req.body.cantidad), productos: [{ id: req.body.id, cantidad: parseInt(req.body.cantidad) }] }, { maxAge: 1000 * 60 * 60 * 24 * 7 }).json({ estado: true })
-            }else{
-                res.json({estado:false,error:"No hay suficiente stock"})
+            } else {
+                res.json({ estado: false, error: "No hay suficiente stock" })
             }
         } else {
             var esta = false;
@@ -178,7 +203,7 @@ router.post("/cesta/agregar", comprobarpost, async function(req, res) {
                     if (parseInt(req.cookies.cesta.productos[i].cantidad) + parseInt(req.body.cantidad) <= aux.cantidad) {
                         req.cookies.cesta.productos[i].cantidad = (parseInt(req.body.cantidad) + parseInt(req.cookies.cesta.productos[i].cantidad)) + "";
                         req.cookies.cesta.total = parseFloat(req.cookies.cesta.total) + (aux.precio * parseInt(req.body.cantidad))
-                        req.cookies.cesta.total = Math.round(req.cookies.cesta.total*100)/100
+                        req.cookies.cesta.total = Math.round(req.cookies.cesta.total * 100) / 100
                         res.cookie("cesta", req.cookies.cesta, { maxAge: 1000 * 60 * 60 * 24 * 7 }).json({ estado: true })
                     } else {
                         res.json({ estado: false, error: "No hay suficiente stock" })
@@ -186,12 +211,12 @@ router.post("/cesta/agregar", comprobarpost, async function(req, res) {
                 }
             }
             if (!esta) {
-                if(parseInt(req.body.cantidad) <= aux.cantidad){
+                if (parseInt(req.body.cantidad) <= aux.cantidad) {
                     req.cookies.cesta.productos.push({ id: req.body.id, cantidad: req.body.cantidad })
                     req.cookies.cesta.total = parseFloat(req.cookies.cesta.total) + (aux.precio * parseInt(req.body.cantidad))
-                    req.cookies.cesta.total = Math.round(req.cookies.cesta.total*100)/100
+                    req.cookies.cesta.total = Math.round(req.cookies.cesta.total * 100) / 100
                     res.cookie("cesta", req.cookies.cesta, { maxAge: 1000 * 60 * 60 * 24 * 7 }).json({ estado: true })
-                }else{
+                } else {
                     res.json({ estado: false, error: "No hay suficiente stock" })
                 }
             }
@@ -202,31 +227,31 @@ router.post("/cesta/agregar", comprobarpost, async function(req, res) {
     }
 })
 
-router.post("/cesta/borrar",comprobarpost,async function(req,res){
-    if(req.cookies && req.cookies.cesta){
+router.post("/cesta/borrar", comprobarpost, async function(req, res) {
+    if (req.cookies && req.cookies.cesta) {
         if (req.body && req.body.id) {
             var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
             var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
             var producto = new Productos(url, DB_CONF.db_name)
-            var aux=await producto.getProductoById(req.body.id)
-            var salida=[]
-            for(let i=0;i<req.cookies.cesta.productos.length;i++){
-                if(req.cookies.cesta.productos[i].id!=req.body.id){
+            var aux = await producto.getProductoById(req.body.id)
+            var salida = []
+            for (let i = 0; i < req.cookies.cesta.productos.length; i++) {
+                if (req.cookies.cesta.productos[i].id != req.body.id) {
                     salida.push(req.cookies.cesta.productos[i])
-                }else{
-                    req.cookies.cesta.total=parseFloat(req.cookies.cesta.total)-(aux.precio*parseInt(req.cookies.cesta.productos[i].cantidad))
-                    req.cookies.cesta.total = Math.round(req.cookies.cesta.total*100)/100
+                } else {
+                    req.cookies.cesta.total = parseFloat(req.cookies.cesta.total) - (aux.precio * parseInt(req.cookies.cesta.productos[i].cantidad))
+                    req.cookies.cesta.total = Math.round(req.cookies.cesta.total * 100) / 100
                 }
             }
-            req.cookies.cesta.productos=salida
-            res.cookie("cesta",req.cookies.cesta, { maxAge: 1000 * 60 * 60 * 24 * 7 }).json({estado:true})            
-        }else{
-            res.json({estado:false,error:"No se han enviado los parámetros"})
+            req.cookies.cesta.productos = salida
+            res.cookie("cesta", req.cookies.cesta, { maxAge: 1000 * 60 * 60 * 24 * 7 }).json({ estado: true })
+        } else {
+            res.json({ estado: false, error: "No se han enviado los parámetros" })
         }
-    }else{
-        res.json({estado:false,error:"No hay ningun producto en la cesta"})
+    } else {
+        res.json({ estado: false, error: "No hay ningun producto en la cesta" })
     }
-    
+
 })
 
 router.post("/cesta", comprobarpost, async function(req, res) {
@@ -234,17 +259,16 @@ router.post("/cesta", comprobarpost, async function(req, res) {
     var salida = []
     var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
     var producto = new Productos(url, DB_CONF.db_name)
-    if(req.cookies.cesta){
-        console.log(req.cookies.cesta)
+    if (req.cookies.cesta) {
         for (let i = 0; i < req.cookies.cesta.productos.length; i++) {
             var aux = await producto.getProductoById(req.cookies.cesta.productos[i].id)
             salida.push({ producto: aux, cantidad: req.cookies.cesta.productos[i].cantidad })
         }
         res.json({ cesta: salida, total: req.cookies.cesta.total })
-    }else{
+    } else {
         res.json({ cesta: [], total: 0 })
     }
-    
+
 })
 
 router.get("/pagar", comprobarpost, async function(req, res) {
@@ -270,7 +294,7 @@ router.get("/pagar", comprobarpost, async function(req, res) {
             res.redirect(req.headers.referer + "?session=off")
                 //res.json({ estado: false, error: "No se ha iniciado sesión" })
         }
-    }else{
+    } else {
         res.redirect(req.headers.referer + "?paypa=La opcion de pago no está configurada")
     }
 

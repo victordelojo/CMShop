@@ -1,0 +1,15 @@
+extends menu.pug
+block datos
+    if id
+        div.row.m-0.mt-5.justify-content-center
+            div.col-12.col-md-11.col-lg-10
+                div.card
+                    div.card-body(id="pedido")
+            div.col-12.text-center
+                button.mt-3.mb-3.btn.btn-outline-dark(onclick="history.go(-1)") Volver
+    else
+        script history.go(-1)
+block script
+    if id
+        script id='#{id}'
+        script(src="../javascript/default/pedido.js")

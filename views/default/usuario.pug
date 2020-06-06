@@ -21,9 +21,9 @@ block datos
                 div.col-12
                     div.row.justify-content-center
                         div.col-12.col-md-3.col-lg-2
-                            button.mb-5.btn.btn-outline-dark(id="guardar") Guardar
+                            button.mb-5.mt-5.btn.btn-outline-dark(id="guardar") Guardar
                         div.col-12.col-md-3.col-lg-2
-                            button.mb-5.btn.btn-outline-danger(id="cerrar") Cerrar Sesión
+                            button.mb-5.mt-5.btn.btn-outline-danger(id="cerrar") Cerrar Sesión
     div.modal.fade(id="cambiar" tabindex="-1" role="dialog" aria-labelledby="nuevoTitle" aria-hidden="true")
         div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
             div.modal-content
@@ -42,6 +42,19 @@ block datos
                 div.modal-footer
                     button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
                     button.btn.btn-dark(type="button",id="guardarContra") Guardar
+    div.modal.fade(id="anular" tabindex="-1" role="dialog" aria-labelledby="nuevoTitle" aria-hidden="true")
+        div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
+            div.modal-content
+                div.modal-header
+                    h5.modal-title(id="exampleModalLongTitle") Anular Pedido
+                    button.close(type="button" data-dismiss="modal" aria-label="Close")
+                        span(aria-hidden="true") &times;
+                div.modal-body
+                    h5.m-3 ¿Estás seguro de anular el pedido?
+
+                div.modal-footer
+                    button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
+                    button.btn.btn-dark(type="button",id="anularPedido") Anular
 
 block script
     script(src="../javascript/default/usuario.js")

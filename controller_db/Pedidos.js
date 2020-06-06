@@ -12,11 +12,14 @@ module.exports = function(url, bd_nombre) {
         });
         const dbo = db.db(this.bd_nombre);
         var usuario = await dbo.collection("usuarios").find({ correo: usu, pedidos: { $exists: true } }, { _id: 0, pedidos: 1 }).toArray()
+
         var pedidos = []
         var estados = ["No pagado", "Pagado", "Confirmado", "En preparación", "Preparado", "Enviado", "Entregado", "Anulado"];
         if (usuario.length != 0) {
             pedidos = await dbo.collection("pedidos").find({ _id: { $in: usuario[0].pedidos } }).sort({ $natural: -1 }).toArray()
+
             for (let i = 0; i < pedidos.length; i++) {
+                //console.log(pedidos[i].contenido)
                 pedidos[i].estado = estados[pedidos[i].estado]
             }
         }
@@ -89,5 +92,28 @@ module.exports = function(url, bd_nombre) {
         }
         db.close();
         return true;
+    }
+    this.borrarPedidoById = async function(id) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        try {
+            var aux = await dbo.collection("pedidos").find({ _id: new this.mongodb.ObjectId(id) }).toArray()
+            if (aux.length == 1) {
+                await dbo.collection("pedidos").updateOne({ _id: new this.mongodb.ObjectId(id) }, { $set: { estado: 7 } })
+                db.close()
+                return true
+            } else {
+                db.close()
+                return false
+            }
+        } catch (error) {
+            db.close()
+            return false
+        }
+
+
     }
 }

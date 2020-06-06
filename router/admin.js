@@ -776,46 +776,66 @@ app.post("/usuarioAdmin/cerrar", async function(req, res) {
 //----------PEDIDOS-------------------------------------------------------------------------------------------------------------------------------
 
 app.get("/pedidos", comprobarget, async function(req, res) {
-        var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
-        var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
-        var pedidos = new Pedidos(url, DB_CONF.db_name);
-        var productos = new Producto(url, DB_CONF.db_name)
-        var num = parseInt(req.query.num) || 0
-        var client = req.query.client || 0
-        var id = req.query.id || 0;
-        var est = req.query.est || 0
-        var pre = req.query.pre || 0
-        var estados = ["No pagado", "Pagado", "Confirmado", "En preparación", "Preparado", "Enviado", "Entregado", "Anulado"];
-        var precios = ["Mas caros primeros", "Mas baratos primero"]
-        if (client != 0) {
-            if (num >= await pedidos.getNumeroPedidosByUsu(client)) {
-                num -= 5
+    var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+    var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+    var pedidos = new Pedidos(url, DB_CONF.db_name);
+    var productos = new Producto(url, DB_CONF.db_name)
+    var num = parseInt(req.query.num) || 0
+    var client = req.query.client || 0
+    var id = req.query.id || 0;
+    var est = req.query.est || 0
+    var pre = req.query.pre || 0
+    var estados = ["No pagado", "Pagado", "Confirmado", "En preparación", "Preparado", "Enviado", "Entregado", "Anulado"];
+    var precios = ["Mas caros primeros", "Mas baratos primero"]
+    if (client != 0) {
+        if (num >= await pedidos.getNumeroPedidosByUsu(client)) {
+            num -= 5
+        }
+    } else {
+        if (num >= await pedidos.getNumeroPedidos()) {
+            num -= 5
+        }
+    }
+    if (num < 0) {
+        num = 0
+    }
+    if (client != 0) {
+        var pedido = await pedidos.getPedidosSkipByUsu(num, client)
+    } else {
+        var pedido = await pedidos.getPedidosSkip(num)
+    }
+    for (var i = 0; i < pedido.length; i++) {
+        var total = 0;
+        for (var x = 0; x < pedido[i].contenido.length; x++) {
+            var aux = await productos.getProductoById(pedido[i].contenido[x].producto)
+            total += (pedido[i].contenido[x].cantidad * aux.precio)
+            pedido[i].contenido[x].producto = aux.nombre
+            pedido[i].contenido[x].precio = aux.precio
+        }
+        pedido[i].estado = estados[pedido[i].estado]
+        pedido[i].total = total
+    }
+    res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido, estados: estados, precios: precios })
+})
+
+app.post("/pedidos/pasarEstado", async function(req, res) {
+        if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
+            var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
+            var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+            var usuAdmin = new admin(url, DB_CONF.db_name);
+            if (await usuAdmin.comprobarInicio()) {
+                if (req.session.admin || req.session.usuario) {
+                    var pedidos = new Pedidos(url, DB_CONF.db_name);
+                    await pedidos.pasarEstado(req.body.id)
+                } else {
+                    res.json({ estado: false, error: "No estas logueado como administrador" });
+                }
+            } else {
+                res.json({ estado: false, error: "No existe un usuario administrador" });
             }
         } else {
-            if (num >= await pedidos.getNumeroPedidos()) {
-                num -= 5
-            }
+            res.json({ estado: false, error: "No existe una configuración de CMShop" })
         }
-        if (num < 0) {
-            num = 0
-        }
-        if (client != 0) {
-            var pedido = await pedidos.getPedidosSkipByUsu(num, client)
-        } else {
-            var pedido = await pedidos.getPedidosSkip(num)
-        }
-        for (var i = 0; i < pedido.length; i++) {
-            var total = 0;
-            for (var x = 0; x < pedido[i].contenido.length; x++) {
-                var aux = await productos.getProductoById(pedido[i].contenido[x].producto)
-                total += (pedido[i].contenido[x].cantidad * aux.precio)
-                pedido[i].contenido[x].producto = aux.nombre
-                pedido[i].contenido[x].precio = aux.precio
-            }
-            pedido[i].estado = estados[pedido[i].estado]
-            pedido[i].total = total
-        }
-        res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido, estados: estados, precios: precios })
     })
     // **************************************************************************************************************************************************
     // **************************************************************************************************************************************************

@@ -125,7 +125,7 @@ module.exports = function(url, bd_nombre) {
         return true;
     }
 
-    this.update=async function(correo, datos){
+    this.update = async function(correo, datos) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
@@ -133,7 +133,7 @@ module.exports = function(url, bd_nombre) {
         const dbo = db.db(this.bd_nombre);
         var usuarios = await dbo.collection("usuarios").find({ correo: correo }).toArray()
         if (usuarios.length == 1) {
-            await dbo.collection("usuarios").updateOne({correo:correo},{$set:datos})
+            await dbo.collection("usuarios").updateOne({ correo: correo }, { $set: datos })
             db.close();
             return true
         }
@@ -148,20 +148,32 @@ module.exports = function(url, bd_nombre) {
         });
         const dbo = db.db(this.bd_nombre);
         var usuarios = await dbo.collection("usuarios").find({ correo: datos.correo }).toArray()
-        if (usuarios.length == 0) {
+        if (usuarios.length == 1) {
             var id = new this.mongodb.ObjectId();
             var Categoria = require("../controller_db/Categoria")
             var Producto = require("../controller_db/Producto")
             var producto = new Producto(this.url, this.bd_nombre)
             var categoria = new Categoria(this.url, this.bd_nombre);
             for (let i = 0; i < datos.productos.length; i++) {
-                var idCate = await producto.getProductoById(datos.productos[i]._id).categoria
-                await categoria.sumarGanancias(idCate, datos.productos[i].cantidad * datos.productos[i].precio)
+                var idCate = await producto.getProductoById(datos.productos[i].id)
+                if (idCate.cantidad < datos.productos[i].cantidad) {
+                    db.close()
+                    return false
+                }
+                console.log("Comprar pedido: " + idCate)
+            }
+            for (let i = 0; i < datos.productos.length; i++) {
+                var idCate = await producto.getProductoById(datos.productos[i].id)
+                idCate.cantidad -= datos.productos[i].cantidad
+                datos.productos[i].producto = datos.productos[i].id
+                delete datos.productos[i].id
+                await producto.actualizar(idCate._id, idCate)
+                await categoria.sumarGanancias(idCate.categoria, datos.productos[i].cantidad * idCate.precio)
             }
             await dbo.collection("usuarios").updateOne({ correo: datos.correo }, { $push: { pedidos: new this.mongodb.ObjectId(id) } });
-            await dbo.collection("pedidos").insertOne({ _id: new this.mongodb.ObjectId(id), contenido: datos.productos, estado: datos.estado, fechaInicio: new Date() })
+            await dbo.collection("pedidos").insertOne({ _id: new this.mongodb.ObjectId(id), contenido: datos.productos, estado: 0, fechaInicio: new Date() })
             db.close();
-            return true;
+            return id;
         }
         db.close();
         return false;
