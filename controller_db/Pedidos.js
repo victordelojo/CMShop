@@ -5,6 +5,32 @@ module.exports = function(url, bd_nombre) {
     this.url = url;
     this.bd_nombre = bd_nombre;
 
+    this.getPedidosByEstado=async function(est){
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var pedidos = await dbo.collection("pedidos").find({estado:est}).toArray()
+        db.close();
+        return pedidos
+    }
+
+    this.getPedidoById = async function(id){
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var pedidos = await dbo.collection("pedidos").find({_id:new this.mongodb.ObjectId(id)}).toArray()
+        db.close();
+        if(pedidos.length==1){
+            return pedidos[0]
+        }else{
+            return false
+        }
+    }
+
     this.getPedidosByCorreo = async function(usu) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
@@ -102,6 +128,13 @@ module.exports = function(url, bd_nombre) {
         try {
             var aux = await dbo.collection("pedidos").find({ _id: new this.mongodb.ObjectId(id) }).toArray()
             if (aux.length == 1) {
+                var Producto = require("../controller_db/Producto")
+                var productos=new Producto(this.url,this.bd_nombre)
+                aux=aux[0]
+                for(let i =0;i<aux.contenido.length;i++){
+                    var aux2=await productos.getProductoById(aux.contenido[i].producto)
+                    await productos.actualizar(aux.contenido[i].producto,{cantidad:parseInt(aux2.cantidad)+parseInt(aux.contenido[i].cantidad)})
+                }
                 await dbo.collection("pedidos").updateOne({ _id: new this.mongodb.ObjectId(id) }, { $set: { estado: 7 } })
                 db.close()
                 return true
@@ -111,6 +144,7 @@ module.exports = function(url, bd_nombre) {
             }
         } catch (error) {
             db.close()
+            console.log(error)
             return false
         }
 

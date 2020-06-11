@@ -13,18 +13,18 @@ html
   body.bg-light(style="height: 100vh")
     div.container-fluid.m-0.p-0.h-100
       div.row.p-0.m-0(style="height:15vh")
-        div.col-12.p-0
-          div.row.align-items-center.m-0
-            div.col-md-3.col-xl-2.d-none.d-md-inline-block
-              img.img-fluid.p-3.ml-5(src="../logo.png", alt="Responsive image", style="width:60%")
-            div.col-2.col-sm-2.d-md-none.d-inline-block
+        div.col-12.p-0(style="height:100%")
+          div.row.align-items-center.m-0.justify-content-between(style="height:100%")
+            div.col-md-3.col-xl-2.d-none.d-md-inline-block.mh-50(style="height:100%")
+              img.img-fluid.p-3.ml-5(src="../logo.png", alt="Responsive image", style="height:100%")
+            div.col-2.col-sm-2.d-md-none.d-inline-block(style="height:100%")
               button.btn.btn-dark.w-100.navbar-btn.pull-right.p-0.h-sm-25(id="btn-menu",type="button" ,data-toggle="modal" ,data-target="#sidebar-left", style="height:50px") 
                 span.typcn.typcn-th-menu
-            div.col-7.col-sm-8.col-md-7.col-lg-8.col-xl-9.text-center 
+            div.col-7.col-sm-8.col-md-6.text-center
               h4 #{location}
-            div.col-3.col-sm-2.col-lg-1.col-xl-1
+            div.col-3.col-sm-2.col-lg-1.col-xl-1(style="height:100%")
               a.p-0.m-0(href=`/${adminD}/usuarioAdmin`)
-                img.m-0.p-0(src="../usuario.png", alt="",width="100%")
+                img.m-0.p-0(src="../usuario.png", alt="",style="height:75%")
       div.row.m-0.p-0(style="height:85vh")
         div.d-none.d-md-inline-block.col-md-3.col-xl-2.m-0.p-0.text-center.bg-dark(id="menu")
           div.row.p-0.m-0

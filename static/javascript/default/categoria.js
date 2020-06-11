@@ -24,8 +24,10 @@ function cargar() {
     xhttp.addEventListener("readystatechange", function() {
         if (this.readyState == 4 && this.status == 200) {
             var datos = JSON.parse(this.responseText);
+            var esta=false
             for (let i = 0; i < datos.length; i++) {
                 if (datos[i].categoria == idCategoria) {
+                    esta=true
                     var a = document.createElement("div");
                     a.classList.add("col-12")
                     a.classList.add("col-sm-6")
@@ -70,6 +72,9 @@ function cargar() {
                     a.appendChild(b)
                     document.getElementById("productos").appendChild(a)
                 }
+            }
+            if(!esta){
+                document.getElementById("productos").innerHTML="<h2>No hay productos en esta categoría</h2>"
             }
         }
     })

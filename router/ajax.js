@@ -71,7 +71,7 @@ router.post("/usuario", comprobarpost, async function(req, res) {
     }
 })
 router.post("/comprar", comprobarpost, async function(req, res) {
-    if (req.session.usuario) {
+    if (req.session.usuario) { 
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var usuario = new Usuario(url, DB_CONF.db_name)
@@ -291,11 +291,11 @@ router.get("/pagar", comprobarpost, async function(req, res) {
                 res.redirect(req.headers.referer + "?error=No hay productos en la cesta")
             }
         } else {
-            res.redirect(req.headers.referer + "?session=off")
+            res.redirect(req.headers.referer + "?error=No se ha iniciado sesión")
                 //res.json({ estado: false, error: "No se ha iniciado sesión" })
         }
     } else {
-        res.redirect(req.headers.referer + "?paypa=La opcion de pago no está configurada")
+        res.redirect(req.headers.referer + "?error=La opcion de pago no está configurada")
     }
 
 })

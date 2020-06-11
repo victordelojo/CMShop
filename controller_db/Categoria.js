@@ -73,6 +73,7 @@ module.exports = function(url, bd_nombre) {
             }
             if (!aux) {
                 salida[i] = {
+                    id:salida2[i]._id,
                     nombre: salida2[i].nombre,
                     productos: 0,
                     ganancias: salida2[i].ganancias

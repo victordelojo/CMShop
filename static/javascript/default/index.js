@@ -8,36 +8,7 @@ function cargar() {
             if (datos.estado == false) {
                 document.getElementById("productos").innerHTML = "No hay productos"
             } else {
-                for (let i = 0; i < 3 && i < datos.length; i++) {
-                    var carr = document.getElementById("fotosCar")
-                    var uno = document.createElement("div")
-                    uno.classList.add("carousel-item")
-                    if (i == 0) {
-                        uno.classList.add("active")
-                    }
-                    var imgUno = document.createElement("img")
-                    imgUno.classList.add("d-block")
-                    imgUno.classList.add("w-100")
-                    imgUno.classList.add("img-fluid")
-                    imgUno.style.maxHeight = "400px"
-                    imgUno.src = "../fotos/" + datos[i].foto[0]
-                    imgUno.alt = i + " slide"
-                    var divUno = document.createElement("div")
-                    divUno.classList.add("carousel-caption")
-                    divUno.classList.add("d-none")
-                    divUno.classList.add("d-md-block")
-                    var btnUno = document.createElement("button")
-                    btnUno.classList.add("btn")
-                    btnUno.classList.add("btn-outline-dark")
-                    btnUno.innerHTML = "VER"
-                    btnUno.value = datos[i]._id
-                    divUno.appendChild(btnUno)
-                    uno.appendChild(imgUno)
-                    uno.appendChild(divUno)
-                    carr.appendChild(uno)
-                }
                 for (let i = 0; i < 9 && i < datos.length; i++) {
-
                     var a = document.createElement("div");
                     a.classList.add("col-12")
                     a.classList.add("col-sm-6")

@@ -2,6 +2,10 @@ extends menu.pug
 block datos
     div.row.m-0.mt-5.justify-content-center
         div.col-12.col-md-11.col-lg-10
+            if error
+                div.alert.alert-danger(role="alert")=error
+                    button.close(type="button" data-dismiss="alert" aria-label="Close")
+                        span(aria-hidden="true") &times;
             h3 Carrito
             hr
             div.row.justify-content-center(id="productos")
