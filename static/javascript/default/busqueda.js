@@ -28,6 +28,9 @@ function cargar() {
                     img.classList.add("img-fluid")
                     img.classList.add("w-75")
                     img.style.maxHeight = "300px"
+                    var a2 = document.createElement("a")
+                    a2.href = "/producto?id=" + datos[i]._id
+                    a2.appendChild(img)
                     var d = document.createElement("div")
                     d.classList.add("row")
                     d.classList.add("mt-3")
@@ -49,7 +52,7 @@ function cargar() {
                     g.appendChild(h)
                     d.appendChild(e)
                     d.appendChild(g)
-                    c.appendChild(img)
+                    c.appendChild(a2)
                     c.appendChild(d)
                     b.appendChild(c)
                     a.appendChild(b)
