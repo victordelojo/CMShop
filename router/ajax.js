@@ -71,11 +71,13 @@ router.post("/usuario", comprobarpost, async function(req, res) {
     }
 })
 router.post("/comprar", comprobarpost, async function(req, res) {
-    if (req.session.usuario) { 
+    if (req.session.usuario) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
         var usuario = new Usuario(url, DB_CONF.db_name)
-        if (req.cookies && req.cookies.cesta && req.cookies.cesta.productos) {
+        if (req.query.id) {
+            res.json({ estado: true })
+        } else if (req.cookies && req.cookies.cesta && req.cookies.cesta.productos) {
             var productos = req.cookies.cesta
             productos.correo = req.session.usuario
             var id = await usuario.pedidoNuevo(productos)
@@ -275,14 +277,31 @@ router.get("/pagar", comprobarpost, async function(req, res) {
     var DB_CONF = require("../CONFIGURE.json")
     if (DB_CONF.paypalEmail) {
         if (req.session.usuario) {
-            if (req.cookies.cesta.productos) {
+            if (req.query.id) {
+                var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
+                var pedidos = new Pedidos(url, DB_CONF.db_name)
+                var producto = new Productos(url, DB_CONF.db_name)
+                try {
+                    var pedido = await pedidos.getPedidoById(req.query.id);
+                    var salida = []
+                    for (let i = 0; i < pedido.contenido.length; i++) {
+                        var aux = await producto.getProductoById(pedido.contenido[i].producto)
+                        salida.push({ producto: aux, cantidad: pedido.contenido[i].cantidad })
+                    }
+                    console.log(pedido)
+                    res.render("./default/pagar.pug", { cesta: salida, datos: DB_CONF, id: pedido._id })
+                } catch (error) {
+                    res.json({ estado: false, error: "No se ha encontrado el pedido" })
+                }
+
+            } else if (req.cookies.cesta.productos) {
                 var salida = []
                 var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
                 var producto = new Productos(url, DB_CONF.db_name)
                 for (let i = 0; i < req.cookies.cesta.productos.length; i++) {
                     var aux = await producto.getProductoById(req.cookies.cesta.productos[i].id)
                     if (aux.cantidad < parseInt(req.cookies.cesta.productos[i].cantidad)) {
-                        res.redirect(req.headers.referer + "?error=El producto '" + aux.nombre + "' no hay suficiente stock")
+                        res.redirect(req.headers.referer + "?error=No hay suficiente stock")
                     }
                     salida.push({ producto: aux, cantidad: req.cookies.cesta.productos[i].cantidad })
                 }

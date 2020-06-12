@@ -53,10 +53,22 @@ function cargar() {
                     var cardBody = document.createElement("div")
                     cardBody.classList.add("card-body")
                     cardBody.innerHTML = "Nº pedido: <a href='/pedido?id=" + datos.pedidos[i]._id + "'>" + datos.pedidos[i]._id + "</a><br>Estado:" + datos.pedidos[i].estado;
+                    if (datos.pedidos[i].estado == "No pagado") {
+                        var pagar = document.createElement("button")
+                        pagar.classList.add("btn")
+                        pagar.classList.add("btn-outline-dark")
+                        pagar.classList.add("ml-2")
+                        pagar.innerHTML = "Pagar Ya"
+                        var a = document.createElement("a")
+                        a.href = "/ajax/pagar?id=" + datos.pedidos[i]._id
+                        a.appendChild(pagar)
+                        cardBody.appendChild(a)
+                    }
                     if (datos.pedidos[i].estado != "Anulado") {
                         var anular = document.createElement("button")
                         anular.classList.add("btn")
                         anular.classList.add("btn-outline-danger")
+                        anular.classList.add("ml-4")
                         anular.innerHTML = "Anular"
                         anular.dataset.toggle = "modal"
                         anular.dataset.target = "#anular"

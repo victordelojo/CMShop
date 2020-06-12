@@ -8,7 +8,7 @@ function cargar() {
             console.log(datos)
             if (datos.estado) {
                 alert("Pagado exitosamente")
-                location.href("/")
+                location.href = "/"
             } else {
                 alert("No se ha podido realizar el pedido")
                 history.go(-1)

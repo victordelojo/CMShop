@@ -783,10 +783,10 @@ app.get("/pedidos", comprobarget, async function(req, res) {
     var num = parseInt(req.query.num) || 0
     var client = req.query.client || 0
     var id = req.query.id || 0;
-    var est = req.query.estado || 0
+    var est = req.query.estado || -1
     var estados = ["No pagado", "Pagado", "Confirmado", "En preparación", "Preparado", "Enviado", "Entregado", "Anulado"];
-    if(id!=0){
-        var pedido=await pedidos.getPedidoById(id)
+    if (id != 0) {
+        var pedido = await pedidos.getPedidoById(id)
         var total = 0;
         for (var x = 0; x < pedido.contenido.length; x++) {
             var aux = await productos.getProductoById(pedido.contenido[x].producto)
@@ -796,10 +796,28 @@ app.get("/pedidos", comprobarget, async function(req, res) {
         }
         pedido.estado = estados[pedido.estado]
         pedido.total = total
-        pedido=[pedido]
-    }else if(est!=0){
-        
-    }else{
+        pedido = [pedido]
+    } else if (est != -1) {
+        var pedido = await pedidos.getPedidosByEstado(est)
+        if (num >= pedido.length) {
+            num -= 5;
+        }
+        if (num < 0) {
+            num = 0
+        }
+        pedido = await pedidos.getPedidosByEstadoSkip(est, num)
+        for (var i = 0; i < pedido.length; i++) {
+            var total = 0;
+            for (var x = 0; x < pedido[i].contenido.length; x++) {
+                var aux = await productos.getProductoById(pedido[i].contenido[x].producto)
+                total += (pedido[i].contenido[x].cantidad * aux.precio)
+                pedido[i].contenido[x].producto = aux.nombre
+                pedido[i].contenido[x].precio = aux.precio
+            }
+            pedido[i].estado = estados[pedido[i].estado]
+            pedido[i].total = total
+        }
+    } else {
         if (client != 0) {
             if (num >= await pedidos.getNumeroPedidosByUsu(client)) {
                 num -= 5
@@ -829,10 +847,10 @@ app.get("/pedidos", comprobarget, async function(req, res) {
             pedido[i].total = total
         }
     }
-    res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido, estados: estados,get:req.query,num:num })
+    res.render('./admin/pedidos.pug', { location: "Pedidos", "port": DB_CONF.port, "host": DB_CONF.direccion, "adminD": DB_CONF.Direccion_Admin, pedidos: pedido, estados: estados, get: req.query, num: num })
 })
 
-app.post("/pedidos/anular",async function(req,res){
+app.post("/pedidos/anular", async function(req, res) {
     if (fs.existsSync(__dirname + "/../CONFIGURE.json")) {
         var DB_CONF = require("../CONFIGURE.json") //Carga la configuración de la base de datos
         var url = 'mongodb://' + DB_CONF.db_user + ':' + DB_CONF.db_pass + '@' + DB_CONF.db_direccion + ':' + DB_CONF.db_port + '?authMechanism=DEFAULT&authSource=' + DB_CONF.db_auth + '';
@@ -840,10 +858,10 @@ app.post("/pedidos/anular",async function(req,res){
         if (await usuAdmin.comprobarInicio()) {
             if (req.session.admin || req.session.usuario) {
                 var pedidos = new Pedidos(url, DB_CONF.db_name);
-                if(await pedidos.borrarPedidoById(req.body.id)){
-                    res.json({estado:true})
-                }else{
-                    res.json({estado:false,error:"No se ha podido anular el pedido"})
+                if (await pedidos.borrarPedidoById(req.body.id)) {
+                    res.json({ estado: true })
+                } else {
+                    res.json({ estado: false, error: "No se ha podido anular el pedido" })
                 }
             } else {
                 res.json({ estado: false, error: "No estas logueado como administrador" });
@@ -864,10 +882,10 @@ app.post("/pedidos/pasarEstado", async function(req, res) {
             if (await usuAdmin.comprobarInicio()) {
                 if (req.session.admin || req.session.usuario) {
                     var pedidos = new Pedidos(url, DB_CONF.db_name);
-                    if(await pedidos.pasarEstado(req.body.id)){
-                        res.json({estado:true})
-                    }else{
-                        res.json({estado:false,error: "No se ha podido cambiar el estado"})
+                    if (await pedidos.pasarEstado(req.body.id)) {
+                        res.json({ estado: true })
+                    } else {
+                        res.json({ estado: false, error: "No se ha podido cambiar el estado" })
                     }
                 } else {
                     res.json({ estado: false, error: "No estas logueado como administrador" });

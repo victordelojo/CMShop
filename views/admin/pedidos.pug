@@ -15,7 +15,7 @@ append datos
     div.col-12.col-md-6.col-lg-3.mr-0.pr-0.text-right
       span Estado: 
       div.col-8.d-inline-block
-        select.custom-select(name="categoria" id="categoria")
+        select.custom-select(name="estado" id="estado")
           option(value="-1") Todas
             each estado,key in estados
               if est==key
@@ -42,8 +42,12 @@ append datos
             h6.mb-0 ID: #{val._id}  
             div.row.justify-content-around
               div.col-4
+                h6="Fecha: "+val.fechaInicio.getDate()+"/"+(val.fechaInicio.getMonth()+1)+"/"+val.fechaInicio.getFullYear()
               div.col-4
-                button.mt-3.btn.btn-outline-dark(type="button") #{val.estado}
+                if val.estado=="Anulado"
+                  button.mt-3.btn.btn-outline-dark.pasar(type="button") #{val.estado}
+                else
+                  button.mt-3.btn.btn-outline-dark.pasar(type="button" data-toggle="modal" data-target="#pasar" value=val._id) #{val.estado}
               div.col-4
                 if val.estado!="Anulado"
                   button.mt-3.btn.btn-danger.anular(type="button" data-toggle="modal" data-target="#anular" value=val._id) Anular
@@ -75,17 +79,33 @@ append datos
                             td.align-middle Cantidad: #{val2.cantidad}
   div.row.m-0.mb-5.mt-5
     div.col-6
-      a(id="atras0" href="./pedidos")
-        button.btn.btn-outline-dark
-          span.typcn.typcn-chevron-left
-          span.typcn.typcn-chevron-left
-      a(id="atras" href="./pedidos?num="+num-5) 
-        button.btn.btn-outline-dark
-          span.typcn.typcn-chevron-left
+      if get.estado
+        a(id="atras0" href="./pedidos?num=0&estado="+get.estado)
+          button.btn.btn-outline-dark
+            span.typcn.typcn-chevron-left
+            span.typcn.typcn-chevron-left
+      else
+        a(id="atras0" href="./pedidos?num=0")
+          button.btn.btn-outline-dark
+            span.typcn.typcn-chevron-left
+            span.typcn.typcn-chevron-left
+      if get.estado
+        a(id="atras" href="./pedidos?num="+(num-5)+"&estado="+get.estado) 
+          button.btn.btn-outline-dark
+            span.typcn.typcn-chevron-left
+      else
+        a(id="atras" href="./pedidos?num="+(num-5)) 
+          button.btn.btn-outline-dark
+            span.typcn.typcn-chevron-left
     div.col-6
-      a(id="siguiente" href="./pedidos?num="+num+5)
-        button.btn.btn-outline-dark
-          span.typcn.typcn-chevron-right
+      if get.estado
+        a(id="siguiente" href="./pedidos?num="+(num+5)+"&estado="+get.estado)
+          button.btn.btn-outline-dark
+            span.typcn.typcn-chevron-right
+      else
+        a(id="siguiente" href="./pedidos?num="+(num+5))
+          button.btn.btn-outline-dark
+            span.typcn.typcn-chevron-right
   div.modal.fade(id="anular" tabindex="-1" role="dialog" aria-labelledby="nuevoTitle" aria-hidden="true")
     div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
       div.modal-content
@@ -98,5 +118,18 @@ append datos
         div.modal-footer
           button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
           button.btn.btn-dark(type="button",id="anularPedido") Anular
+
+  div.modal.fade(id="pasar" tabindex="-1" role="dialog" aria-labelledby="nuevoTitle" aria-hidden="true")
+    div.modal-dialog.modal-dialog-centered.modal-dialog-scrollable(role="document")
+      div.modal-content
+        div.modal-header
+          h5.modal-title(id="exampleModalLongTitle") Siguiente Estado
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") &times;
+        div.modal-body
+          h5.m-3 ¿Vas ha actualizar el pedido al siguiente estado?
+        div.modal-footer
+          button.btn.btn-outline-dark(type="button" data-dismiss="modal") Cerrar
+          button.btn.btn-dark(type="button",id="pasarPedido") Siguiente
 append script
   script(src="../javascript/admin/pedidos.js")

@@ -19,12 +19,22 @@ html
                     input(name="shopping_url" type="hidden" value="http://"+datos.direccion+":"+datos.port)
             input(name="currency_code" type="hidden" value="EUR")
             if datos.https
-                input( id="salida" name="return" type="hidden" value="https://"+datos.direccion+"/default/correcto")
+                if id
+                    input( id="salida" name="return" type="hidden" value="https://"+datos.direccion+"/default/correcto?id="+id)
+                else
+                    input( id="salida" name="return" type="hidden" value="https://"+datos.direccion+"/default/correcto")
             else
                 if datos.port==80
-                    input(id="salida" name="return" type="hidden" value="http://"+datos.direccion+"/default/correcto")
+                    if id
+                        input(id="salida" name="return" type="hidden" value="http://"+datos.direccion+"/default/correcto?id="+id)
+                    else
+                        input(id="salida" name="return" type="hidden" value="http://"+datos.direccion+"/default/correcto")
+                    
                 else
-                    input(id="salida" name="return" type="hidden" value="http://"+datos.direccion+":"+datos.port+"/default/correcto")
+                    if id
+                        input(id="salida" name="return" type="hidden" value="http://"+datos.direccion+":"+datos.port+"/default/correcto?id="+id)
+                    else
+                        input(id="salida" name="return" type="hidden" value="http://"+datos.direccion+":"+datos.port+"/default/correcto")
             input(name="rm" type="hidden" value="1")
             each producto,key in cesta
                 input(name="item_number_"+(key+1) type="hidden" value=key)
@@ -40,6 +50,10 @@ html
                     div.spinner-grow(style="width: 3rem; height: 3rem;", role="status")
                         span.sr-only Loading...
 
+        if id
+            script var id='#{id}'
+        else
+            script var id=false
         script(src="../javascript/default/pagar.js")
         script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js", integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1", crossorigin="anonymous")

@@ -73,7 +73,7 @@ module.exports = function(url, bd_nombre) {
             }
             if (!aux) {
                 salida[i] = {
-                    id:salida2[i]._id,
+                    id: salida2[i]._id,
                     nombre: salida2[i].nombre,
                     productos: 0,
                     ganancias: salida2[i].ganancias
@@ -90,7 +90,7 @@ module.exports = function(url, bd_nombre) {
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        await dbo.collection("categorias").update({ _id: new this.mongodb.ObjectId(id) }, { $inc: { ganancias: precio } })
+        await dbo.collection("categorias").updateOne({ _id: new this.mongodb.ObjectId(id) }, { $inc: { ganancias: precio } })
     }
 
     this.getPedidosPrecioDeCategorias = async function() {

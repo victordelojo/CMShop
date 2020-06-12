@@ -57,4 +57,6 @@ block datos
                     button.btn.btn-dark(type="button",id="anularPedido") Anular
 
 block script
+    if error
+        script alert('#{error}')
     script(src="../javascript/default/usuario.js")

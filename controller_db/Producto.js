@@ -118,7 +118,7 @@ module.exports = function(url, bd_nombre) {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
-        if(nuevo.categoria){
+        if (nuevo.categoria) {
             nuevo.categoria = new this.mongodb.ObjectId(nuevo.categoria);
         }
         const dbo = db.db(this.bd_nombre);
@@ -180,15 +180,15 @@ module.exports = function(url, bd_nombre) {
             if (mes < 10) {
                 if (mes == 9) {
                     // UTILIZAMOS EL  OPERADOR AND YA QUE SI NO UTILIZAMOS SOLO REALIZA EL ULTIMO PARAMETRO DEL MISMO NOMBRE EN ESTA OCASIÓN $LT
-                    aux = await dbo.collection("pedidos").find({ $and: [{ fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-10-01") } }] }).toArray()
+                    aux = await dbo.collection("pedidos").find({ $and: [{ estado: { $gte: 1 } }, { estado: { $lt: 7 } }, { fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-10-01") } }] }).toArray()
                 } else {
-                    aux = await dbo.collection("pedidos").find({ $and: [{ fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-0" + (mes + 1) + "-01") } }] }).toArray()
+                    aux = await dbo.collection("pedidos").find({ $and: [{ estado: { $gte: 1 } }, { estado: { $lt: 7 } }, { fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-0" + (mes + 1) + "-01") } }] }).toArray()
                 }
             } else {
                 if (mes == 12) {
-                    aux = await dbo.collection("pedidos").find({ $and: [{ fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") } }, { fechaInicio: { $lt: new Date((anio + 1) + "-01-01") } }] }).toArray()
+                    aux = await dbo.collection("pedidos").find({ $and: [{ estado: { $gte: 1 } }, { estado: { $lt: 7 } }, { fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") } }, { fechaInicio: { $lt: new Date((anio + 1) + "-01-01") } }] }).toArray()
                 } else {
-                    aux = await dbo.collection("pedidos").find({ $and: [{ fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-" + (mes + 1) + "-01") } }] }).toArray()
+                    aux = await dbo.collection("pedidos").find({ $and: [{ estado: { $gte: 1 } }, { estado: { $lt: 7 } }, { fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-" + (mes + 1) + "-01") } }] }).toArray()
                 }
             }
             if (aux.length == 0) {
@@ -221,15 +221,15 @@ module.exports = function(url, bd_nombre) {
             var aux;
             if (mes < 10) {
                 if (mes == 9) {
-                    aux = await dbo.collection("pedidos").find({ $and: [{estado:{$gte:1}},{estado:{$lt:7}},{ fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-10-01") } }] }).toArray()
+                    aux = await dbo.collection("pedidos").find({ $and: [{ estado: { $gte: 1 } }, { estado: { $lt: 7 } }, { fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-10-01") } }] }).toArray()
                 } else {
-                    aux = await dbo.collection("pedidos").find({ $and: [{estado:{$gte:1}},{estado:{$lt:7}},{ fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-0" + (mes + 1) + "-01") } }] }).toArray()
+                    aux = await dbo.collection("pedidos").find({ $and: [{ estado: { $gte: 1 } }, { estado: { $lt: 7 } }, { fechaInicio: { $gte: new Date(anio + "-0" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-0" + (mes + 1) + "-01") } }] }).toArray()
                 }
             } else {
                 if (mes == 12) {
-                    aux = await dbo.collection("pedidos").find({ $and: [{estado:{$gte:1}},{estado:{$lt:7}},{ fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") } }, { fechaInicio: { $lt: new Date((anio + 1) + "-01-01") } }] }).toArray()
+                    aux = await dbo.collection("pedidos").find({ $and: [{ estado: { $gte: 1 } }, { estado: { $lt: 7 } }, { fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") } }, { fechaInicio: { $lt: new Date((anio + 1) + "-01-01") } }] }).toArray()
                 } else {
-                    aux = await dbo.collection("pedidos").find({ $and: [{estado:{$gte:1}},{estado:{$lt:7}},{ fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-" + (mes + 1) + "-01") } }] }).toArray()
+                    aux = await dbo.collection("pedidos").find({ $and: [{ estado: { $gte: 1 } }, { estado: { $lt: 7 } }, { fechaInicio: { $gte: new Date(anio + "-" + mes + "-01") } }, { fechaInicio: { $lt: new Date(anio + "-" + (mes + 1) + "-01") } }] }).toArray()
                 }
             }
             if (aux.length == 0) {

@@ -5,28 +5,38 @@ module.exports = function(url, bd_nombre) {
     this.url = url;
     this.bd_nombre = bd_nombre;
 
-    this.getPedidosByEstado=async function(est){
+    this.getPedidosByEstado = async function(est) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        var pedidos = await dbo.collection("pedidos").find({estado:est}).toArray()
+        var pedidos = await dbo.collection("pedidos").find({ estado: parseInt(est) }).toArray()
+        db.close();
+        return pedidos
+    }
+    this.getPedidosByEstadoSkip = async function(est, num) {
+        let db = await this.mongodb.MongoClient.connect(this.url, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        });
+        const dbo = db.db(this.bd_nombre);
+        var pedidos = await dbo.collection("pedidos").find({ estado: parseInt(est) }).skip(num).limit(5).toArray()
         db.close();
         return pedidos
     }
 
-    this.getPedidoById = async function(id){
+    this.getPedidoById = async function(id) {
         let db = await this.mongodb.MongoClient.connect(this.url, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
         const dbo = db.db(this.bd_nombre);
-        var pedidos = await dbo.collection("pedidos").find({_id:new this.mongodb.ObjectId(id)}).toArray()
+        var pedidos = await dbo.collection("pedidos").find({ _id: new this.mongodb.ObjectId(id) }).toArray()
         db.close();
-        if(pedidos.length==1){
+        if (pedidos.length == 1) {
             return pedidos[0]
-        }else{
+        } else {
             return false
         }
     }
@@ -45,7 +55,6 @@ module.exports = function(url, bd_nombre) {
             pedidos = await dbo.collection("pedidos").find({ _id: { $in: usuario[0].pedidos } }).sort({ $natural: -1 }).toArray()
 
             for (let i = 0; i < pedidos.length; i++) {
-                //console.log(pedidos[i].contenido)
                 pedidos[i].estado = estados[pedidos[i].estado]
             }
         }
@@ -86,11 +95,7 @@ module.exports = function(url, bd_nombre) {
         const dbo = db.db(this.bd_nombre);
         var pedidos = await dbo.collection("pedidos").find({}).toArray()
         db.close();
-        var total = 0
-        for (var i = 0; i < pedidos.length; i++) {
-            total += pedidos[i].length;
-        }
-        return total;
+        return pedidos.length;
     }
 
     this.getNumeroPedidosByUsu = async function(usu) {
@@ -111,6 +116,16 @@ module.exports = function(url, bd_nombre) {
         const dbo = db.db(this.bd_nombre);
         var aux = await dbo.collection("pedidos").find({ _id: new this.mongodb.ObjectId(id) }, { _id: 0, estado: 1 }).toArray()
         if (aux[0] && aux[0].estado < 6) {
+            if (aux[0].estado == 0) {
+                var Producto = require("../controller_db/Producto")
+                var producto = new Producto(this.url, this.bd_nombre)
+                var Categoria = require("../controller_db/Categoria")
+                var categoria = new Categoria(this.url, this.bd_nombre)
+                for (let i = 0; i < aux[0].contenido.length; i++) {
+                    var idCate = await producto.getProductoById(aux[0].contenido[i].producto)
+                    await categoria.sumarGanancias(idCate.categoria, aux[0].contenido[i].cantidad * idCate.precio)
+                }
+            }
             await dbo.collection("pedidos").updateOne({ _id: new this.mongodb.ObjectId(id) }, { $inc: { estado: 1 } })
         } else {
             db.close();
@@ -127,13 +142,13 @@ module.exports = function(url, bd_nombre) {
         const dbo = db.db(this.bd_nombre);
         try {
             var aux = await dbo.collection("pedidos").find({ _id: new this.mongodb.ObjectId(id) }).toArray()
-            if (aux.length == 1) {
+            if (aux.length == 1 && aux[0].estado < 6) {
                 var Producto = require("../controller_db/Producto")
-                var productos=new Producto(this.url,this.bd_nombre)
-                aux=aux[0]
-                for(let i =0;i<aux.contenido.length;i++){
-                    var aux2=await productos.getProductoById(aux.contenido[i].producto)
-                    await productos.actualizar(aux.contenido[i].producto,{cantidad:parseInt(aux2.cantidad)+parseInt(aux.contenido[i].cantidad)})
+                var productos = new Producto(this.url, this.bd_nombre)
+                aux = aux[0]
+                for (let i = 0; i < aux.contenido.length; i++) {
+                    var aux2 = await productos.getProductoById(aux.contenido[i].producto)
+                    await productos.actualizar(aux.contenido[i].producto, { cantidad: parseInt(aux2.cantidad) + parseInt(aux.contenido[i].cantidad) })
                 }
                 await dbo.collection("pedidos").updateOne({ _id: new this.mongodb.ObjectId(id) }, { $set: { estado: 7 } })
                 db.close()
