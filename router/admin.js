@@ -932,4 +932,8 @@ app.post("/informacionEmpresa", comprobarpost, async function(req, res) {
 })
 
 
+app.get("/ayuda", function(req, res) {
+    res.sendFile(path.resolve("static/ayuda.pdf"))
+})
+
 module.exports = app;
