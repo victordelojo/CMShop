@@ -34,21 +34,10 @@ Posibles problemas:
 Linux:
 </li>
 <ul>
-<li>Inicia servicio y no accede al sitio web en el navegador al poner el puerto 80: 
+<li>Inicia servicio y no accede al sitio web en el navegador al poner el puerto 80 o 443: 
 <ul>
 <li>
-Instalamos authbind
-</li>
-<li>Ejecutamos los siguientes comandos: (%user% es el nombre de usuario que vamos a utilizar para el arranque del servicio)<br><b>
-sudo touch /etc/authbind/byport/80</b><br><b>
-sudo chown %user% /etc/authbind/byport/80</b><br><b>
-sudo chmod 755 /etc/authbind/byport/80</b>
-</li>
-<li>
-Luego ejecutamos el siguiente comando: <br><b>alias pm2='authbind --deep pm2'</b>
-</li>
-<li>
-Ya podemos utilizar el comando : <br><b>pm2 start -f app.js</b>
+Ejecutamos el comando: <b>sudo setcap 'cap_net_bind_service=+ep' `which node`</b>
 </li>
 </ul>
 </ul>
